@@ -71,11 +71,63 @@ html[data-lang="vi"] .lang-toggle .l-vi, html[data-lang="en"] .lang-toggle .l-en
 
 /* layout */
 .layout{display:flex;max-width:1280px;margin:0 auto}
-.sidebar{position:sticky;top:calc(56px + var(--st));align-self:flex-start;width:var(--sidebar);flex:none;height:calc(100vh - 56px - var(--st));height:calc(100dvh - 56px - var(--st));overflow-y:auto;padding:20px 12px 40px 16px;border-right:1px solid var(--border)}
-.toc-group{margin:14px 0 4px;padding:0 10px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.sidebar a{display:block;padding:5px 10px;border-radius:6px;color:var(--text);text-decoration:none;font-size:14px;line-height:1.4;border-left:3px solid transparent}
-.sidebar a:hover{background:var(--surface-2)}
-.sidebar a.active{background:var(--accent-soft);border-left-color:var(--accent);font-weight:600}
+.sidebar{position:sticky;top:calc(56px + var(--st));align-self:flex-start;width:var(--sidebar);flex:none;height:calc(100vh - 56px - var(--st));height:calc(100dvh - 56px - var(--st));overflow-y:auto;overscroll-behavior:contain;padding:0 12px 40px 16px;border-right:1px solid var(--border);background:var(--bg)}
+.toc-head{position:sticky;top:0;z-index:2;background:inherit;padding:14px 0 8px;margin:0 -4px 4px;padding-left:4px;padding-right:4px;border-bottom:1px solid var(--border)}
+.toc-search{position:relative}
+.toc-search input{width:100%;height:38px;padding:0 34px 0 34px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:var(--text);font:inherit;font-size:16px;outline:none;-webkit-appearance:none;appearance:none}
+.toc-search input::-webkit-search-cancel-button{display:none}
+.toc-search input:focus{border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.toc-search::before{content:"";position:absolute;left:11px;top:11px;width:12px;height:12px;border:2px solid var(--muted);border-radius:50%;pointer-events:none}
+.toc-search::after{content:"";position:absolute;left:24px;top:24px;width:6px;height:2px;background:var(--muted);transform:rotate(45deg);pointer-events:none}
+#tocClear{position:absolute;right:4px;top:4px;width:30px;height:30px;border:0;border-radius:8px;background:transparent;color:var(--muted);font-size:14px;cursor:pointer}
+#tocClear:hover{background:var(--surface-2);color:var(--text)}
+.toc-meta{display:flex;align-items:center;gap:10px;margin-top:10px}
+.toc-progress{flex:1;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;color:var(--muted)}
+.toc-progress .bar{flex:1;height:6px;border-radius:3px;background:var(--surface-2);border:1px solid var(--border);overflow:hidden}
+.toc-progress .bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .3s}
+.toc-mini{border:1px solid var(--border);background:var(--surface);color:var(--muted);font:inherit;font-size:12px;font-weight:600;border-radius:7px;padding:3px 8px;cursor:pointer;white-space:nowrap}
+.toc-mini:hover{color:var(--text);border-color:var(--accent)}
+.toc-result{margin-top:8px;font-size:12.5px;color:var(--muted)}
+.toc-sec{margin-top:2px}
+.toc-group{display:flex;align-items:center;gap:6px;width:100%;margin:8px 0 2px;padding:6px 6px;border:0;border-radius:6px;background:transparent;font:inherit;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);cursor:pointer;text-align:left}
+.toc-group:hover{background:var(--surface-2);color:var(--text)}
+.toc-group .chev{flex:none;width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(-45deg);transition:transform .15s;margin:0 3px 0 1px}
+.toc-sec.open .toc-group .chev{transform:rotate(45deg)}
+.toc-gt{flex:1;min-width:0}
+.toc-prog{flex:none;font-size:11px;letter-spacing:0;font-weight:700;color:var(--muted);background:var(--surface-2);border-radius:9px;padding:1px 7px}
+.toc-sec.complete .toc-prog{background:var(--ok-soft);color:var(--ok)}
+.toc-links{display:none}
+.toc-sec.open .toc-links{display:block}
+.toc-item{position:relative;display:flex;flex-wrap:wrap;align-items:stretch}
+.toc-item[hidden]{display:none}
+.sidebar .toc-item a{flex:1;min-width:0;display:flex;gap:7px;padding:5px 6px 5px 10px;border-radius:6px;color:var(--text);text-decoration:none;font-size:14px;line-height:1.4;border-left:3px solid transparent}
+.toc-num{flex:none;min-width:2.6em;color:var(--muted);font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;padding-top:1px}
+.sidebar .toc-item a:hover{background:var(--surface-2)}
+.sidebar .toc-item a.active{background:var(--accent-soft);border-left-color:var(--accent);font-weight:600}
+.sidebar .toc-item a.active .toc-num{color:var(--accent)}
+.toc-done{flex:none;align-self:center;width:28px;height:28px;margin-left:2px;border:0;border-radius:50%;background:transparent;cursor:pointer;position:relative}
+.toc-done::before{content:"";position:absolute;inset:7px;border:1.6px solid var(--border);border-radius:50%;transition:all .15s}
+.toc-done:hover::before{border-color:var(--ok)}
+.toc-done[aria-pressed="true"]::before{background:var(--ok);border-color:var(--ok)}
+.toc-done[aria-pressed="true"]::after{content:"";position:absolute;left:11.5px;top:9.5px;width:4px;height:7px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.toc-item.done a .toc-label{color:var(--muted)}
+.toc-snip{flex-basis:100%;margin:0 6px 6px 40px;font-size:12px;line-height:1.45;color:var(--muted)}
+.toc-snip mark,.toc-label mark{background:color-mix(in srgb,var(--accent) 30%,transparent);color:inherit;border-radius:2px;padding:0 1px}
+.sec-num{flex:none;font-size:.8em;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+.sec-foot{display:flex;justify-content:flex-end;margin-top:18px;padding-top:12px;border-top:1px dashed var(--border)}
+.done-btn{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border:1px solid var(--border);border-radius:18px;background:var(--surface-2);color:var(--text);font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.done-btn::before{content:"";width:14px;height:14px;border:1.6px solid var(--muted);border-radius:50%}
+.done-btn[aria-pressed="true"]{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.done-btn[aria-pressed="true"]::before{border-color:var(--ok);background:var(--ok);box-shadow:inset 0 0 0 2px var(--ok-soft)}
+.cheat-h{margin:26px 0 4px;font-size:15px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.brand-txt{display:flex;flex-direction:column;min-width:0;line-height:1.2}
+.brand-name,.crumb{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.crumb{display:none;font-size:12.5px;font-weight:600;color:var(--accent)}
+#navBackdrop{display:none}
+#toTop{position:fixed;right:max(16px,var(--sr));bottom:calc(18px + var(--sbm));z-index:12;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18);opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .2s,transform .2s}
+#toTop.show{opacity:1;transform:none;pointer-events:auto}
+#toTop:hover{border-color:var(--accent)}
+body.dv-open #toTop,body.nav-open #toTop{display:none}
 main{flex:1;min-width:0;padding:28px 40px 80px}
 .content{max-width:900px;overflow-wrap:break-word}
 
@@ -170,12 +222,21 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
 .cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px;margin-top:12px}
 .cheat div{overflow-wrap:anywhere;min-width:0;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14.3px}
 .cheat b{display:block;margin-bottom:4px;color:var(--accent)}
+.xref{margin:10px 0;padding:8px 12px;border-left:3px solid var(--link);background:var(--surface-2);border-radius:0 6px 6px 0;font-size:14.3px}
+.xref a{font-weight:600;text-decoration:none}
+.xref a:hover{text-decoration:underline}
 .upd{display:inline-block;font-size:11px;font-weight:700;color:var(--info);border:1px solid var(--info);border-radius:10px;padding:0 6px;margin-left:4px;vertical-align:1px;white-space:nowrap}
 .foot{margin-top:48px;color:var(--muted);font-size:13px}
 
 @media (max-width: 960px){
   .menu-btn{display:inline-flex}
-  .sidebar{position:fixed;left:0;top:calc(56px + var(--st));padding-left:max(16px,var(--sl));padding-bottom:calc(40px + var(--sbm));z-index:15;background:var(--surface);transform:translateX(-100%);transition:transform .2s;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+  .sidebar{position:fixed;left:0;top:calc(56px + var(--st));width:min(340px,88vw);padding-left:max(16px,var(--sl));padding-bottom:calc(40px + var(--sbm));z-index:15;background:var(--surface);transform:translateX(-102%);transition:transform .22s ease,visibility 0s linear .22s;box-shadow:0 8px 24px rgba(0,0,0,.25);visibility:hidden}
+  body.nav-open .sidebar{visibility:visible;transition:transform .22s ease}
+  #navBackdrop{display:block;position:fixed;inset:0;z-index:14;background:rgba(0,0,0,.42);opacity:0;pointer-events:none;transition:opacity .22s}
+  body.nav-open #navBackdrop{opacity:1;pointer-events:auto}
+  body.nav-open{overflow:hidden}
+  .crumb:not(:empty){display:block}
+  body.has-crumb .brand-name{font-size:12px;font-weight:600;color:var(--muted)}
   body.nav-open .sidebar{transform:none}
   main{padding:20px max(16px,var(--sr)) calc(60px + var(--sbm)) max(16px,var(--sl))}
   .tbl-wrap th:first-child,.tbl-wrap td:first-child{position:sticky;left:0;z-index:1;background:var(--surface);box-shadow:1px 0 0 var(--border);max-width:42vw}
@@ -183,7 +244,10 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
   section.topic{padding:18px 16px}
   h1{font-size:25px}
   .brand .full{display:none}
-  .sidebar a{padding:9px 10px}
+  .sidebar .toc-item a{padding:9px 6px 9px 10px}
+  .toc-done{width:36px;height:36px}
+  .toc-done::before{inset:10px}
+  .toc-done[aria-pressed="true"]::after{left:15.5px;top:12.5px}
   .tbl-wrap table{font-size:13.8px}
   th,td{padding:8px 10px}
 }
@@ -298,7 +362,7 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
 
 <header class="topbar">
   <button class="btn menu-btn" id="menuBtn" aria-label="Menu">☰</button>
-  <div class="brand"><svg><use href="#ic-ec2"/></svg><span><span class="aws">AWS </span>CloudOps <span class="full">Notes</span></span></div>
+  <div class="brand"><svg><use href="#ic-ec2"/></svg><span class="brand-txt"><span class="brand-name"><span class="aws">AWS </span>CloudOps <span class="full">Notes</span></span><span class="crumb" id="crumb"></span></span></div>
   <div class="spacer"></div>
   <button class="btn lang-toggle" id="langBtn" title="Tiếng Việt / English"><span class="l-vi">VI</span><span class="l-en">EN</span></button>
   <button class="btn" id="themeBtn" title="Light / Dark">◐</button>
@@ -316,72 +380,127 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
   <div class="dv-hint"><span class="vi">Chụm để zoom · chạm 2 lần phóng to · kéo để xem</span><span class="en">Pinch to zoom · double-tap to zoom in · drag to pan</span></div>
 </div>
 
+<div id="navBackdrop" aria-hidden="true"></div>
+<button id="toTop" type="button" aria-label="Back to top" title="Lên đầu trang / Back to top">↑</button>
+
 <div class="layout">
-<nav class="sidebar" id="sidebar">
-  <div class="toc-group"><span class="vi">Phần 1 · EC2 cho SysOps</span><span class="en">Part 1 · EC2 for SysOps</span></div>
-  <a href="#connect"><span class="vi">Launch &amp; kết nối EC2</span><span class="en">Launch &amp; connect to EC2</span></a>
-  <a href="#ssh-troubleshoot"><span class="vi">Troubleshoot SSH</span><span class="en">SSH troubleshooting</span></a>
-  <a href="#instance-type"><span class="vi">Đổi instance type</span><span class="en">Change instance type</span></a>
-  <a href="#placement">Placement Groups</a>
-  <a href="#hibernate">EC2 Hibernate</a>
-  <a href="#scheduler">Instance Scheduler on AWS</a>
-  <div class="toc-group"><span class="vi">Phần 2 · Giám sát EC2</span><span class="en">Part 2 · Monitoring EC2</span></div>
-  <a href="#cw-metrics"><span class="vi">CloudWatch metrics cho EC2</span><span class="en">CloudWatch metrics for EC2</span></a>
-  <a href="#cw-agent">Unified CloudWatch Agent</a>
-  <a href="#status-checks"><span class="vi">Status checks &amp; tự phục hồi</span><span class="en">Status checks &amp; recovery</span></a>
-  <div class="toc-group"><span class="vi">Phần 3 · AMI</span><span class="en">Part 3 · AMI</span></div>
-  <a href="#ami-basics"><span class="vi">AMI cơ bản</span><span class="en">AMI basics</span></a>
-  <a href="#ami-noreboot"><span class="vi">Tuỳ chọn No-Reboot</span><span class="en">No-Reboot option</span></a>
-  <a href="#ami-sharing"><span class="vi">Chia sẻ &amp; copy AMI</span><span class="en">Sharing &amp; copying AMIs</span></a>
-  <a href="#image-builder">EC2 Image Builder</a>
-  <a href="#ami-prod"><span class="vi">AMI trong production</span><span class="en">AMIs in production</span></a>
-  <div class="toc-group"><span class="vi">Phần 4 · Systems Manager</span><span class="en">Part 4 · Systems Manager</span></div>
-  <a href="#ssm-overview"><span class="vi">SSM tổng quan</span><span class="en">SSM overview</span></a>
-  <a href="#ssm-fleet">Fleet Manager &amp; DHMC</a>
-  <a href="#resource-groups">Tags &amp; Resource Groups</a>
-  <a href="#run-command">Documents &amp; Run Command</a>
-  <a href="#ssm-automation">SSM Automation</a>
-  <a href="#parameter-store">Parameter Store</a>
-  <a href="#inventory-state">Inventory &amp; State Manager</a>
-  <a href="#patch-manager">Patch Manager</a>
-  <a href="#session-manager">Session Manager</a>
-  <a href="#distributor-opscenter">Distributor &amp; OpsCenter</a>
-  <div class="toc-group"><span class="vi">Phần 5 · ELB &amp; ASG</span><span class="en">Part 5 · ELB &amp; ASG</span></div>
-  <a href="#scalability">Scalability &amp; HA</a>
-  <a href="#elb-basics"><span class="vi">ELB tổng quan</span><span class="en">ELB overview</span></a>
-  <a href="#alb">Application LB (ALB)</a>
-  <a href="#nlb">Network LB (NLB)</a>
-  <a href="#gwlb">Gateway LB (GWLB)</a>
-  <a href="#sticky">Sticky sessions</a>
-  <a href="#cross-zone">Cross-zone LB</a>
-  <a href="#ssl-sni">SSL/TLS &amp; SNI</a>
-  <a href="#tg-settings"><span class="vi">Target group settings</span><span class="en">Target group settings</span></a>
-  <a href="#elb-monitoring"><span class="vi">ELB monitoring &amp; lỗi</span><span class="en">ELB monitoring &amp; errors</span></a>
-  <a href="#asg-basics"><span class="vi">ASG cơ bản</span><span class="en">ASG basics</span></a>
-  <a href="#asg-scaling">Scaling policies</a>
-  <a href="#asg-lifecycle">Refresh · Warm pool · Hooks</a>
-  <a href="#asg-ops"><span class="vi">ASG cho SysOps</span><span class="en">ASG for SysOps</span></a>
-  <div class="toc-group"><span class="vi">Phần 6 · Lambda</span><span class="en">Part 6 · Lambda</span></div>
-  <a href="#lambda"><span class="vi">Lambda tổng quan</span><span class="en">Lambda overview</span></a>
-  <a href="#lambda-triggers"><span class="vi">Quyền &amp; trigger</span><span class="en">Permissions &amp; triggers</span></a>
-  <div class="toc-group"><span class="vi">Phần 7 · EBS &amp; EFS</span><span class="en">Part 7 · EBS &amp; EFS</span></div>
-  <a href="#ebs"><span class="vi">EBS volume &amp; loại volume</span><span class="en">EBS volumes &amp; types</span></a>
-  <a href="#ebs-snapshots">EBS Snapshots</a>
-  <a href="#efs">Amazon EFS</a>
-  <div class="toc-group"><span class="vi">Phần 8 · S3 &amp; Athena</span><span class="en">Part 8 · S3 &amp; Athena</span></div>
-  <a href="#s3-basics"><span class="vi">S3 cơ bản</span><span class="en">S3 basics</span></a>
-  <a href="#s3-security">S3 Security</a>
-  <a href="#s3-encryption">S3 Encryption</a>
-  <a href="#s3-versioning">Versioning</a>
-  <a href="#s3-replication">Replication</a>
-  <a href="#s3-storage-classes">Storage Classes</a>
-  <a href="#s3-lifecycle">Lifecycle rules</a>
-  <a href="#s3-events">Event Notifications</a>
-  <a href="#s3-performance">Performance &amp; Multipart</a>
-  <a href="#s3-batch">Batch Ops &amp; Inventory</a>
-  <a href="#athena">Amazon Athena</a>
-  <div class="toc-group"><span class="vi">Ôn tập</span><span class="en">Review</span></div>
-  <a href="#cheatsheet"><span class="vi">Exam cheat sheet</span><span class="en">Exam cheat sheet</span></a>
+<nav class="sidebar" id="sidebar" aria-label="Table of contents">
+  <div class="toc-head">
+    <div class="toc-search">
+      <input id="tocSearch" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search" data-ph-vi="Tìm… (vd: KMS, 503)" data-ph-en="Search… (e.g. KMS, 503)" placeholder="Tìm… (vd: KMS, 503)">
+      <button id="tocClear" type="button" aria-label="Clear" hidden>✕</button>
+    </div>
+    <div class="toc-meta">
+      <div class="toc-progress" title="Đã học / Learned"><div class="bar"><i id="progBar"></i></div><span id="progText">0/0</span></div>
+      <button id="tocToggleAll" class="toc-mini" type="button"><span class="vi">Mở hết</span><span class="en">Expand all</span></button>
+    </div>
+    <div id="tocResult" class="toc-result" hidden></div>
+  </div>
+  <div class="toc-sec" data-part="1">
+    <button class="toc-group" type="button" aria-expanded="false"><span class="chev" aria-hidden="true"></span><span class="toc-gt"><span class="vi">Phần 1 · EC2 cho SysOps</span><span class="en">Part 1 · EC2 for SysOps</span></span><span class="toc-prog"></span></button>
+    <div class="toc-links">
+      <div class="toc-item"><a href="#connect"><span class="toc-num"></span><span class="toc-label"><span class="vi">Launch &amp; kết nối EC2</span><span class="en">Launch &amp; connect to EC2</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#ssh-troubleshoot"><span class="toc-num"></span><span class="toc-label"><span class="vi">Troubleshoot SSH</span><span class="en">SSH troubleshooting</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#instance-type"><span class="toc-num"></span><span class="toc-label"><span class="vi">Đổi instance type</span><span class="en">Change instance type</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#placement"><span class="toc-num"></span><span class="toc-label">Placement Groups</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#hibernate"><span class="toc-num"></span><span class="toc-label">EC2 Hibernate</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#scheduler"><span class="toc-num"></span><span class="toc-label">Instance Scheduler on AWS</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+    </div>
+  </div>
+  <div class="toc-sec" data-part="2">
+    <button class="toc-group" type="button" aria-expanded="false"><span class="chev" aria-hidden="true"></span><span class="toc-gt"><span class="vi">Phần 2 · Giám sát EC2</span><span class="en">Part 2 · Monitoring EC2</span></span><span class="toc-prog"></span></button>
+    <div class="toc-links">
+      <div class="toc-item"><a href="#cw-metrics"><span class="toc-num"></span><span class="toc-label"><span class="vi">CloudWatch metrics cho EC2</span><span class="en">CloudWatch metrics for EC2</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#cw-agent"><span class="toc-num"></span><span class="toc-label">Unified CloudWatch Agent</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#status-checks"><span class="toc-num"></span><span class="toc-label"><span class="vi">Status checks &amp; tự phục hồi</span><span class="en">Status checks &amp; recovery</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+    </div>
+  </div>
+  <div class="toc-sec" data-part="3">
+    <button class="toc-group" type="button" aria-expanded="false"><span class="chev" aria-hidden="true"></span><span class="toc-gt"><span class="vi">Phần 3 · AMI</span><span class="en">Part 3 · AMI</span></span><span class="toc-prog"></span></button>
+    <div class="toc-links">
+      <div class="toc-item"><a href="#ami-basics"><span class="toc-num"></span><span class="toc-label"><span class="vi">AMI cơ bản</span><span class="en">AMI basics</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#ami-noreboot"><span class="toc-num"></span><span class="toc-label"><span class="vi">Tuỳ chọn No-Reboot</span><span class="en">No-Reboot option</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#ami-sharing"><span class="toc-num"></span><span class="toc-label"><span class="vi">Chia sẻ &amp; copy AMI</span><span class="en">Sharing &amp; copying AMIs</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#image-builder"><span class="toc-num"></span><span class="toc-label">EC2 Image Builder</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#ami-prod"><span class="toc-num"></span><span class="toc-label"><span class="vi">AMI trong production</span><span class="en">AMIs in production</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+    </div>
+  </div>
+  <div class="toc-sec" data-part="4">
+    <button class="toc-group" type="button" aria-expanded="false"><span class="chev" aria-hidden="true"></span><span class="toc-gt"><span class="vi">Phần 4 · Systems Manager</span><span class="en">Part 4 · Systems Manager</span></span><span class="toc-prog"></span></button>
+    <div class="toc-links">
+      <div class="toc-item"><a href="#ssm-overview"><span class="toc-num"></span><span class="toc-label"><span class="vi">SSM tổng quan</span><span class="en">SSM overview</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#ssm-fleet"><span class="toc-num"></span><span class="toc-label">Fleet Manager &amp; DHMC</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#resource-groups"><span class="toc-num"></span><span class="toc-label">Tags &amp; Resource Groups</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#run-command"><span class="toc-num"></span><span class="toc-label">Documents &amp; Run Command</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#ssm-automation"><span class="toc-num"></span><span class="toc-label">SSM Automation</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#parameter-store"><span class="toc-num"></span><span class="toc-label">Parameter Store</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#inventory-state"><span class="toc-num"></span><span class="toc-label">Inventory &amp; State Manager</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#patch-manager"><span class="toc-num"></span><span class="toc-label">Patch Manager</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#session-manager"><span class="toc-num"></span><span class="toc-label">Session Manager</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#distributor-opscenter"><span class="toc-num"></span><span class="toc-label">Distributor &amp; OpsCenter</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+    </div>
+  </div>
+  <div class="toc-sec" data-part="5">
+    <button class="toc-group" type="button" aria-expanded="false"><span class="chev" aria-hidden="true"></span><span class="toc-gt"><span class="vi">Phần 5 · Load Balancing</span><span class="en">Part 5 · Load Balancing</span></span><span class="toc-prog"></span></button>
+    <div class="toc-links">
+      <div class="toc-item"><a href="#scalability"><span class="toc-num"></span><span class="toc-label">Scalability &amp; HA</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#elb-basics"><span class="toc-num"></span><span class="toc-label"><span class="vi">ELB tổng quan</span><span class="en">ELB overview</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#alb"><span class="toc-num"></span><span class="toc-label">Application LB (ALB)</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#nlb"><span class="toc-num"></span><span class="toc-label">Network LB (NLB)</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#gwlb"><span class="toc-num"></span><span class="toc-label">Gateway LB (GWLB)</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#sticky"><span class="toc-num"></span><span class="toc-label">Sticky sessions</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#cross-zone"><span class="toc-num"></span><span class="toc-label">Cross-zone LB</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#ssl-sni"><span class="toc-num"></span><span class="toc-label">SSL/TLS &amp; SNI</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#tg-settings"><span class="toc-num"></span><span class="toc-label"><span class="vi">Target group settings</span><span class="en">Target group settings</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#elb-monitoring"><span class="toc-num"></span><span class="toc-label"><span class="vi">ELB monitoring &amp; lỗi</span><span class="en">ELB monitoring &amp; errors</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+    </div>
+  </div>
+  <div class="toc-sec" data-part="6">
+    <button class="toc-group" type="button" aria-expanded="false"><span class="chev" aria-hidden="true"></span><span class="toc-gt"><span class="vi">Phần 6 · Auto Scaling</span><span class="en">Part 6 · Auto Scaling</span></span><span class="toc-prog"></span></button>
+    <div class="toc-links">
+      <div class="toc-item"><a href="#asg-basics"><span class="toc-num"></span><span class="toc-label"><span class="vi">ASG cơ bản</span><span class="en">ASG basics</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#asg-scaling"><span class="toc-num"></span><span class="toc-label">Scaling policies</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#asg-lifecycle"><span class="toc-num"></span><span class="toc-label">Refresh · Warm pool · Hooks</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#asg-ops"><span class="toc-num"></span><span class="toc-label"><span class="vi">ASG cho SysOps</span><span class="en">ASG for SysOps</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+    </div>
+  </div>
+  <div class="toc-sec" data-part="7">
+    <button class="toc-group" type="button" aria-expanded="false"><span class="chev" aria-hidden="true"></span><span class="toc-gt"><span class="vi">Phần 7 · Lambda</span><span class="en">Part 7 · Lambda</span></span><span class="toc-prog"></span></button>
+    <div class="toc-links">
+      <div class="toc-item"><a href="#lambda"><span class="toc-num"></span><span class="toc-label"><span class="vi">Lambda tổng quan</span><span class="en">Lambda overview</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#lambda-triggers"><span class="toc-num"></span><span class="toc-label"><span class="vi">Quyền &amp; trigger</span><span class="en">Permissions &amp; triggers</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+    </div>
+  </div>
+  <div class="toc-sec" data-part="8">
+    <button class="toc-group" type="button" aria-expanded="false"><span class="chev" aria-hidden="true"></span><span class="toc-gt"><span class="vi">Phần 8 · EBS &amp; EFS</span><span class="en">Part 8 · EBS &amp; EFS</span></span><span class="toc-prog"></span></button>
+    <div class="toc-links">
+      <div class="toc-item"><a href="#ebs"><span class="toc-num"></span><span class="toc-label"><span class="vi">EBS volume &amp; loại volume</span><span class="en">EBS volumes &amp; types</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#ebs-snapshots"><span class="toc-num"></span><span class="toc-label">EBS Snapshots</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#efs"><span class="toc-num"></span><span class="toc-label">Amazon EFS</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+    </div>
+  </div>
+  <div class="toc-sec" data-part="9">
+    <button class="toc-group" type="button" aria-expanded="false"><span class="chev" aria-hidden="true"></span><span class="toc-gt"><span class="vi">Phần 9 · S3 &amp; Athena</span><span class="en">Part 9 · S3 &amp; Athena</span></span><span class="toc-prog"></span></button>
+    <div class="toc-links">
+      <div class="toc-item"><a href="#s3-basics"><span class="toc-num"></span><span class="toc-label"><span class="vi">S3 cơ bản</span><span class="en">S3 basics</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#s3-security"><span class="toc-num"></span><span class="toc-label">S3 Security</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#s3-encryption"><span class="toc-num"></span><span class="toc-label">S3 Encryption</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#s3-versioning"><span class="toc-num"></span><span class="toc-label">Versioning</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#s3-replication"><span class="toc-num"></span><span class="toc-label">Replication</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#s3-storage-classes"><span class="toc-num"></span><span class="toc-label">Storage Classes</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#s3-lifecycle"><span class="toc-num"></span><span class="toc-label">Lifecycle rules</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#s3-events"><span class="toc-num"></span><span class="toc-label">Event Notifications</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#s3-performance"><span class="toc-num"></span><span class="toc-label">Performance &amp; Multipart</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#s3-batch"><span class="toc-num"></span><span class="toc-label">Batch Ops &amp; Inventory</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+      <div class="toc-item"><a href="#athena"><span class="toc-num"></span><span class="toc-label">Amazon Athena</span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+    </div>
+  </div>
+  <div class="toc-sec" data-part="R">
+    <button class="toc-group" type="button" aria-expanded="false"><span class="chev" aria-hidden="true"></span><span class="toc-gt"><span class="vi">Ôn tập</span><span class="en">Review</span></span><span class="toc-prog"></span></button>
+    <div class="toc-links">
+      <div class="toc-item"><a href="#cheatsheet"><span class="toc-num"></span><span class="toc-label"><span class="vi">Exam cheat sheet</span><span class="en">Exam cheat sheet</span></span></a><button class="toc-done" type="button" aria-pressed="false"></button><div class="toc-snip" hidden></div></div>
+    </div>
+  </div>
 </nav>
 
 <main>
@@ -848,6 +967,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
   --state-reason "testing recovering action"</code></pre>
   <p><span class="vi">→ History của alarm: OK → ALARM, gửi SNS và "Successfully executed action ec2 recover".</span><span class="en">→ Alarm history: OK → ALARM, SNS sent and "Successfully executed action ec2 recover".</span></p>
   <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">System check fail → <b>stop/start</b> hoặc alarm <b>Recover</b>. Instance check fail → <b>reboot</b>. Recover giữ nguyên IP/EIP/metadata/placement group.</span><span class="en">System check fails → <b>stop/start</b> or a <b>Recover</b> alarm. Instance check fails → <b>reboot</b>. Recover keeps IPs/EIP/metadata/placement group.</span></div>
+  <p class="xref"><span class="vi">Instance nằm trong ASG thì không cần alarm Recover: ASG dùng status check (và ELB health check) để <b>terminate + thay instance mới</b> → xem <a href="#asg-ops">ASG health checks</a>.</span><span class="en">Instances in an ASG don't need a Recover alarm: the ASG uses status checks (and ELB health checks) to <b>terminate + replace</b> them → see <a href="#asg-ops">ASG health checks</a>.</span></p>
 </section>
 
 <!-- ============================ PART 3 ============================ -->
@@ -1039,6 +1159,14 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
     <tr><td><b>Distribution settings</b></td><td><span class="vi">Mặc định: region hiện tại; có thể thêm nhiều region</span><span class="en">Default: current region; can add more regions</span></td></tr>
   </table></div>
   <p><span class="vi">Trạng thái khi chạy: <b>Building → Testing → Distributing → Available</b>. Instance và AMI tạo ra có tag <code>CreatedBy: EC2 Image Builder</code>. Dọn dẹp: deregister AMI + xoá snapshot (pipeline manual thì để lại không tốn phí).</span><span class="en">Run states: <b>Building → Testing → Distributing → Available</b>. Created instances and AMIs are tagged <code>CreatedBy: EC2 Image Builder</code>. Cleanup: deregister the AMI + delete the snapshot (a manual pipeline can stay, it costs nothing).</span></p>
+  <h4><span class="vi">Golden AMI: Image Builder hay SSM Automation?</span><span class="en">Golden AMI: Image Builder or SSM Automation?</span></h4>
+  <div class="tbl-wrap"><table>
+    <tr><th></th><th>EC2 Image Builder</th><th><span class="vi">SSM Automation (runbook tự viết)</span><span class="en">SSM Automation (custom runbook)</span></th></tr>
+    <tr><td><span class="vi">Cách làm</span><span class="en">Approach</span></td><td><span class="vi">Managed pipeline: recipe + components → build → <b>test</b> → distribute</span><span class="en">Managed pipeline: recipe + components → build → <b>test</b> → distribute</span></td><td><span class="vi">Tự ghép bước: launch → <code>AWS-RunPatchBaseline</code> → stop → CreateImage → terminate</span><span class="en">You chain steps: launch → <code>AWS-RunPatchBaseline</code> → stop → CreateImage → terminate</span></td></tr>
+    <tr><td><span class="vi">Mạnh ở</span><span class="en">Strength</span></td><td><span class="vi">Test tự động, phân phối nhiều region/account, lịch hoặc khi có bản cập nhật</span><span class="en">Built-in tests, multi-region/account distribution, scheduled or on updates</span></td><td><span class="vi">Linh hoạt: nối tiếp update Launch Template + ASG <b>Instance Refresh</b> trong cùng runbook</span><span class="en">Flexible: chain Launch Template update + ASG <b>Instance Refresh</b> in the same runbook</span></td></tr>
+    <tr><td><span class="vi">Chọn khi đề nói</span><span class="en">Pick when the question says</span></td><td><span class="vi">"tự động build + test + phân phối AMI"</span><span class="en">"automate building, testing and distributing AMIs"</span></td><td><span class="vi">"patch AMI rồi cập nhật ASG", runbook tuỳ biến</span><span class="en">"patch the AMI then update the ASG", custom runbooks</span></td></tr>
+  </table></div>
+  <p class="xref"><span class="vi">Ví dụ pipeline patch AMI → ASG bằng runbook: <a href="#ssm-automation">SSM Automation</a>.</span><span class="en">Runbook example patching an AMI → ASG: <a href="#ssm-automation">SSM Automation</a>.</span></p>
 </section>
 
 <!-- 3.5 AMI IN PRODUCTION -->
@@ -1377,7 +1505,7 @@ mainSteps:
       <text class="b c" x="402" y="220">⑥ Instance Refresh</text>
       <text class="s c" x="402" y="236"><tspan class="vi">thay toàn bộ instance cũ</tspan><tspan class="en">replace all old instances</tspan></text>
     </svg>
-    <figcaption><span class="vi">Đổi Launch Template chỉ ảnh hưởng instance <b>mới</b> → cần <b>Instance Refresh</b> để thay instance đang chạy.</span><span class="en">Changing the Launch Template only affects <b>new</b> instances → use <b>Instance Refresh</b> to replace running ones.</span></figcaption>
+    <figcaption><span class="vi">Đổi Launch Template chỉ ảnh hưởng instance <b>mới</b> → cần <b>Instance Refresh</b> để thay instance đang chạy (<a href="#asg-lifecycle">chi tiết</a>). So sánh với <a href="#image-builder">EC2 Image Builder</a>.</span><span class="en">Changing the Launch Template only affects <b>new</b> instances → use <b>Instance Refresh</b> to replace running ones (<a href="#asg-lifecycle">details</a>). Compare with <a href="#image-builder">EC2 Image Builder</a>.</span></figcaption>
   </figure>
   <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Tự động <b>khắc phục</b> resource non-compliant của <b>AWS Config</b> → Config remediation chạy <b>SSM Automation</b>. Restart/snapshot/tạo AMI hàng loạt không cần script tự viết → Automation runbook.</span><span class="en">Auto-<b>remediate</b> non-compliant resources from <b>AWS Config</b> → Config remediation runs an <b>SSM Automation</b>. Bulk restart/snapshot/AMI creation without custom scripts → Automation runbook.</span></div>
 </section>
@@ -1633,7 +1761,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
 <!-- ============================ PART 5 ============================ -->
 <div class="part">
   <div class="part-label"><span class="vi">Phần 5</span><span class="en">Part 5</span></div>
-  <h2><span class="vi">High Availability &amp; Scalability: ELB + ASG</span><span class="en">High Availability &amp; Scalability: ELB + ASG</span></h2>
+  <h2><span class="vi">High Availability &amp; Load Balancing (ELB)</span><span class="en">High Availability &amp; Load Balancing (ELB)</span></h2>
 </div>
 
 <!-- 5.1 SCALABILITY & HA -->
@@ -2045,7 +2173,13 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
   <div class="callout note"><span class="ttl"><span class="vi">Ghi chú thêm</span><span class="en">Extra note</span></span><span class="vi">Theo AWS docs, giới hạn chính xác của SurgeQueueLength (metric của CLB) là <b>1,024</b> request.</span><span class="en">Per AWS docs, the exact SurgeQueueLength limit (a CLB metric) is <b>1,024</b> requests.</span></div>
 </section>
 
-<!-- 5.11 ASG BASICS -->
+<!-- ============================ PART 6 (ASG) ============================ -->
+<div class="part">
+  <div class="part-label"><span class="vi">Phần 6</span><span class="en">Part 6</span></div>
+  <h2>Auto Scaling (ASG)</h2>
+</div>
+
+<!-- 6.1 ASG BASICS -->
 <section class="topic" id="asg-basics">
   <h3><svg class="ico"><use href="#ic-ec2autoscaling"/></svg><span class="vi">Auto Scaling Group (ASG) cơ bản</span><span class="en">Auto Scaling Group (ASG) basics</span></h3>
   <p class="sub-lead"><span class="vi"><b>Scale out</b> (thêm EC2) khi tải tăng, <b>scale in</b> (bớt EC2) khi tải giảm; giữ số instance trong khoảng min–max; tự đăng ký instance vào load balancer; instance unhealthy bị <b>terminate và thay mới</b>. ASG <b>miễn phí</b> — chỉ trả cho EC2.</span><span class="en"><b>Scale out</b> (add EC2) as load grows, <b>scale in</b> (remove EC2) as it drops; keep the count between min and max; auto-register instances with the load balancer; unhealthy instances are <b>terminated and replaced</b>. ASGs are <b>free</b> — you pay for EC2 only.</span></p>
@@ -2113,6 +2247,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
   <h4>Instance Refresh</h4>
   <ul>
     <li><span class="vi">Cập nhật toàn bộ ASG theo <b>launch template mới</b> (vd AMI mới) mà không phải tự terminate từng instance: API <b><code>StartInstanceRefresh</code></b>.</span><span class="en">Update the whole ASG to a <b>new launch template</b> (e.g. new AMI) without terminating instances by hand: the <b><code>StartInstanceRefresh</code></b> API.</span></li>
+    <li><span class="vi">Ví dụ tự động hoá cả chuỗi patch AMI → Launch Template → Instance Refresh: <a href="#ssm-automation">SSM Automation</a>.</span><span class="en">End-to-end automation example AMI patch → Launch Template → Instance Refresh: <a href="#ssm-automation">SSM Automation</a>.</span></li>
     <li><span class="vi"><b>Minimum healthy percentage</b> (vd 60%) = bao nhiêu instance được thay cùng lúc; <b>warm-up time</b> = chờ bao lâu để coi instance mới sẵn sàng phục vụ.</span><span class="en"><b>Minimum healthy percentage</b> (e.g. 60%) = how many can be replaced at once; <b>warm-up time</b> = how long until a new instance is considered ready.</span></li>
   </ul>
   <h4>Warm Pools</h4>
@@ -2211,6 +2346,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
   <ul>
     <li><span class="vi">HA: ít nhất <b>2 instance</b> trong ASG <b>multi-AZ</b>.</span><span class="en">HA: at least <b>2 instances</b> in a <b>multi-AZ</b> ASG.</span></li>
     <li><span class="vi"><b>EC2 status checks</b> (mặc định bật), <b>ELB health check</b> (app trong target group), <b>custom health check</b> (gửi trạng thái qua CLI/SDK: <code>set-instance-health</code>).</span><span class="en"><b>EC2 status checks</b> (on by default), <b>ELB health checks</b> (app in a target group), <b>custom health checks</b> (report via CLI/SDK: <code>set-instance-health</code>).</span></li>
+    <li><span class="vi">Status check của EC2: xem <a href="#status-checks">Status checks &amp; tự phục hồi</a>.</span><span class="en">EC2 status checks themselves: see <a href="#status-checks">Status checks &amp; recovery</a>.</span></li>
     <li><span class="vi">Instance unhealthy → ASG <b>terminate rồi launch mới</b>, <b>không reboot</b>. CLI hữu ích: <code>set-instance-health</code>, <code>terminate-instance-in-auto-scaling-group</code>.</span><span class="en">Unhealthy instance → ASG <b>terminates and launches a new one</b>, <b>no reboot</b>. Useful CLI: <code>set-instance-health</code>, <code>terminate-instance-in-auto-scaling-group</code>.</span></li>
   </ul>
   <h4><span class="vi">Troubleshooting</span><span class="en">Troubleshooting</span></h4>
@@ -2223,7 +2359,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
   <h4><span class="vi">CloudWatch metrics của ASG</span><span class="en">ASG CloudWatch metrics</span></h4>
   <ul>
     <li><span class="vi"><b>ASG-level metrics</b> (<b>opt-in</b> — phải <i>Enable group metrics collection</i>, chu kỳ 1 phút): <code>GroupMinSize</code>, <code>GroupMaxSize</code>, <code>GroupDesiredCapacity</code>, <code>GroupInServiceInstances</code>, <code>GroupPendingInstances</code>, <code>GroupStandbyInstances</code>, <code>GroupTerminatingInstances</code>, <code>GroupTotalInstances</code>.</span><span class="en"><b>ASG-level metrics</b> (<b>opt-in</b> — <i>Enable group metrics collection</i>, 1-minute): <code>GroupMinSize</code>, <code>GroupMaxSize</code>, <code>GroupDesiredCapacity</code>, <code>GroupInServiceInstances</code>, <code>GroupPendingInstances</code>, <code>GroupStandbyInstances</code>, <code>GroupTerminatingInstances</code>, <code>GroupTotalInstances</code>.</span></li>
-    <li><span class="vi"><b>EC2-level metrics</b> (mặc định bật): CPU, network, disk, status check — basic 5 phút / detailed 1 phút.</span><span class="en"><b>EC2-level metrics</b> (enabled by default): CPU, network, disk, status checks — basic 5 min / detailed 1 min.</span></li>
+    <li><span class="vi"><b>EC2-level metrics</b> (mặc định bật) — chi tiết ở <a href="#cw-metrics">CloudWatch metrics cho EC2</a>.</span><span class="en"><b>EC2-level metrics</b> (on by default) — details in <a href="#cw-metrics">CloudWatch metrics for EC2</a>.</span></li>
   </ul>
   <h4>AWS Auto Scaling <span class="s">(<span class="vi">service chung</span><span class="en">umbrella service</span>)</span></h4>
   <ul>
@@ -2235,7 +2371,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
 
 <!-- ============================ PART 6 ============================ -->
 <div class="part">
-  <div class="part-label"><span class="vi">Phần 6</span><span class="en">Part 6</span></div>
+  <div class="part-label"><span class="vi">Phần 7</span><span class="en">Part 7</span></div>
   <h2>AWS Lambda</h2>
 </div>
 
@@ -2321,17 +2457,17 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
   </ul>
   <h4><span class="vi">S3 → Lambda</span><span class="en">S3 → Lambda</span></h4>
   <ul>
-    <li><span class="vi">S3 event notification (object created / removed / restored / replication, lọc theo prefix/suffix) → SNS (fan-out ra nhiều SQS), SQS (Lambda đọc queue), hoặc gọi <b>Lambda trực tiếp (async)</b> + DLQ (SQS) khi lỗi.</span><span class="en">S3 event notifications (object created / removed / restored / replication, filter by prefix/suffix) → SNS (fan-out to several SQS), SQS (Lambda reads the queue), or <b>Lambda directly (async)</b> + a DLQ (SQS) on failure.</span></li>
-    <li><span class="vi">Event thường tới trong vài giây, đôi khi ≥ 1 phút. Bật <b>versioning</b> để không mất notification khi 2 lần ghi cùng object cùng lúc. Bucket và function cùng region.</span><span class="en">Events usually arrive in seconds, sometimes ≥ 1 minute. Enable <b>versioning</b> so two simultaneous writes to one object don't yield a single notification. Bucket and function in the same region.</span></li>
-    <li><span class="vi">Event chứa bucket name, object key, size, ETag → code gọi <code>GetObject</code> để xử lý file.</span><span class="en">The event holds bucket name, object key, size, ETag → code calls <code>GetObject</code> to process the file.</span></li>
+    <li><span class="vi">S3 gọi Lambda <b>bất đồng bộ (async)</b>: lỗi thì Lambda tự retry, có thể đặt <b>DLQ</b> (SQS) / on-failure destination để không mất event.</span><span class="en">S3 invokes Lambda <b>asynchronously</b>: on failure Lambda retries; configure a <b>DLQ</b> (SQS) / on-failure destination so events aren't lost.</span></li>
+    <li><span class="vi">Quyền gọi nằm ở <b>resource-based policy</b> của function (S3 tự thêm); event chứa bucket, key, size, ETag → code gọi <code>GetObject</code>. Bucket và function cùng region.</span><span class="en">Permission lives in the function's <b>resource-based policy</b> (added by S3); the event carries bucket, key, size, ETag → code calls <code>GetObject</code>. Bucket and function in the same region.</span></li>
   </ul>
+  <p class="xref"><span class="vi">Loại event, filter, các đích (SNS / SQS / EventBridge), thời gian giao event, versioning → xem <a href="#s3-events">S3 Event Notifications</a>.</span><span class="en">Event types, filters, destinations (SNS / SQS / EventBridge), delivery timing, versioning → see <a href="#s3-events">S3 Event Notifications</a>.</span></p>
   <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Function không ghi được log / không đọc được S3 → sửa <b>execution role</b>. Service khác không gọi được function → kiểm tra <b>resource-based policy</b> (hoặc role của service gọi).</span><span class="en">Function can't write logs / read S3 → fix the <b>execution role</b>. Another service can't invoke the function → check the <b>resource-based policy</b> (or the caller's role).</span></div>
   <div class="callout note"><span class="ttl"><span class="vi">Ghi chú thêm</span><span class="en">Extra note</span></span><span class="vi">Managed policy của role cơ bản là <code>AWSLambdaBasicExecutionRole</code> (logs:CreateLogGroup, CreateLogStream, PutLogEvents). Timeout mặc định 3 giây, tối đa <b>1,800 giây</b> (từ 11/2026, trước đó 900). Memory 128 MB – 10,240 MB; <code>/tmp</code> 512 MB – 10 GB. Giá duration x86 ~$0.0000166667/GB-giây.<span class="upd">AWS docs 11/2026</span></span><span class="en">The basic role's managed policy is <code>AWSLambdaBasicExecutionRole</code> (logs:CreateLogGroup, CreateLogStream, PutLogEvents). Default timeout 3 seconds, max <b>1,800 seconds</b> (since Nov 2026, previously 900). Memory 128 MB – 10,240 MB; <code>/tmp</code> 512 MB – 10 GB. x86 duration ~$0.0000166667 per GB-second.<span class="upd">AWS docs 11/2026</span></span></div>
 </section>
 
 <!-- ============================ PART 7 ============================ -->
 <div class="part">
-  <div class="part-label"><span class="vi">Phần 7</span><span class="en">Part 7</span></div>
+  <div class="part-label"><span class="vi">Phần 8</span><span class="en">Part 8</span></div>
   <h2><span class="vi">EC2 Storage: EBS &amp; EFS</span><span class="en">EC2 Storage: EBS &amp; EFS</span></h2>
 </div>
 
@@ -2456,7 +2592,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
 
 <!-- ============================ PART 8 ============================ -->
 <div class="part">
-  <div class="part-label"><span class="vi">Phần 8</span><span class="en">Part 8</span></div>
+  <div class="part-label"><span class="vi">Phần 9</span><span class="en">Part 9</span></div>
   <h2><span class="vi">Amazon S3 &amp; Athena</span><span class="en">Amazon S3 &amp; Athena</span></h2>
 </div>
 
@@ -2988,6 +3124,8 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
   <div class="part-label"><span class="vi">Ôn tập</span><span class="en">Review</span></div>
   <h2 id="cheatsheet">Exam cheat sheet</h2>
 </div>
+<div id="cheat-body">
+<h3 class="cheat-h"><span class="vi">Phần 1 · EC2 cho SysOps</span><span class="en">Part 1 · EC2 for SysOps</span></h3>
 <div class="cheat">
   <div><b>SSH</b><span class="vi">Timeout = mạng/SG. Permission denied = key/username. Unprotected key = <code>chmod 400</code>. EIC cần SG mở dải IP <code>EC2_INSTANCE_CONNECT</code>.</span><span class="en">Timeout = network/SG. Permission denied = key/username. Unprotected key = <code>chmod 400</code>. EIC needs the SG to allow the <code>EC2_INSTANCE_CONNECT</code> range.</span></div>
   <div><b>EIC Endpoint</b><span class="vi">SSH vào private subnet, không IGW/NAT. SG endpoint outbound 22 → SG instance inbound 22 từ SG endpoint.</span><span class="en">SSH into private subnets, no IGW/NAT. Endpoint SG outbound 22 → instance SG inbound 22 from the endpoint SG.</span></div>
@@ -2995,14 +3133,23 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
   <div><b>Placement groups</b>Cluster = 1 AZ, perf · Spread = 7/AZ, critical · Partition = 7 partitions/AZ, Kafka/Cassandra/HDFS · Precision time = PTP clock.</div>
   <div><b>Hibernate</b><span class="vi">RAM → root EBS (mã hoá, đủ chỗ). &lt;150 GB RAM, không bare metal, ≤60 ngày.</span><span class="en">RAM → root EBS (encrypted, big enough). &lt;150 GB RAM, no bare metal, ≤60 days.</span></div>
   <div><b>Instance Scheduler</b><span class="vi">AWS Solution (CloudFormation), DynamoDB + Lambda, stop/start EC2/ASG/RDS/Aurora/DocumentDB/Neptune ngoài giờ.</span><span class="en">AWS Solution (CloudFormation), DynamoDB + Lambda, stop/start EC2/ASG/RDS/Aurora/DocumentDB/Neptune off-hours.</span></div>
+</div>
+<h3 class="cheat-h"><span class="vi">Phần 2 · Giám sát EC2</span><span class="en">Part 2 · Monitoring EC2</span></h3>
+<div class="cheat">
   <div><b>CloudWatch EC2 metrics</b><span class="vi">Basic 5 phút / Detailed 1 phút. CPU, Network, Disk (instance store), Status check. <b>Không có RAM.</b></span><span class="en">Basic 5 min / Detailed 1 min. CPU, Network, Disk (instance store), Status check. <b>No RAM.</b></span></div>
   <div><b>Custom metrics</b><span class="vi">Standard 1 phút, high-res tới 1 giây. EC2 cần IAM role.</span><span class="en">Standard 1 min, high-res down to 1 sec. EC2 needs an IAM role.</span></div>
   <div><b>CloudWatch Agent</b><span class="vi">RAM, disk, process (procstat), log file. EC2 + on-prem. Config ở SSM Parameter Store. Namespace <code>CWAgent</code>.</span><span class="en">RAM, disk, processes (procstat), log files. EC2 + on-prem. Config in SSM Parameter Store. Namespace <code>CWAgent</code>.</span></div>
   <div><b>Status checks</b><span class="vi">System → stop/start hoặc Recover alarm. Instance → reboot. Attached EBS → reboot/thay volume.</span><span class="en">System → stop/start or Recover alarm. Instance → reboot. Attached EBS → reboot/replace volume.</span></div>
+</div>
+<h3 class="cheat-h"><span class="vi">Phần 3 · AMI</span><span class="en">Part 3 · AMI</span></h3>
+<div class="cheat">
   <div><b>AMI</b><span class="vi">Theo region, copy được sang region khác. Migrate AZ = AMI → launch AZ mới. AWS Backup = no-reboot.</span><span class="en">Regional, copyable across regions. Migrate AZ = AMI → launch in new AZ. AWS Backup = no-reboot.</span></div>
   <div><b><span class="vi">Share / copy AMI</span><span class="en">Share / copy AMI</span></b><span class="vi">Mã hoá → phải là CMK + share key. Copy → mình thành owner, re-encrypt được.</span><span class="en">Encrypted → must be a CMK + share the key. Copy → you become owner, can re-encrypt.</span></div>
   <div><b>EC2 Image Builder</b><span class="vi">Build → Test → Distribute (multi-region). Lịch / khi package update. Free.</span><span class="en">Build → Test → Distribute (multi-region). Scheduled / on package updates. Free.</span></div>
   <div><b><span class="vi">AMI production</span><span class="en">AMI production</span></b><span class="vi">Tag + IAM condition để chặn; AWS Config để phát hiện non-compliant.</span><span class="en">Tag + IAM condition to prevent; AWS Config to detect non-compliance.</span></div>
+</div>
+<h3 class="cheat-h"><span class="vi">Phần 4 · Systems Manager</span><span class="en">Part 4 · Systems Manager</span></h3>
+<div class="cheat">
   <div><b>SSM</b><span class="vi">Cần SSM Agent + IAM role <code>AmazonSSMManagedInstanceCore</code>. Không hiện trong Fleet Manager = lỗi agent hoặc IAM. Agent gọi ra, SG không cần inbound.</span><span class="en">Needs SSM Agent + IAM role <code>AmazonSSMManagedInstanceCore</code>. Missing from Fleet Manager = agent or IAM issue. Agent calls out, no SG inbound needed.</span></div>
   <div><b>DHMC</b><span class="vi">Managed instance không cần instance profile. Cần IMDSv2 + agent mới. Bật theo region.</span><span class="en">Managed instances without an instance profile. Needs IMDSv2 + recent agent. Enabled per region.</span></div>
   <div><b>Run Command</b><span class="vi">Chạy document/lệnh trên fleet, không SSH. Rate control + error threshold. Output S3/CW Logs, status SNS, trigger bằng EventBridge.</span><span class="en">Run documents/commands on a fleet, no SSH. Rate control + error threshold. Output S3/CW Logs, status SNS, triggered by EventBridge.</span></div>
@@ -3012,6 +3159,9 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
   <div><b>Patch Manager</b><span class="vi"><code>AWS-RunPatchBaseline</code>. Baseline (mặc định critical + security), tag <code>Patch Group</code> (1 instance → 1 group → 1 baseline). Chạy trong Maintenance Window.</span><span class="en"><code>AWS-RunPatchBaseline</code>. Baseline (default critical + security), <code>Patch Group</code> tag (1 instance → 1 group → 1 baseline). Run in a Maintenance Window.</span></div>
   <div><b>Session Manager</b><span class="vi">Shell không port 22, không key, không bastion. Log lệnh ra S3/CW Logs, CloudTrail <code>StartSession</code>. Giới hạn bằng IAM + tag.</span><span class="en">Shell without port 22, keys or bastion. Command logs to S3/CW Logs, CloudTrail <code>StartSession</code>. Restrict with IAM + tags.</span></div>
   <div><b>Distributor / OpsCenter</b><span class="vi">Distributor: package (zip/OS + manifest trên S3), cài qua Run Command hoặc State Manager <code>AWS-ConfigureAWSPackage</code>. OpsCenter: OpsItem + runbook gợi ý.</span><span class="en">Distributor: packages (zip per OS + manifest in S3), installed via Run Command or State Manager <code>AWS-ConfigureAWSPackage</code>. OpsCenter: OpsItems + suggested runbooks.</span></div>
+</div>
+<h3 class="cheat-h"><span class="vi">Phần 5 · Load Balancing</span><span class="en">Part 5 · Load Balancing</span></h3>
+<div class="cheat">
   <div><b>Scalability / HA</b><span class="vi">Scale up = vertical (DB). Scale out = horizontal (ASG/ELB). HA = ≥ 2 AZ (passive: RDS Multi-AZ; active: horizontal).</span><span class="en">Scale up = vertical (DB). Scale out = horizontal (ASG/ELB). HA = ≥ 2 AZs (passive: RDS Multi-AZ; active: horizontal).</span></div>
   <div><b>ELB types</b><span class="vi">ALB L7 HTTP/WebSocket · NLB L4 TCP/UDP/TLS, static IP/AZ · GWLB L3 GENEVE 6081, firewall/IDS · CLB deprecated. SG EC2 nhận từ SG LB.</span><span class="en">ALB L7 HTTP/WebSocket · NLB L4 TCP/UDP/TLS, static IP per AZ · GWLB L3 GENEVE 6081, firewall/IDS · CLB deprecated. EC2 SG allows the LB SG.</span></div>
   <div><b>ALB</b><span class="vi">Route theo host/path/query/header/method/source IP. Target: EC2, ECS, Lambda, private IP. IP client ở <code>X-Forwarded-For</code>. Rule priority 1…50,000. Weighted TG = blue/green.</span><span class="en">Routes by host/path/query/header/method/source IP. Targets: EC2, ECS, Lambda, private IP. Client IP in <code>X-Forwarded-For</code>. Rule priority 1…50,000. Weighted TGs = blue/green.</span></div>
@@ -3021,14 +3171,26 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
   <div><b>SSL / SNI</b><span class="vi">Cert trong ACM, SSL termination ở LB. Nhiều cert / nhiều domain → SNI → ALB, NLB, CloudFront (không CLB).</span><span class="en">Certs in ACM, SSL termination at the LB. Many certs / domains → SNI → ALB, NLB, CloudFront (not CLB).</span></div>
   <div><b>Target group</b><span class="vi">Deregistration delay 1–3600s (mặc định 300, 0 = tắt). Slow start 30–900s. Round Robin / Least Outstanding (ALB/CLB), Flow Hash (NLB). Toàn unhealthy → route tới tất cả.</span><span class="en">Deregistration delay 1–3600s (default 300, 0 = off). Slow start 30–900s. Round Robin / Least Outstanding (ALB/CLB), Flow Hash (NLB). All unhealthy → route to all.</span></div>
   <div><b>ELB errors</b><span class="vi">4XX client, 5XX server. 503 = không còn healthy host. 504 = keep-alive &lt; idle timeout. Spillover &gt; 0 = mất request. Access logs → S3.</span><span class="en">4XX client, 5XX server. 503 = no healthy hosts. 504 = keep-alive &lt; idle timeout. Spillover &gt; 0 = lost requests. Access logs → S3.</span></div>
+</div>
+<h3 class="cheat-h"><span class="vi">Phần 6 · Auto Scaling</span><span class="en">Part 6 · Auto Scaling</span></h3>
+<div class="cheat">
   <div><b>ASG scaling</b><span class="vi">Target tracking (tự tạo alarm), simple/step, scheduled, predictive. Metric: CPU, RequestCountPerTarget, Network, custom. Cooldown 300s.</span><span class="en">Target tracking (creates alarms), simple/step, scheduled, predictive. Metrics: CPU, RequestCountPerTarget, network, custom. Cooldown 300s.</span></div>
   <div><b>ASG features</b><span class="vi">Instance Refresh (min healthy %, warm-up). Warm pool (running/stopped/hibernated). Lifecycle hooks Pending:Wait / Terminating:Wait → EventBridge/SNS/SQS.</span><span class="en">Instance Refresh (min healthy %, warm-up). Warm pool (running/stopped/hibernated). Lifecycle hooks Pending:Wait / Terminating:Wait → EventBridge/SNS/SQS.</span></div>
   <div><b>ASG troubleshoot</b><span class="vi">Chạm max / AZ hết capacity / SG hoặc key pair bị xoá / lỗi &gt; 24h → suspend. Unhealthy → thay mới, không reboot. Group metrics phải opt-in.</span><span class="en">Hit max / AZ out of capacity / SG or key pair deleted / failing &gt; 24h → suspended. Unhealthy → replaced, not rebooted. Group metrics are opt-in.</span></div>
+</div>
+<h3 class="cheat-h"><span class="vi">Phần 7 · Lambda</span><span class="en">Part 7 · Lambda</span></h3>
+<div class="cheat">
   <div><b>Lambda</b><span class="vi">≤ 30 phút (cũ: 15), ≤ 10 GB RAM (RAM ↑ → CPU ↑). Trả theo request + GB-giây (free 1M req, 400k GB-s). Docker → ưu tiên ECS/Fargate.</span><span class="en">≤ 30 min (formerly 15), ≤ 10 GB RAM (more RAM → more CPU). Pay per request + GB-seconds (free 1M req, 400k GB-s). Docker → prefer ECS/Fargate.</span></div>
   <div><b><span class="vi">Lambda quyền</span><span class="en">Lambda permissions</span></b><span class="vi">Execution role = function được làm gì (logs, S3…). Resource-based policy = ai được invoke (S3, SNS…). EventBridge Scheduler dùng role riêng.</span><span class="en">Execution role = what the function may do (logs, S3…). Resource-based policy = who may invoke (S3, SNS…). EventBridge Scheduler uses its own role.</span></div>
+</div>
+<h3 class="cheat-h"><span class="vi">Phần 8 · EBS &amp; EFS</span><span class="en">Part 8 · EBS &amp; EFS</span></h3>
+<div class="cheat">
   <div><b>EBS</b><span class="vi">Network drive, khoá 1 AZ (snapshot để chuyển). Root DeleteOnTermination = on. gp3 IOPS độc lập size; gp2 3 IOPS/GB; &gt; 32k IOPS → io1/io2 Nitro; st1/sc1 không boot.</span><span class="en">Network drive, locked to one AZ (snapshot to move). Root DeleteOnTermination = on. gp3 IOPS independent of size; gp2 3 IOPS/GB; &gt; 32k IOPS → io1/io2 Nitro; st1/sc1 can't boot.</span></div>
   <div><b>EBS snapshots</b><span class="vi">DLM (tự động theo tag), FSR (khởi tạo sẵn, rất đắt), Archive (-75%, restore ≤ 72h), Recycle Bin (1 ngày–1 năm).</span><span class="en">DLM (tag-based automation), FSR (pre-initialised, very expensive), Archive (-75%, ≤ 72h restore), Recycle Bin (1 day–1 year).</span></div>
   <div><b>EFS</b><span class="vi">NFS multi-AZ, chỉ Linux, SG port 2049, pay-per-use. General Purpose (Max I/O = thế hệ cũ); Bursting / Elastic / Provisioned; Standard / IA / Archive; Regional / One Zone.</span><span class="en">Multi-AZ NFS, Linux only, SG port 2049, pay-per-use. General Purpose (Max I/O = previous gen); Bursting / Elastic / Provisioned; Standard / IA / Archive; Regional / One Zone.</span></div>
+</div>
+<h3 class="cheat-h"><span class="vi">Phần 9 · S3 &amp; Athena</span><span class="en">Part 9 · S3 &amp; Athena</span></h3>
+<div class="cheat">
   <div><b>S3 security</b><span class="vi">(IAM allow OR bucket policy allow) AND không explicit deny. Cross-account/public → bucket policy. Block Public Access thắng policy. ACL nên tắt.</span><span class="en">(IAM allow OR bucket policy allow) AND no explicit deny. Cross-account/public → bucket policy. Block Public Access overrides policies. Disable ACLs.</span></div>
   <div><b>S3 encryption</b><span class="vi">SSE-S3 (AES256, mặc định) · SSE-KMS (aws:kms, audit, quota KMS → Bucket Key) · DSSE-KMS (2 lớp) · SSE-C (key khách, HTTPS, chặn mặc định từ 04/2026) · client-side. Ép bằng bucket policy; HTTPS → aws:SecureTransport.</span><span class="en">SSE-S3 (AES256, default) · SSE-KMS (aws:kms, audit, KMS quota → Bucket Key) · DSSE-KMS (dual-layer) · SSE-C (customer key, HTTPS, blocked by default since Apr 2026) · client-side. Enforce via bucket policy; HTTPS → aws:SecureTransport.</span></div>
   <div><b>Versioning</b><span class="vi">Delete = delete marker (xoá marker để khôi phục); xoá version ID = vĩnh viễn. Object cũ = null. Bật lần đầu chờ 15 phút (404 NoSuchKey).</span><span class="en">Delete = delete marker (remove it to restore); deleting a version ID = permanent. Older objects = null. First enable: wait 15 min (404 NoSuchKey).</span></div>
@@ -3038,6 +3200,7 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
   <div><b>S3 events</b><span class="vi">SNS / SQS / Lambda (resource policy ở đích) hoặc EventBridge (mọi event, filter nâng cao, nhiều đích, replay).</span><span class="en">SNS / SQS / Lambda (resource policy on target) or EventBridge (all events, advanced filters, many targets, replay).</span></div>
   <div><b>S3 performance</b><span class="vi">3,500 write + 11,000 read /s /prefix (cũ: 5,500). Multipart &gt; 100 MB (bắt buộc &gt; 5 GB, ≤ 10,000 part). Transfer Acceleration qua edge. Byte-range fetch.</span><span class="en">3,500 writes + 11,000 reads /s /prefix (formerly 5,500). Multipart &gt; 100 MB (required &gt; 5 GB, ≤ 10,000 parts). Transfer Acceleration via edge. Byte-range fetches.</span></div>
   <div><b>Batch / Inventory / Athena</b><span class="vi">Inventory (CSV/ORC/Parquet) → Athena lọc → Batch Operations (encrypt, tag, copy, restore). Athena: SQL serverless, trả theo TB scan; Parquet/ORC + nén + partition + file lớn.</span><span class="en">Inventory (CSV/ORC/Parquet) → Athena filter → Batch Operations (encrypt, tag, copy, restore). Athena: serverless SQL, pay per TB scanned; Parquet/ORC + compression + partitions + big files.</span></div>
+</div>
 </div>
 
 <p class="foot"><span class="vi">Dọn dẹp sau lab: terminate instance, deregister AMI, xoá snapshot, xoá dashboard/alarm, đưa instance về t2.micro để ở trong free tier; terminate các instance trong Fleet Manager, xoá maintenance window, S3 bucket inventory; xoá ASG, load balancer, target group; tắt EventBridge schedule, xoá EBS volume/snapshot, EFS, tắt S3 Inventory.</span><span class="en">Lab cleanup: terminate instances, deregister AMIs, delete snapshots, delete dashboards/alarms, revert to t2.micro to stay in the free tier; terminate Fleet Manager instances, delete maintenance windows and the inventory S3 bucket; delete ASGs, load balancers, target groups; disable EventBridge schedules, delete EBS volumes/snapshots, EFS, disable S3 Inventory.</span></p>
@@ -3193,50 +3356,205 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
   }
   var body=document.body;
   document.getElementById('menuBtn').addEventListener('click',function(){body.classList.toggle('nav-open')});
-  /* TOC: click to scroll + scrollspy.
-     Never call scrollIntoView() on sidebar links: it also scrolls the window and
-     interrupts the smooth scroll started by a click. Only the sidebar's own scrollTop is changed. */
+  /* ===================== Table of contents =====================
+     - click → smooth scroll (never scrollIntoView on sidebar links: it would also scroll the window
+       and interrupt the smooth scroll); only the sidebar's own scrollTop is adjusted
+     - scrollspy, collapsible parts (current part auto-opens), numbering, "learned" marks,
+       accent-insensitive search over titles + content, mobile drawer + crumb, back-to-top */
   var sidebar=document.getElementById('sidebar');
   var topbar=document.querySelector('.topbar');
+  var crumb=document.getElementById('crumb');
   function offset(){return topbar.offsetHeight+16}
-  var links=[].slice.call(sidebar.querySelectorAll('a[href^="#"]'));
-  var items=links.map(function(a){return {a:a,el:document.getElementById(a.getAttribute('href').slice(1))}}).filter(function(x){return x.el});
+  function lang(){return d.dataset.lang==='en'?'en':'vi'}
+  function txt(node){ /* visible text of a node in the current language */
+    var c=node.cloneNode(true); [].forEach.call(c.querySelectorAll(lang()==='vi'?'.en':'.vi'),function(x){x.remove()});
+    return c.textContent.replace(/\s+/g,' ').trim();
+  }
+  var secs=[].slice.call(sidebar.querySelectorAll('.toc-sec'));
+  var items=[];
+  secs.forEach(function(sec){
+    var part=sec.getAttribute('data-part'), n=0;
+    [].forEach.call(sec.querySelectorAll('.toc-item'),function(row){
+      var a=row.querySelector('a'), id=a.getAttribute('href').slice(1), el=document.getElementById(id);
+      if(!el) return;
+      n++;
+      var num=part==='R'?'★':part+'.'+n;
+      row.querySelector('.toc-num').textContent=num;
+      var it={id:id,a:a,row:row,sec:sec,el:el,num:num,label:row.querySelector('.toc-label'),done:row.querySelector('.toc-done'),snip:row.querySelector('.toc-snip')};
+      if(el.tagName==='SECTION'){
+        var h=el.querySelector('h3');
+        if(h){ var sp=document.createElement('span'); sp.className='sec-num'; sp.textContent=num; var ic=h.querySelector('svg.ico'); h.insertBefore(sp, ic?ic.nextSibling:h.firstChild); }
+        var foot=document.createElement('div'); foot.className='sec-foot';
+        foot.innerHTML='<button class="done-btn" type="button" aria-pressed="false"><span class="vi">Đánh dấu đã học</span><span class="en">Mark as learned</span></button>';
+        el.appendChild(foot); it.btn=foot.firstChild;
+      }
+      it.content=id==='cheatsheet'?document.getElementById('cheat-body'):el;
+      items.push(it);
+    });
+  });
+  var byId={}; items.forEach(function(it){byId[it.id]=it});
+
+  /* ---- collapsible parts ---- */
+  var manual={};                                    /* parts opened by the user stay open */
+  function setOpen(sec,open){ sec.classList.toggle('open',open); sec.querySelector('.toc-group').setAttribute('aria-expanded',open?'true':'false'); }
+  secs.forEach(function(sec){
+    sec.querySelector('.toc-group').addEventListener('click',function(){
+      var open=!sec.classList.contains('open'); setOpen(sec,open); manual[sec.dataset.part]=open; syncToggleAll();
+    });
+  });
+  var toggleAll=document.getElementById('tocToggleAll');
+  function allOpen(){return secs.every(function(x){return x.classList.contains('open')})}
+  function syncToggleAll(){ toggleAll.innerHTML=allOpen()?'<span class="vi">Thu gọn</span><span class="en">Collapse</span>':'<span class="vi">Mở hết</span><span class="en">Expand all</span>'; }
+  toggleAll.addEventListener('click',function(){
+    var open=!allOpen();
+    secs.forEach(function(sec){ var keep=current&&current.sec===sec; setOpen(sec,open||keep); manual[sec.dataset.part]=open; });
+    syncToggleAll(); revealActive();
+  });
+
+  /* ---- active item, crumb, scrollspy ---- */
   var current=null, lockUntil=0;
-  function setActive(a){
-    if(a===current) return;
-    if(current) current.classList.remove('active');
-    current=a; if(!a) return;
-    a.classList.add('active');
-    var top=a.offsetTop-sidebar.offsetTop, bottom=top+a.offsetHeight;
-    if(top<sidebar.scrollTop+40) sidebar.scrollTop=top-40;
-    else if(bottom>sidebar.scrollTop+sidebar.clientHeight-40) sidebar.scrollTop=bottom-sidebar.clientHeight+40;
+  function revealActive(){
+    if(!current||current.row.hidden||!current.sec.classList.contains('open')) return;
+    var sb=sidebar.getBoundingClientRect(), r=current.a.getBoundingClientRect(), head=sidebar.querySelector('.toc-head').offsetHeight;
+    if(r.top<sb.top+head+8) sidebar.scrollTop-=sb.top+head+8-r.top;
+    else if(r.bottom>sb.bottom-24) sidebar.scrollTop+=r.bottom-sb.bottom+24;
+  }
+  function setActive(it){
+    if(it===current) return;
+    var prev=current;
+    if(prev) prev.a.classList.remove('active');
+    current=it; if(!it) return;
+    it.a.classList.add('active');
+    if(!searching){
+      if(prev&&prev.sec!==it.sec&&!manual[prev.sec.dataset.part]) setOpen(prev.sec,false);
+      setOpen(it.sec,true); syncToggleAll();
+    }
+    updateCrumb(); revealActive();
+  }
+  function updateCrumb(){
+    var show=current&&window.scrollY>40;
+    crumb.textContent=show?current.num+' · '+txt(current.label):'';
+    body.classList.toggle('has-crumb',!!show);
   }
   function spy(){
     if(Date.now()<lockUntil) return;
     var pick=items[0];
-    for(var i=0;i<items.length;i++){
-      if(items[i].el.getBoundingClientRect().top-offset()<=24) pick=items[i]; else break;
-    }
+    for(var i=0;i<items.length;i++){ if(items[i].el.getBoundingClientRect().top-offset()<=24) pick=items[i]; else break; }
     if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4) pick=items[items.length-1];
-    setActive(pick&&pick.a);
+    setActive(pick); updateCrumb();
   }
+  var toTop=document.getElementById('toTop');
   var ticking=false;
   window.addEventListener('scroll',function(){
-    if(!ticking){ticking=true; requestAnimationFrame(function(){ticking=false; spy();});}
+    if(!ticking){ticking=true; requestAnimationFrame(function(){ticking=false; spy(); toTop.classList.toggle('show',window.scrollY>window.innerHeight*1.2);});}
   },{passive:true});
   window.addEventListener('scrollend',function(){lockUntil=0; spy();});
   window.addEventListener('resize',spy);
-  items.forEach(function(it){
-    it.a.addEventListener('click',function(e){
-      e.preventDefault();
-      body.classList.remove('nav-open');
-      var y=it.el.getBoundingClientRect().top+window.scrollY-offset();
-      lockUntil=Date.now()+1500;            /* keep the clicked item highlighted during the smooth scroll */
-      setActive(it.a);
-      window.scrollTo({top:y,behavior:'smooth'});
-      try{history.replaceState(null,'','#'+it.el.id)}catch(err){}
-    });
+  toTop.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+
+  /* ---- navigation (TOC links + cross-references inside the notes) ---- */
+  function closeNav(){ body.classList.remove('nav-open'); }
+  function goTo(el,it){
+    closeNav();
+    var y=el.getBoundingClientRect().top+window.scrollY-offset();
+    if(it){ lockUntil=Date.now()+1500; setActive(it); }   /* keep the clicked item highlighted during the smooth scroll */
+    window.scrollTo({top:y,behavior:'smooth'});
+    try{history.replaceState(null,'','#'+el.id)}catch(err){}
+  }
+  items.forEach(function(it){ it.a.addEventListener('click',function(e){ e.preventDefault(); goTo(it.el,it); }); });
+  document.querySelector('main').addEventListener('click',function(e){
+    var a=e.target.closest('a[href^="#"]'); if(!a) return;
+    var el=document.getElementById(a.getAttribute('href').slice(1)); if(!el) return;
+    e.preventDefault(); goTo(el,byId[el.id]);
   });
+  document.getElementById('navBackdrop').addEventListener('click',closeNav);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&body.classList.contains('nav-open')&&viewer.hidden) closeNav(); });
+
+  /* ---- "learned" marks (per device, localStorage) ---- */
+  var done={};
+  try{ JSON.parse(localStorage.getItem('done')||'[]').forEach(function(id){done[id]=1}); }catch(e){}
+  function saveDone(){ try{localStorage.setItem('done',JSON.stringify(Object.keys(done)))}catch(e){} }
+  var progBar=document.getElementById('progBar'), progText=document.getElementById('progText');
+  function renderDone(){
+    var total=0, n=0;
+    secs.forEach(function(sec){
+      var its=items.filter(function(it){return it.sec===sec}), k=its.filter(function(it){return done[it.id]}).length;
+      sec.querySelector('.toc-prog').textContent=k+'/'+its.length;
+      sec.classList.toggle('complete',k===its.length); total+=its.length; n+=k;
+    });
+    items.forEach(function(it){
+      var on=!!done[it.id];
+      it.row.classList.toggle('done',on); it.done.setAttribute('aria-pressed',on?'true':'false');
+      it.done.setAttribute('aria-label',(on?(lang()==='vi'?'Bỏ đánh dấu đã học: ':'Unmark learned: '):(lang()==='vi'?'Đánh dấu đã học: ':'Mark learned: '))+txt(it.label));
+      if(it.btn){ it.btn.setAttribute('aria-pressed',on?'true':'false');
+        it.btn.innerHTML=on?'<span class="vi">Đã học</span><span class="en">Learned</span>':'<span class="vi">Đánh dấu đã học</span><span class="en">Mark as learned</span>'; }
+    });
+    progBar.style.width=(total?Math.round(n/total*100):0)+'%';
+    progText.textContent=n+'/'+total;
+  }
+  function toggleDone(it){ if(done[it.id]) delete done[it.id]; else done[it.id]=1; saveDone(); renderDone(); }
+  items.forEach(function(it){
+    it.done.addEventListener('click',function(){toggleDone(it)});
+    if(it.btn) it.btn.addEventListener('click',function(){toggleDone(it)});
+  });
+  renderDone();
+
+  /* ---- search (accent-insensitive, titles + content, current language) ---- */
+  var input=document.getElementById('tocSearch'), clearBtn=document.getElementById('tocClear'), result=document.getElementById('tocResult');
+  var searching=false, cache={}, searchT=0, savedOpen=null;
+  function norm(t){ return t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d'); }
+  function esc(t){ return t.replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]}); }
+  function mark(t,q){ var i=norm(t).indexOf(q); return i<0?esc(t):esc(t.slice(0,i))+'<mark>'+esc(t.slice(i,i+q.length))+'</mark>'+esc(t.slice(i+q.length)); }
+  function index(){
+    var L=lang(); if(cache[L]) return cache[L];
+    return cache[L]=items.map(function(it){ var t=txt(it.content); return {title:txt(it.label),titleN:norm(txt(it.label)),body:t,bodyN:norm(t)}; });
+  }
+  function resetSearch(){
+    searching=false; result.hidden=true; clearBtn.hidden=true;
+    items.forEach(function(it){ it.row.hidden=false; it.snip.hidden=true; it.snip.innerHTML=''; it.label.innerHTML=it.labelHTML; });
+    secs.forEach(function(sec){ sec.hidden=false; });
+    if(savedOpen){ secs.forEach(function(sec,i){ setOpen(sec,savedOpen[i]) }); savedOpen=null; }
+    if(current) setOpen(current.sec,true);
+    syncToggleAll(); revealActive();
+  }
+  items.forEach(function(it){ it.labelHTML=it.label.innerHTML; });
+  function runSearch(){
+    var raw=input.value.trim(), q=norm(raw);
+    if(!q){ resetSearch(); return; }
+    if(!searching){ savedOpen=secs.map(function(sec){return sec.classList.contains('open')}); }
+    searching=true; clearBtn.hidden=false;
+    var idx=index(), hits=0;
+    items.forEach(function(it,i){
+      var x=idx[i], inTitle=x.titleN.indexOf(q)>=0, at=x.bodyN.indexOf(q);
+      var ok=inTitle||at>=0;
+      it.row.hidden=!ok; it.label.innerHTML=inTitle?mark(x.title,q):it.labelHTML;
+      if(ok&&!inTitle){
+        var a0=Math.max(0,at-38), a1=Math.min(x.body.length,at+q.length+60);
+        it.snip.innerHTML=(a0>0?'…':'')+mark(x.body.slice(a0,a1),q)+(a1<x.body.length?'…':''); it.snip.hidden=false;
+      } else { it.snip.hidden=true; it.snip.innerHTML=''; }
+      if(ok) hits++;
+    });
+    secs.forEach(function(sec){
+      var any=items.some(function(it){return it.sec===sec&&!it.row.hidden});
+      sec.hidden=!any; setOpen(sec,any);
+    });
+    result.hidden=false;
+    result.textContent=hits?(lang()==='vi'?hits+' mục khớp · Enter để mở mục đầu':hits+' matching sections · Enter opens the first'):(lang()==='vi'?'Không tìm thấy "'+raw+'"':'No results for "'+raw+'"');
+    sidebar.scrollTop=0;
+  }
+  input.addEventListener('input',function(){ clearTimeout(searchT); searchT=setTimeout(runSearch,120); });
+  input.addEventListener('keydown',function(e){
+    if(e.key==='Enter'){ e.preventDefault(); clearTimeout(searchT); runSearch(); var f=items.filter(function(it){return !it.row.hidden})[0]; if(f){ input.blur(); goTo(f.el,f); } }
+    else if(e.key==='Escape'){ e.stopPropagation(); input.value=''; resetSearch(); input.blur(); }
+  });
+  clearBtn.addEventListener('click',function(){ input.value=''; resetSearch(); input.focus(); });
+  function refreshLang(){
+    input.placeholder=input.getAttribute(lang()==='vi'?'data-ph-vi':'data-ph-en');
+    renderDone(); updateCrumb(); if(searching) runSearch();
+  }
+  document.getElementById('langBtn').addEventListener('click',refreshLang);
+  refreshLang();
+  syncToggleAll();
   spy();
 })();
 </script>
