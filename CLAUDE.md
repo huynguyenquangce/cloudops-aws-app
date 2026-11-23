@@ -36,7 +36,10 @@ Repository để học AWS CloudOps. User sẽ paste transcript bài giảng và
 ## Cấu trúc `index.html`
 
 - Một file tự chứa (self-contained): CSS/JS inline, icon nhúng inline (SVG) — mở trực tiếp bằng trình duyệt không cần server.
-- Có sidebar mục lục (TOC) để điều hướng nhanh giữa các section, highlight section đang xem.
+- Sidebar mục lục (TOC): mỗi Phần là một `<div class="toc-sec" data-part="N">` (nút `.toc-group` thu gọn được) chứa các `.toc-item` (`<a href="#id">` + nút `.toc-done`). **Thêm section mới = thêm 1 `.toc-item` vào đúng nhóm** theo thứ tự xuất hiện trong trang; số thứ tự (1.1, 1.2…), nút "Đánh dấu đã học", tìm kiếm và scrollspy tự sinh bằng JS — không gõ số tay.
+- Mỗi Phần trong nội dung có divider `<div class="part">` với nhãn "Phần N / Part N" khớp với nhóm trong TOC. Tách / thêm Phần thì cập nhật cả hai.
+- Cheat sheet chia nhóm theo Phần (`h3.cheat-h` + `.cheat`) trong `#cheat-body`; thêm thẻ vào đúng nhóm.
+- Nội dung liên quan giữa các section: dùng link chéo (`<p class="xref">` hoặc `<a href="#id">`) thay vì viết lặp lại; điều hướng mượt được xử lý tự động.
 - Responsive chuẩn: không được tràn ngang ở mọi khổ từ 320px (iPhone SE) → desktop, cả iPhone xoay ngang. Bảng/diagram/code chỉ cuộn ngang **bên trong** khung của chúng (`.tbl-wrap`, `figure.diagram`, `pre`). Chuỗi dài không có khoảng trắng (ARN, path, lệnh) phải tự xuống dòng (`overflow-wrap:anywhere` đã có cho `code` và `.cheat`). Header: các nút không được co lại, chỉ phần brand được rút gọn.
 - Hỗ trợ light/dark mode.
 

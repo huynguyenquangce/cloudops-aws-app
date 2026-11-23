@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AWS CloudOps Notes</title>
 <meta name="description" content="Ghi chú ôn thi AWS CloudOps / SysOps — song ngữ VI · EN">
-<link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
@@ -15,6 +14,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" id="themeColor" content="#ffffff">
 <script>
+if(/^https?:$/.test(location.protocol)){var m=document.createElement('link');m.rel='manifest';m.href='manifest.webmanifest';document.head.appendChild(m);}
 (function(){var d=document.documentElement;try{var l=localStorage.getItem('lang');if(l==='en'||l==='vi'){d.dataset.lang=l;d.lang=l;}var t=localStorage.getItem('theme');if(t==='dark'||t==='light')d.dataset.theme=t;}catch(e){}})();
 </script>
 <style>
@@ -106,7 +106,7 @@ html[data-lang="vi"] .lang-toggle .l-vi, html[data-lang="en"] .lang-toggle .l-en
 .sidebar .toc-item a.active{background:var(--accent-soft);border-left-color:var(--accent);font-weight:600}
 .sidebar .toc-item a.active .toc-num{color:var(--accent)}
 .toc-done{flex:none;align-self:center;width:28px;height:28px;margin-left:2px;border:0;border-radius:50%;background:transparent;cursor:pointer;position:relative}
-.toc-done::before{content:"";position:absolute;inset:7px;border:1.6px solid var(--border);border-radius:50%;transition:all .15s}
+.toc-done::before{content:"";position:absolute;inset:7px;border:1.6px solid color-mix(in srgb,var(--muted) 75%,transparent);border-radius:50%;transition:all .15s}
 .toc-done:hover::before{border-color:var(--ok)}
 .toc-done[aria-pressed="true"]::before{background:var(--ok);border-color:var(--ok)}
 .toc-done[aria-pressed="true"]::after{content:"";position:absolute;left:11.5px;top:9.5px;width:4px;height:7px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
@@ -125,7 +125,8 @@ html[data-lang="vi"] .lang-toggle .l-vi, html[data-lang="en"] .lang-toggle .l-en
 .crumb{display:none;font-size:12.5px;font-weight:600;color:var(--accent)}
 #navBackdrop{display:none}
 #toTop{position:fixed;right:max(16px,var(--sr));bottom:calc(18px + var(--sbm));z-index:12;width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.18);opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .2s,transform .2s}
-#toTop.show{opacity:1;transform:none;pointer-events:auto}
+#toTop{visibility:hidden}
+#toTop.show{opacity:1;transform:none;pointer-events:auto;visibility:visible}
 #toTop:hover{border-color:var(--accent)}
 body.dv-open #toTop,body.nav-open #toTop{display:none}
 main{flex:1;min-width:0;padding:28px 40px 80px}
@@ -169,8 +170,11 @@ td.y{color:var(--ok);font-weight:600} td.n{color:var(--bad);font-weight:600}
 /* diagrams */
 .dg-wrap{position:relative}
 .dg-wrap svg.dg{cursor:zoom-in}
-.dv-btn{position:absolute;top:8px;right:8px;z-index:2;width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:17px;line-height:1;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center}
-.dv-btn:hover{border-color:var(--accent)}
+.dg-wrap figure.diagram{margin-bottom:6px}
+.dv-bar-under{display:flex;justify-content:flex-end;margin:0 0 16px}
+.dv-btn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border-radius:15px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font:inherit;font-size:12.5px;font-weight:600;line-height:1;cursor:pointer}
+.dv-btn .ic{font-size:15px}
+.dv-btn:hover{border-color:var(--accent);color:var(--text)}
 #dgViewer{position:fixed;inset:0;z-index:50;background:var(--bg);display:flex;flex-direction:column}
 #dgViewer[hidden]{display:none}
 #dgViewer .dv-bar{display:flex;align-items:center;gap:8px;padding:calc(8px + var(--st)) max(12px,var(--sr)) 8px max(12px,var(--sl));background:var(--surface);border-bottom:1px solid var(--border)}
@@ -188,6 +192,7 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
 .dg{display:block;width:100%;height:auto;min-width:640px;color:var(--text);font-family:inherit}
 .dg text{fill:var(--text);font-size:13px}
 .dg .s{fill:var(--muted);font-size:11.5px}
+.dg .halo{paint-order:stroke;stroke:var(--bg);stroke-width:4px;stroke-linejoin:round}
 .dg .b{font-weight:700}
 .dg .c{text-anchor:middle}
 .dg .r{text-anchor:end}
@@ -361,14 +366,14 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
 </svg>
 
 <header class="topbar">
-  <button class="btn menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+  <button class="btn menu-btn" id="menuBtn" aria-label="Mục lục" aria-controls="sidebar" aria-expanded="false">☰</button>
   <div class="brand"><svg><use href="#ic-ec2"/></svg><span class="brand-txt"><span class="brand-name"><span class="aws">AWS </span>CloudOps <span class="full">Notes</span></span><span class="crumb" id="crumb"></span></span></div>
   <div class="spacer"></div>
   <button class="btn lang-toggle" id="langBtn" title="Tiếng Việt / English"><span class="l-vi">VI</span><span class="l-en">EN</span></button>
-  <button class="btn" id="themeBtn" title="Light / Dark">◐</button>
+  <button class="btn" id="themeBtn" title="Light / Dark" aria-label="Đổi giao diện sáng / tối">◐</button>
 </header>
 
-<div id="dgViewer" hidden role="dialog" aria-modal="true">
+<div id="dgViewer" hidden role="dialog" aria-modal="true" aria-labelledby="dvTitle">
   <div class="dv-bar">
     <span class="dv-title" id="dvTitle">Diagram</span>
     <button class="btn" id="dvOut" aria-label="Zoom out">−</button>
@@ -387,7 +392,7 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
 <nav class="sidebar" id="sidebar" aria-label="Table of contents">
   <div class="toc-head">
     <div class="toc-search">
-      <input id="tocSearch" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search" data-ph-vi="Tìm… (vd: KMS, 503)" data-ph-en="Search… (e.g. KMS, 503)" placeholder="Tìm… (vd: KMS, 503)">
+      <input id="tocSearch" type="search" autocomplete="off" spellcheck="false" enterkeyhint="search" data-ph-vi="Tìm… (vd: KMS, 503)" data-ph-en="Search… (KMS, 503)" placeholder="Tìm… (vd: KMS, 503)">
       <button id="tocClear" type="button" aria-label="Clear" hidden>✕</button>
     </div>
     <div class="toc-meta">
@@ -508,7 +513,7 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
 
 <h1><span class="vi">Ghi chú học AWS CloudOps</span><span class="en">AWS CloudOps study notes</span></h1>
 <p class="lead"><span class="vi">Tổng hợp trọng tâm từ các bài giảng, kèm diagram dùng bộ AWS Architecture Icons. Bấm <b>VI / EN</b> ở góc phải để đổi ngôn ngữ.</span><span class="en">Key points distilled from the lectures, with diagrams drawn using the AWS Architecture Icons. Use <b>VI / EN</b> at the top right to switch language.</span></p>
-<div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Khung màu cam = điểm hay ra thi (SOA-C02/C03).</span><span class="en">Orange boxes = points that often appear on the exam (SOA-C02/C03).</span></div>
+<div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Khung màu cam "Mẹo thi" = điểm hay ra thi (SOA-C02/C03).</span><span class="en">Orange boxes = points that often appear on the exam (SOA-C02/C03).</span></div>
 <div class="callout note"><span class="ttl"><span class="vi">Ghi chú thêm</span><span class="en">Extra note</span></span><span class="vi">Khung màu xanh = kiến thức bổ sung ngoài transcript. Nhãn <span class="upd">AWS docs 11/2026</span> = con số đã đối chiếu/cập nhật theo AWS docs mới nhất (có thể khác bài giảng; đề thi đôi khi vẫn dùng số cũ).</span><span class="en">Blue boxes = knowledge added beyond the transcripts. The <span class="upd">AWS docs 11/2026</span> tag = figures checked/updated against the latest AWS docs (may differ from the lecture; exams sometimes still use older numbers).</span></div>
 
 <!-- ============================ PART 1 ============================ -->
@@ -556,8 +561,8 @@ ssh -i DemoKeyPair.pem ec2-user@&lt;public-ipv4&gt;</code></pre>
       <use href="#ic-ec2" x="324" y="194" width="44" height="44"/>
       <text class="c b" x="346" y="256">EC2 Instance Connect</text>
       <path class="ln acc" d="M376 216 H620 V140 H704"/>
-      <text class="c t-acc" x="500" y="206"><tspan class="vi">đẩy SSH public key 1 lần (60s)</tspan><tspan class="en">push one-time SSH key (60s)</tspan></text>
-      <text class="c s" x="500" y="232"><tspan class="vi">rồi SSH từ dải IP của EIC</tspan><tspan class="en">then SSH from the EIC IP range</tspan></text>
+      <text class="c t-acc halo" x="500" y="206"><tspan class="vi">đẩy SSH public key 1 lần (60s)</tspan><tspan class="en">push one-time SSH key (60s)</tspan></text>
+      <text class="c s halo" x="500" y="232"><tspan class="vi">rồi SSH từ dải IP của EIC</tspan><tspan class="en">then SSH from the EIC IP range</tspan></text>
     </svg>
     <figcaption><span class="vi">SSH: IP của bạn phải khớp inbound rule. EIC: SG phải cho phép dải IP của dịch vụ EC2 Instance Connect.</span><span class="en">SSH: your IP must match an inbound rule. EIC: the SG must allow the EC2 Instance Connect service IP range.</span></figcaption>
   </figure>
@@ -581,7 +586,8 @@ ssh -i DemoKeyPair.pem ec2-user@&lt;public-ipv4&gt;</code></pre>
       <use href="#ic-r-user" x="30" y="130" width="44" height="44"/>
       <text class="c" x="52" y="194">User</text>
       <path class="ln" d="M82 152 H306"/>
-      <text class="c" x="190" y="142">EC2 Instance Connect</text>
+      <text class="c" x="132" y="124">EC2 Instance</text>
+      <text class="c" x="132" y="140">Connect</text>
       <use href="#ic-r-endpoint" x="314" y="126" width="52" height="52"/>
       <text class="c b" x="340" y="198">EIC Endpoint</text>
       <text class="c s" x="340" y="216">SG-EICE: outbound 22 → SG-EC2</text>
@@ -609,7 +615,7 @@ ssh -i DemoKeyPair.pem ec2-user@&lt;public-ipv4&gt;</code></pre>
     <tr><td><code>Connection timed out</code></td><td><span class="vi"><b>Lỗi mạng</b>: Security Group, route table của subnet, NACL; instance không có public IPv4; hoặc CPU 100% (instance quá tải)</span><span class="en"><b>Network issue</b>: Security Group, subnet route table, NACL; no public IPv4; or CPU at 100% (instance swamped)</span></td><td><span class="vi">Kiểm tra SG/route/NACL, public IP, tải CPU</span><span class="en">Check SG/routes/NACL, public IP, CPU load</span></td></tr>
     <tr><td><span class="vi">SSH được nhưng EC2 Instance Connect lỗi</span><span class="en">SSH works but EC2 Instance Connect fails</span></td><td><span class="vi">SG chỉ mở port 22 cho "My IP", chưa mở cho dải IP của EIC</span><span class="en">SG only allows port 22 from "My IP", not from the EIC range</span></td><td><span class="vi">Thêm prefix <code>EC2_INSTANCE_CONNECT</code> của region (lấy từ <code>ip-ranges.json</code>)</span><span class="en">Add the region's <code>EC2_INSTANCE_CONNECT</code> prefix (from <code>ip-ranges.json</code>)</span></td></tr>
   </table></div>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi"><b>Timeout</b> → vấn đề mạng (SG / NACL / route / public IP). <b>Permission denied</b> → vấn đề credential (key / username).</span><span class="en"><b>Timeout</b> → networking (SG / NACL / route / public IP). <b>Permission denied</b> → credentials (key / username).</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi"><b>Timeout</b> → vấn đề mạng (SG / NACL / route / public IP). <b>Permission denied</b> → vấn đề credential (key / username).</span><span class="en"><b>Timeout</b> → networking (SG / NACL / route / public IP). <b>Permission denied</b> → credentials (key / username).</span></div>
 </section>
 
 <!-- 1.3 INSTANCE TYPE -->
@@ -619,12 +625,12 @@ ssh -i DemoKeyPair.pem ec2-user@&lt;public-ipv4&gt;</code></pre>
   <figure class="diagram">
     <svg class="dg" viewBox="0 0 860 270" role="img" aria-label="Change instance type">
       <rect class="hw" x="20" y="24" width="220" height="140" rx="8"/>
-      <text class="c s" x="130" y="44">Physical host 1</text>
+      <text class="c s" x="130" y="44"><tspan class="vi">Host vật lý 1</tspan><tspan class="en">Physical host 1</tspan></text>
       <use href="#ic-r-instance" x="106" y="58" width="48" height="48"/>
       <text class="c b" x="130" y="128">t2.micro</text>
       <text class="c s" x="130" y="146">RAM ≈ 1 GB</text>
       <rect class="hw" x="620" y="24" width="220" height="140" rx="8"/>
-      <text class="c s" x="730" y="44">Physical host 2</text>
+      <text class="c s" x="730" y="44"><tspan class="vi">Host vật lý 2</tspan><tspan class="en">Physical host 2</tspan></text>
       <use href="#ic-r-instance" x="706" y="58" width="48" height="48"/>
       <text class="c b" x="730" y="128">t2.small</text>
       <text class="c s" x="730" y="146">RAM ≈ 2 GB</text>
@@ -691,7 +697,7 @@ ssh -i DemoKeyPair.pem ec2-user@&lt;public-ipv4&gt;</code></pre>
     </svg>
   </figure>
   <div class="tbl-wrap"><table>
-    <tr><th>Strategy</th><th><span class="vi">Đặc điểm</span><span class="en">Characteristics</span></th><th><span class="vi">Giới hạn / rủi ro</span><span class="en">Limits / risk</span></th><th>Use case</th></tr>
+    <tr><th><span class="vi">Chiến lược</span><span class="en">Strategy</span></th><th><span class="vi">Đặc điểm</span><span class="en">Characteristics</span></th><th><span class="vi">Giới hạn / rủi ro</span><span class="en">Limits / risk</span></th><th><span class="vi">Trường hợp dùng</span><span class="en">Use case</span></th></tr>
     <tr><td><b>Cluster</b></td><td><span class="vi">Gom sát nhau trong <b>1 AZ</b>, phần cứng low-latency, ~10 Gbps giữa các instance (bật enhanced networking)</span><span class="en">Packed in <b>one AZ</b> on low-latency hardware, ~10 Gbps between instances (enhanced networking)</span></td><td><span class="vi">AZ chết → <b>tất cả</b> chết (hiệu năng cao, rủi ro cao)</span><span class="en">AZ fails → <b>all</b> fail (high performance, high risk)</span></td><td><span class="vi">Big data job cần xong nhanh, app cần latency cực thấp/throughput cao</span><span class="en">Big data jobs that must finish fast; apps needing very low latency / high throughput</span></td></tr>
     <tr><td><b>Spread</b></td><td><span class="vi">Mỗi instance trên <b>phần cứng khác nhau</b>, trải được nhiều AZ</span><span class="en">Each instance on <b>different hardware</b>, can span AZs</span></td><td><span class="vi"><b>Tối đa 7 instance / AZ / group</b></span><span class="en"><b>Max 7 instances / AZ / group</b></span></td><td><span class="vi">App quan trọng, cần HA tối đa, lỗi phải cô lập từng instance</span><span class="en">Critical apps needing max HA, failures isolated per instance</span></td></tr>
     <tr><td><b>Partition</b></td><td><span class="vi">Chia thành partition, <b>mỗi partition = 1 bộ rack</b> riêng; trải nhiều AZ trong cùng region; xem partition qua <b>instance metadata</b></span><span class="en">Split into partitions, <b>each partition = its own set of racks</b>; spans AZs in one region; partition visible via <b>instance metadata</b></span></td><td><span class="vi"><b>Tối đa 7 partition / AZ</b>, tới <b>hàng trăm</b> instance. Lỗi rack chỉ ảnh hưởng 1 partition</span><span class="en"><b>Max 7 partitions / AZ</b>, up to <b>hundreds</b> of instances. A rack failure hits only one partition</span></td><td><span class="vi">App partition-aware: HDFS, HBase, Cassandra, Kafka</span><span class="en">Partition-aware apps: HDFS, HBase, Cassandra, Kafka</span></td></tr>
@@ -703,7 +709,7 @@ ssh -i DemoKeyPair.pem ec2-user@&lt;public-ipv4&gt;</code></pre>
     <li><span class="vi">Spread level: <b>rack</b> (mặc định) hoặc <b>host</b> (chỉ cho Outposts). Partition: chọn số partition 1–7.</span><span class="en">Spread level: <b>rack</b> (default) or <b>host</b> (Outposts only). Partition: pick 1–7 partitions.</span></li>
     <li><span class="vi">Khi launch: <b>Advanced details → Placement group name</b>.</span><span class="en">At launch: <b>Advanced details → Placement group name</b>.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Hiệu năng mạng → <b>Cluster</b>. Critical app, cô lập lỗi từng máy → <b>Spread</b> (nhớ con số 7/AZ). Hadoop/Cassandra/Kafka → <b>Partition</b>.</span><span class="en">Network performance → <b>Cluster</b>. Critical app, isolate each instance → <b>Spread</b> (remember 7/AZ). Hadoop/Cassandra/Kafka → <b>Partition</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Hiệu năng mạng → <b>Cluster</b>. Critical app, cô lập lỗi từng máy → <b>Spread</b> (nhớ con số 7/AZ). Hadoop/Cassandra/Kafka → <b>Partition</b>.</span><span class="en">Network performance → <b>Cluster</b>. Critical app, isolate each instance → <b>Spread</b> (remember 7/AZ). Hadoop/Cassandra/Kafka → <b>Partition</b>.</span></div>
 </section>
 
 <!-- 1.5 HIBERNATE -->
@@ -750,7 +756,7 @@ ssh -i DemoKeyPair.pem ec2-user@&lt;public-ipv4&gt;</code></pre>
       <use href="#ic-r-volume" x="678" y="120" width="40" height="40"/>
       <rect class="ram" x="746" y="126" width="90" height="28" rx="4"/><text class="c" x="791" y="145">RAM dump</text>
       <path class="ln acc" d="M791 124 V92"/>
-      <text class="c s" x="757" y="194"><tspan class="vi">nạp lại RAM → uptime không reset</tspan><tspan class="en">RAM reloaded → uptime not reset</tspan></text>
+      <text class="c s" x="757" y="194"><tspan class="vi">nạp lại RAM → uptime giữ nguyên</tspan><tspan class="en">RAM reloaded → uptime not reset</tspan></text>
       <path class="ln" d="M200 114 H222"/><path class="ln" d="M418 114 H440"/><path class="ln" d="M636 114 H658"/>
     </svg>
   </figure>
@@ -804,7 +810,7 @@ ssh -i DemoKeyPair.pem ec2-user@&lt;public-ipv4&gt;</code></pre>
     <li><span class="vi">Lịch (period, office hours, ngày làm việc…) lưu trong <b>DynamoDB config table</b>. Tài nguyên được gắn tag key mặc định <code>Schedule</code>.</span><span class="en">Schedules (periods, office hours, working days…) live in the <b>DynamoDB config table</b>. Resources are targeted by the default tag key <code>Schedule</code>.</span></li>
     <li><span class="vi">Production-ready; có tuỳ chọn snapshot RDS khi stop, tự gắn tag ghi lại hành động start/stop.</span><span class="en">Production-ready; options like RDS snapshot on stop and auto-tagging of start/stop actions.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Câu hỏi "tự động tắt/bật EC2/RDS ngoài giờ để tiết kiệm chi phí" → <b>Instance Scheduler on AWS</b>.</span><span class="en">"Automatically stop/start EC2/RDS outside business hours to save cost" → <b>Instance Scheduler on AWS</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Câu hỏi "tự động tắt/bật EC2/RDS ngoài giờ để tiết kiệm chi phí" → <b>Instance Scheduler on AWS</b>.</span><span class="en">"Automatically stop/start EC2/RDS outside business hours to save cost" → <b>Instance Scheduler on AWS</b>.</span></div>
 </section>
 
 <!-- ============================ PART 2 ============================ -->
@@ -832,7 +838,7 @@ ssh -i DemoKeyPair.pem ec2-user@&lt;public-ipv4&gt;</code></pre>
     <tr><td><b>Status check</b></td><td><code>StatusCheckFailed_Instance</code>, <code>_System</code>, <code>_AttachedEBS</code></td><td><span class="vi">Instance = VM; System = phần cứng bên dưới; AttachedEBS = volume đính kèm. Giá trị 0/1.</span><span class="en">Instance = the VM; System = underlying hardware; AttachedEBS = attached volumes. Value 0/1.</span></td></tr>
     <tr><td><b>Disk</b></td><td><code>DiskRead/WriteOps</code>, <code>DiskRead/WriteBytes</code></td><td><span class="vi"><b>Chỉ cho instance store</b>. Với EBS thì metric nằm ở chính EBS volume (trên EC2 sẽ thấy = 0).</span><span class="en"><b>Instance store only</b>. For EBS, metrics are on the EBS volume itself (shows 0 on EC2).</span></td></tr>
   </table></div>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi"><b>RAM KHÔNG có</b> trong metric mặc định của EC2. Muốn có RAM (hoặc metric ứng dụng) → tự push custom metric, thường qua <a href="#cw-agent">CloudWatch Agent</a>.</span><span class="en"><b>RAM is NOT</b> in the default EC2 metrics. For RAM (or app-level metrics) → push a custom metric yourself, usually via the <a href="#cw-agent">CloudWatch Agent</a>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi"><b>RAM KHÔNG có</b> trong metric mặc định của EC2. Muốn có RAM (hoặc metric ứng dụng) → tự push custom metric, thường qua <a href="#cw-agent">CloudWatch Agent</a>.</span><span class="en"><b>RAM is NOT</b> in the default EC2 metrics. For RAM (or app-level metrics) → push a custom metric yourself, usually via the <a href="#cw-agent">CloudWatch Agent</a>.</span></div>
   <p><span class="vi"><b>Hands-on:</b> tab <b>Monitoring</b> của instance → có thể add vào CloudWatch dashboard. Bật detailed monitoring: <b>Manage detailed monitoring → Enable</b> (tính phí).</span><span class="en"><b>Hands-on:</b> instance <b>Monitoring</b> tab → can add to a CloudWatch dashboard. Enable detailed monitoring: <b>Manage detailed monitoring → Enable</b> (extra cost).</span></p>
 </section>
 
@@ -883,7 +889,7 @@ ssh -i DemoKeyPair.pem ec2-user@&lt;public-ipv4&gt;</code></pre>
     <li><span class="vi">Chọn process theo: <b>PID file</b>, <b>tên process</b>, hoặc <b>pattern</b> (regex).</span><span class="en">Select processes by: <b>PID file</b>, <b>process name</b>, or <b>pattern</b> (regex).</span></li>
     <li><span class="vi">Metric có prefix <code>procstat_</code>: <code>procstat_cpu_time</code>, <code>procstat_cpu_usage</code>…</span><span class="en">Metrics are prefixed <code>procstat_</code>: <code>procstat_cpu_time</code>, <code>procstat_cpu_usage</code>…</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Cần <b>RAM</b>, <b>metric theo từng process</b>, hoặc <b>log file</b> từ EC2/on-prem → <b>Unified CloudWatch Agent</b> (process → procstat plugin).</span><span class="en">Need <b>RAM</b>, <b>per-process metrics</b>, or <b>log files</b> from EC2/on-prem → <b>Unified CloudWatch Agent</b> (processes → procstat plugin).</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Cần <b>RAM</b>, <b>metric theo từng process</b>, hoặc <b>log file</b> từ EC2/on-prem → <b>Unified CloudWatch Agent</b> (process → procstat plugin).</span><span class="en">Need <b>RAM</b>, <b>per-process metrics</b>, or <b>log files</b> from EC2/on-prem → <b>Unified CloudWatch Agent</b> (processes → procstat plugin).</span></div>
 
   <h4><span class="vi">Hands-on: cài agent &amp; đẩy log httpd</span><span class="en">Hands-on: install the agent &amp; ship httpd logs</span></h4>
   <ol>
@@ -907,7 +913,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
   <h3><svg class="ico"><use href="#ic-cloudwatch"/></svg><span class="vi">Status checks &amp; tự phục hồi</span><span class="en">Status checks &amp; recovery</span></h3>
   <p class="sub-lead"><span class="vi">Kiểm tra tự động do AWS thực hiện để phát hiện lỗi phần cứng/phần mềm.</span><span class="en">Automated checks run by AWS to detect hardware and software issues.</span></p>
   <div class="tbl-wrap"><table>
-    <tr><th>Check</th><th><span class="vi">Theo dõi</span><span class="en">Monitors</span></th><th><span class="vi">Cách xử lý</span><span class="en">Fix</span></th></tr>
+    <tr><th><span class="vi">Loại check</span><span class="en">Check</span></th><th><span class="vi">Theo dõi</span><span class="en">Monitors</span></th><th><span class="vi">Cách xử lý</span><span class="en">Fix</span></th></tr>
     <tr><td><b>System status</b></td><td><span class="vi">Hệ thống AWS: lỗi phần cứng/phần mềm của <b>host vật lý</b>, mất điện… Xem lịch bảo trì trong <b>Personal Health Dashboard</b></span><span class="en">AWS systems: hardware/software issues on the <b>physical host</b>, power loss… See scheduled maintenance in the <b>Personal Health Dashboard</b></span></td><td><span class="vi"><b>Stop &amp; Start</b> (không phải reboot) → instance chuyển sang host khác</span><span class="en"><b>Stop &amp; Start</b> (not reboot) → instance migrates to a new host</span></td></tr>
     <tr><td><b>Instance status</b></td><td><span class="vi">Cấu hình phần mềm/mạng của instance: network config sai, hết memory…</span><span class="en">Instance software/network config: invalid network config, exhausted memory…</span></td><td><span class="vi"><b>Reboot</b> hoặc sửa cấu hình instance</span><span class="en"><b>Reboot</b> or change the instance configuration</span></td></tr>
     <tr><td><b>Attached EBS status</b></td><td><span class="vi">EBS volume đính kèm có reachable và hoàn thành I/O không</span><span class="en">Whether attached EBS volumes are reachable and complete I/O</span></td><td><span class="vi"><b>Reboot</b> hoặc thay EBS volume lỗi</span><span class="en"><b>Reboot</b> or replace the affected volume</span></td></tr>
@@ -966,7 +972,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
   --state-value ALARM \
   --state-reason "testing recovering action"</code></pre>
   <p><span class="vi">→ History của alarm: OK → ALARM, gửi SNS và "Successfully executed action ec2 recover".</span><span class="en">→ Alarm history: OK → ALARM, SNS sent and "Successfully executed action ec2 recover".</span></p>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">System check fail → <b>stop/start</b> hoặc alarm <b>Recover</b>. Instance check fail → <b>reboot</b>. Recover giữ nguyên IP/EIP/metadata/placement group.</span><span class="en">System check fails → <b>stop/start</b> or a <b>Recover</b> alarm. Instance check fails → <b>reboot</b>. Recover keeps IPs/EIP/metadata/placement group.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">System check fail → <b>stop/start</b> hoặc alarm <b>Recover</b>. Instance check fail → <b>reboot</b>. Recover giữ nguyên IP/EIP/metadata/placement group.</span><span class="en">System check fails → <b>stop/start</b> or a <b>Recover</b> alarm. Instance check fails → <b>reboot</b>. Recover keeps IPs/EIP/metadata/placement group.</span></div>
   <p class="xref"><span class="vi">Instance nằm trong ASG thì không cần alarm Recover: ASG dùng status check (và ELB health check) để <b>terminate + thay instance mới</b> → xem <a href="#asg-ops">ASG health checks</a>.</span><span class="en">Instances in an ASG don't need a Recover alarm: the ASG uses status checks (and ELB health checks) to <b>terminate + replace</b> them → see <a href="#asg-ops">ASG health checks</a>.</span></p>
 </section>
 
@@ -1058,7 +1064,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
       <text class="c t-ok" x="718" y="284">✓ AMI</text>
     </svg>
   </figure>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi"><b>AWS Backup</b> tạo AMI cho EC2 với <b>no-reboot</b> → không gián đoạn nhưng <b>không đảm bảo toàn vẹn file system</b>. Muốn backup định kỳ có reboot → <b>EventBridge schedule + Lambda CreateImage</b>.</span><span class="en"><b>AWS Backup</b> creates EC2 AMIs with <b>no-reboot</b> → no interruption but <b>no file-system integrity guarantee</b>. For scheduled backups with reboot → <b>EventBridge schedule + Lambda CreateImage</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi"><b>AWS Backup</b> tạo AMI cho EC2 với <b>no-reboot</b> → không gián đoạn nhưng <b>không đảm bảo toàn vẹn file system</b>. Muốn backup định kỳ có reboot → <b>EventBridge schedule + Lambda CreateImage</b>.</span><span class="en"><b>AWS Backup</b> creates EC2 AMIs with <b>no-reboot</b> → no interruption but <b>no file-system integrity guarantee</b>. For scheduled backups with reboot → <b>EventBridge schedule + Lambda CreateImage</b>.</span></div>
 </section>
 
 <!-- 3.3 SHARING -->
@@ -1107,7 +1113,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
     <li><span class="vi">Share với: <b>Account ID</b>, <b>Organization ARN</b> hoặc <b>OU ARN</b>.</span><span class="en">Share with: <b>Account IDs</b>, <b>Organization ARN</b> or <b>OU ARN</b>.</span></li>
     <li><span class="vi">Tick <b>"Add create volume permission to the associated snapshots"</b> để account kia dùng được snapshot.</span><span class="en">Tick <b>"Add create volume permission to the associated snapshots"</b> so the other account can use the snapshots.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Share AMI mã hoá bị lỗi ở account đích → quên <b>share KMS CMK</b> (hoặc AMI đang dùng key AWS-managed <code>aws/ebs</code>, không share được).</span><span class="en">Shared encrypted AMI fails in the target account → forgot to <b>share the KMS CMK</b> (or the AMI uses the AWS-managed key <code>aws/ebs</code>, which can't be shared).</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Share AMI mã hoá bị lỗi ở account đích → quên <b>share KMS CMK</b> (hoặc AMI đang dùng key AWS-managed <code>aws/ebs</code>, không share được).</span><span class="en">Shared encrypted AMI fails in the target account → forgot to <b>share the KMS CMK</b> (or the AMI uses the AWS-managed key <code>aws/ebs</code>, which can't be shared).</span></div>
 </section>
 
 <!-- 3.4 IMAGE BUILDER -->
@@ -1275,7 +1281,7 @@ sudo /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl \
     <li><span class="vi">Gắn IAM instance profile có policy <b><code>AmazonSSMManagedInstanceCore</code></b>.</span><span class="en">Attach an IAM instance profile with the <b><code>AmazonSSMManagedInstanceCore</code></b> policy.</span></li>
     <li><span class="vi">Vài phút sau instance hiện trong <b>Fleet Manager → Managed nodes</b> (Agent ping status: Online, agent version…).</span><span class="en">A few minutes later the instance shows up in <b>Fleet Manager → Managed nodes</b> (agent online, agent version…).</span></li>
   </ol>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Instance <b>không hiện / không điều khiển được bằng SSM</b> → gần như luôn do (1) <b>SSM agent</b> không chạy/chưa cài, hoặc (2) <b>thiếu IAM role</b> (<code>AmazonSSMManagedInstanceCore</code>). Patch instance hoặc chạy automation trên fleet → nghĩ ngay tới SSM.</span><span class="en">Instance <b>not showing up / not controllable in SSM</b> → almost always (1) the <b>SSM agent</b> isn't running/installed, or (2) a <b>missing IAM role</b> (<code>AmazonSSMManagedInstanceCore</code>). Patching instances or automating actions on a fleet → think SSM.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Instance <b>không hiện / không điều khiển được bằng SSM</b> → gần như luôn do (1) <b>SSM agent</b> không chạy/chưa cài, hoặc (2) <b>thiếu IAM role</b> (<code>AmazonSSMManagedInstanceCore</code>). Patch instance hoặc chạy automation trên fleet → nghĩ ngay tới SSM.</span><span class="en">Instance <b>not showing up / not controllable in SSM</b> → almost always (1) the <b>SSM agent</b> isn't running/installed, or (2) a <b>missing IAM role</b> (<code>AmazonSSMManagedInstanceCore</code>). Patching instances or automating actions on a fleet → think SSM.</span></div>
 </section>
 
 <!-- 4.2 FLEET MANAGER & DHMC -->
@@ -1421,7 +1427,7 @@ mainSteps:
     - sudo systemctl start httpd
     - sudo systemctl enable httpd
     - echo "{{Message}} from $(hostname -f)" &gt; /var/www/html/index.html</code></pre>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Chạy script/lệnh trên nhiều instance <b>không mở SSH</b>, có <b>rate control/error control</b>, log ra S3/CloudWatch Logs, audit bằng CloudTrail → <b>Run Command</b>. EventBridge có thể trigger Run Command.</span><span class="en">Run scripts/commands across many instances <b>without SSH</b>, with <b>rate/error control</b>, output to S3/CloudWatch Logs, audited by CloudTrail → <b>Run Command</b>. EventBridge can trigger Run Command.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Chạy script/lệnh trên nhiều instance <b>không mở SSH</b>, có <b>rate control/error control</b>, log ra S3/CloudWatch Logs, audit bằng CloudTrail → <b>Run Command</b>. EventBridge có thể trigger Run Command.</span><span class="en">Run scripts/commands across many instances <b>without SSH</b>, with <b>rate/error control</b>, output to S3/CloudWatch Logs, audited by CloudTrail → <b>Run Command</b>. EventBridge can trigger Run Command.</span></div>
 </section>
 
 <!-- 4.5 AUTOMATION -->
@@ -1507,7 +1513,7 @@ mainSteps:
     </svg>
     <figcaption><span class="vi">Đổi Launch Template chỉ ảnh hưởng instance <b>mới</b> → cần <b>Instance Refresh</b> để thay instance đang chạy (<a href="#asg-lifecycle">chi tiết</a>). So sánh với <a href="#image-builder">EC2 Image Builder</a>.</span><span class="en">Changing the Launch Template only affects <b>new</b> instances → use <b>Instance Refresh</b> to replace running ones (<a href="#asg-lifecycle">details</a>). Compare with <a href="#image-builder">EC2 Image Builder</a>.</span></figcaption>
   </figure>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Tự động <b>khắc phục</b> resource non-compliant của <b>AWS Config</b> → Config remediation chạy <b>SSM Automation</b>. Restart/snapshot/tạo AMI hàng loạt không cần script tự viết → Automation runbook.</span><span class="en">Auto-<b>remediate</b> non-compliant resources from <b>AWS Config</b> → Config remediation runs an <b>SSM Automation</b>. Bulk restart/snapshot/AMI creation without custom scripts → Automation runbook.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Tự động <b>khắc phục</b> resource non-compliant của <b>AWS Config</b> → Config remediation chạy <b>SSM Automation</b>. Restart/snapshot/tạo AMI hàng loạt không cần script tự viết → Automation runbook.</span><span class="en">Auto-<b>remediate</b> non-compliant resources from <b>AWS Config</b> → Config remediation runs an <b>SSM Automation</b>. Bulk restart/snapshot/AMI creation without custom scripts → Automation runbook.</span></div>
 </section>
 
 <!-- 4.6 PARAMETER STORE -->
@@ -1563,7 +1569,7 @@ mainSteps:
 aws ssm get-parameters --names /my-app/dev/db-password --with-decryption
 <span class="cm"><span class="vi"># lấy theo path; --recursive để lấy cả cây con</span><span class="en"># by path; --recursive to include sub-paths</span></span>
 aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</code></pre>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Value &gt; 4 KB, cần <b>hết hạn/TTL</b> hoặc thông báo khi parameter sắp hết hạn/không đổi → <b>Advanced tier</b> + parameter policies + EventBridge. <code>get-parameters-by-path</code> cần <code>--recursive</code> để lấy cây con.</span><span class="en">Value &gt; 4 KB, need <b>expiration/TTL</b> or alerts when a parameter is about to expire/unchanged → <b>Advanced tier</b> + parameter policies + EventBridge. <code>get-parameters-by-path</code> needs <code>--recursive</code> for sub-paths.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Value &gt; 4 KB, cần <b>hết hạn/TTL</b> hoặc thông báo khi parameter sắp hết hạn/không đổi → <b>Advanced tier</b> + parameter policies + EventBridge. <code>get-parameters-by-path</code> cần <code>--recursive</code> để lấy cây con.</span><span class="en">Value &gt; 4 KB, need <b>expiration/TTL</b> or alerts when a parameter is about to expire/unchanged → <b>Advanced tier</b> + parameter policies + EventBridge. <code>get-parameters-by-path</code> needs <code>--recursive</code> for sub-paths.</span></div>
   <div class="callout note"><span class="ttl"><span class="vi">Ghi chú thêm</span><span class="en">Extra note</span></span><span class="vi">Đường dẫn cụ thể theo AWS docs: <code>/aws/reference/secretsmanager/&lt;secret-name&gt;</code>; AMI public parameter vd <code>/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2</code>. Tên policy chính thức: <code>Expiration</code>, <code>ExpirationNotification</code>, <code>NoChangeNotification</code>.</span><span class="en">Exact paths per AWS docs: <code>/aws/reference/secretsmanager/&lt;secret-name&gt;</code>; AMI public parameter e.g. <code>/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2</code>. Official policy names: <code>Expiration</code>, <code>ExpirationNotification</code>, <code>NoChangeNotification</code>.</span></div>
 </section>
 
@@ -1605,7 +1611,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi"><b>Association</b> = trạng thái mong muốn (dùng SSM document) + <b>lịch</b> áp dụng. Vd: port 22 phải đóng, phải có antivirus, cài CloudWatch agent, bật inventory.</span><span class="en"><b>Association</b> = desired state (via an SSM document) + a <b>schedule</b>. E.g.: port 22 must be closed, antivirus must be installed, install the CloudWatch agent, enable inventory.</span></li>
     <li><span class="vi">Bật Inventory trên console thực chất tạo một <b>State Manager association</b> cho các instance.</span><span class="en">Enabling Inventory in the console actually creates a <b>State Manager association</b> for the instances.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">"Đảm bảo fleet <b>luôn</b> ở cấu hình X / tự sửa khi lệch (drift)" → <b>State Manager</b>. "Liệt kê phần mềm đã cài trên mọi instance, query bằng SQL" → <b>Inventory + Resource Data Sync + Athena</b>.</span><span class="en">"Ensure the fleet <b>always</b> stays in configuration X / re-apply on drift" → <b>State Manager</b>. "List installed software across all instances and query with SQL" → <b>Inventory + Resource Data Sync + Athena</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">"Đảm bảo fleet <b>luôn</b> ở cấu hình X / tự sửa khi lệch (drift)" → <b>State Manager</b>. "Liệt kê phần mềm đã cài trên mọi instance, query bằng SQL" → <b>Inventory + Resource Data Sync + Athena</b>.</span><span class="en">"Ensure the fleet <b>always</b> stays in configuration X / re-apply on drift" → <b>State Manager</b>. "List installed software across all instances and query with SQL" → <b>Inventory + Resource Data Sync + Athena</b>.</span></div>
 </section>
 
 <!-- 4.8 PATCH MANAGER -->
@@ -1656,7 +1662,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi">Gồm: <b>schedule</b> (cron/rate), <b>duration</b>, <b>registered targets</b>, <b>registered tasks</b> (vd Run Command <code>AWS-RunPatchBaseline</code>) + concurrency/error threshold. Tuỳ chọn "stop initiating tasks N giờ trước khi window đóng".</span><span class="en">Contains: a <b>schedule</b> (cron/rate), a <b>duration</b>, <b>registered targets</b>, <b>registered tasks</b> (e.g. Run Command <code>AWS-RunPatchBaseline</code>) + concurrency/error threshold. Option "stop initiating tasks N hours before the window closes".</span></li>
     <li><span class="vi"><b>Patch policy</b> (console mới): <i>Scan</i> hoặc <i>Scan &amp; install</i>, lịch scan (vd hằng ngày 1:00) và lịch cài (vd Chủ nhật), cho reboot, chọn baseline theo OS, log ra S3, target nhiều region, rate control (vd 10%), error threshold.</span><span class="en"><b>Patch policy</b> (new console): <i>Scan</i> or <i>Scan &amp; install</i>, scan schedule (e.g. daily 1:00 AM) and install schedule (e.g. Sunday), allow reboot, baseline per OS, log to S3, multi-region targets, rate control (e.g. 10%), error threshold.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Patch instance → <b>Patch Manager</b> (document <b><code>AWS-RunPatchBaseline</code></b>), chạy trong <b>Maintenance Window</b> với <b>rate control</b>. Baseline khác nhau cho dev/prod → tag <code>Patch Group</code>. Baseline mặc định chỉ cài critical + security.</span><span class="en">Patching instances → <b>Patch Manager</b> (document <b><code>AWS-RunPatchBaseline</code></b>), run within a <b>Maintenance Window</b> with <b>rate control</b>. Different baselines for dev/prod → <code>Patch Group</code> tag. The default baseline installs only critical + security patches.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Patch instance → <b>Patch Manager</b> (document <b><code>AWS-RunPatchBaseline</code></b>), chạy trong <b>Maintenance Window</b> với <b>rate control</b>. Baseline khác nhau cho dev/prod → tag <code>Patch Group</code>. Baseline mặc định chỉ cài critical + security.</span><span class="en">Patching instances → <b>Patch Manager</b> (document <b><code>AWS-RunPatchBaseline</code></b>), run within a <b>Maintenance Window</b> with <b>rate control</b>. Different baselines for dev/prod → <code>Patch Group</code> tag. The default baseline installs only critical + security patches.</span></div>
 </section>
 
 <!-- 4.9 SESSION MANAGER -->
@@ -1712,7 +1718,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <tr><td><span class="vi">Log lệnh đã chạy</span><span class="en">Command logging</span></td><td class="n"><span class="vi">Không</span><span class="en">No</span></td><td class="n"><span class="vi">Không</span><span class="en">No</span></td><td class="y">S3 / CloudWatch Logs</td></tr>
     <tr><td><span class="vi">Điều kiện</span><span class="en">Requirements</span></td><td><span class="vi">Mạng tới instance</span><span class="en">Network path to instance</span></td><td><span class="vi">SG cho dải IP EIC</span><span class="en">SG allowing EIC range</span></td><td><span class="vi">SSM agent + IAM role; IAM cho user</span><span class="en">SSM agent + IAM role; IAM for the user</span></td></tr>
   </table></div>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">"Truy cập shell <b>không mở port 22</b>, không bastion, không key, và <b>phải audit/log mọi lệnh</b>" → <b>Session Manager</b>. Giới hạn ai vào instance nào → IAM policy với điều kiện tag.</span><span class="en">"Shell access <b>without opening port 22</b>, no bastion, no keys, and <b>every command must be audited/logged</b>" → <b>Session Manager</b>. Restrict who can access which instance → IAM policy with tag conditions.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">"Truy cập shell <b>không mở port 22</b>, không bastion, không key, và <b>phải audit/log mọi lệnh</b>" → <b>Session Manager</b>. Giới hạn ai vào instance nào → IAM policy với điều kiện tag.</span><span class="en">"Shell access <b>without opening port 22</b>, no bastion, no keys, and <b>every command must be audited/logged</b>" → <b>Session Manager</b>. Restrict who can access which instance → IAM policy with tag conditions.</span></div>
   <div class="callout note"><span class="ttl"><span class="vi">Ghi chú thêm</span><span class="en">Extra note</span></span><span class="vi">Điều kiện tag trong IAM policy thường viết: <code>"Condition": {"StringLike": {"ssm:resourceTag/Environment": ["dev"]}}</code> trên action <code>ssm:StartSession</code>.</span><span class="en">The tag condition in the IAM policy is typically: <code>"Condition": {"StringLike": {"ssm:resourceTag/Environment": ["dev"]}}</code> on the <code>ssm:StartSession</code> action.</span></div>
 </section>
 
@@ -1755,7 +1761,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
       <text class="s c" x="744" y="116"><tspan class="vi">snapshot / xoá volume</tspan><tspan class="en">snapshot / delete volume</tspan></text>
     </svg>
   </figure>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Tập trung mọi vấn đề vận hành (Security Hub, CloudWatch, Config…) và khắc phục bằng runbook → <b>OpsCenter</b>. Cài/cập nhật package phần mềm định kỳ cho fleet → <b>Distributor</b> + State Manager (<code>AWS-ConfigureAWSPackage</code>).</span><span class="en">Centralise operational issues (Security Hub, CloudWatch, Config…) and remediate with runbooks → <b>OpsCenter</b>. Regularly install/update software packages across a fleet → <b>Distributor</b> + State Manager (<code>AWS-ConfigureAWSPackage</code>).</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Tập trung mọi vấn đề vận hành (Security Hub, CloudWatch, Config…) và khắc phục bằng runbook → <b>OpsCenter</b>. Cài/cập nhật package phần mềm định kỳ cho fleet → <b>Distributor</b> + State Manager (<code>AWS-ConfigureAWSPackage</code>).</span><span class="en">Centralise operational issues (Security Hub, CloudWatch, Config…) and remediate with runbooks → <b>OpsCenter</b>. Regularly install/update software packages across a fleet → <b>Distributor</b> + State Manager (<code>AWS-ConfigureAWSPackage</code>).</span></div>
 </section>
 
 <!-- ============================ PART 5 ============================ -->
@@ -1774,7 +1780,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <tr><td><b>Horizontal scaling</b> <span class="s">(elasticity)</span></td><td><span class="vi">Tăng <b>số lượng</b> instance. Cần hệ <b>phân tán</b> (web app hiện đại).</span><span class="en">Increase the <b>number</b> of instances. Requires a <b>distributed</b> system (modern web apps).</span></td><td><span class="vi"><b>Scale out / in</b>: Auto Scaling Group, Load Balancer</span><span class="en"><b>Scale out / in</b>: Auto Scaling Group, Load Balancer</span></td></tr>
     <tr><td><b>High availability</b></td><td><span class="vi">Chạy ở <b>≥ 2 AZ</b> để sống sót khi mất 1 data center. Có thể <b>passive</b> (RDS Multi-AZ) hoặc <b>active</b> (horizontal scaling).</span><span class="en">Run in <b>≥ 2 AZs</b> to survive a data-center loss. Can be <b>passive</b> (RDS Multi-AZ) or <b>active</b> (horizontal scaling).</span></td><td><span class="vi">ASG multi-AZ, Load Balancer multi-AZ</span><span class="en">Multi-AZ ASG, multi-AZ Load Balancer</span></td></tr>
   </table></div>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Đề hay đánh lừa giữa các khái niệm: "scale up" = vertical, "scale out" = horizontal, "survive AZ failure" = HA (multi-AZ).</span><span class="en">Questions like to mix the terms: "scale up" = vertical, "scale out" = horizontal, "survive an AZ failure" = HA (multi-AZ).</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Đề hay đánh lừa giữa các khái niệm: "scale up" = vertical, "scale out" = horizontal, "survive AZ failure" = HA (multi-AZ).</span><span class="en">Questions like to mix the terms: "scale up" = vertical, "scale out" = horizontal, "survive an AZ failure" = HA (multi-AZ).</span></div>
 </section>
 
 <!-- 5.2 ELB BASICS -->
@@ -1820,7 +1826,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
       <text class="c" x="430" y="200"><tspan class="vi">SG của EC2 tham chiếu SG của LB → truy cập thẳng public IP của EC2 sẽ timeout</tspan><tspan class="en">The EC2 SG references the LB SG → hitting the EC2 public IP directly times out</tspan></text>
     </svg>
   </figure>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Chỉ cho EC2 nhận traffic từ LB → inbound rule của SG EC2 dùng <b>source = security group của LB</b> (không dùng CIDR). Thêm NLB sau này thì nhớ allow thêm SG của NLB, nếu không target sẽ <b>unhealthy</b>.</span><span class="en">Only allow traffic from the LB → the EC2 SG inbound rule uses <b>source = the LB's security group</b> (not a CIDR). Adding an NLB later? Allow its SG too, or targets go <b>unhealthy</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Chỉ cho EC2 nhận traffic từ LB → inbound rule của SG EC2 dùng <b>source = security group của LB</b> (không dùng CIDR). Thêm NLB sau này thì nhớ allow thêm SG của NLB, nếu không target sẽ <b>unhealthy</b>.</span><span class="en">Only allow traffic from the LB → the EC2 SG inbound rule uses <b>source = the LB's security group</b> (not a CIDR). Adding an NLB later? Allow its SG too, or targets go <b>unhealthy</b>.</span></div>
 </section>
 
 <!-- 5.3 ALB -->
@@ -1895,7 +1901,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
       <text class="s" x="494" y="128"><tspan class="vi">weight 2 — theo dõi metric trước khi chuyển hết</tspan><tspan class="en">weight 2 — watch metrics before full cut-over</tspan></text>
     </svg>
   </figure>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Route theo <b>path / hostname / query string / header</b>, microservices, container, Lambda làm target → <b>ALB</b>. Cần IP client ở backend → <code>X-Forwarded-For</code>. Chuyển dần traffic sang version mới → <b>weighted target groups</b>.</span><span class="en">Routing by <b>path / hostname / query string / header</b>, microservices, containers, Lambda targets → <b>ALB</b>. Need the client IP on the backend → <code>X-Forwarded-For</code>. Gradually shift traffic to a new version → <b>weighted target groups</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Route theo <b>path / hostname / query string / header</b>, microservices, container, Lambda làm target → <b>ALB</b>. Cần IP client ở backend → <code>X-Forwarded-For</code>. Chuyển dần traffic sang version mới → <b>weighted target groups</b>.</span><span class="en">Routing by <b>path / hostname / query string / header</b>, microservices, containers, Lambda targets → <b>ALB</b>. Need the client IP on the backend → <code>X-Forwarded-For</code>. Gradually shift traffic to a new version → <b>weighted target groups</b>.</span></div>
 </section>
 
 <!-- 5.4 NLB -->
@@ -1937,7 +1943,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi">Listener: TCP, TCP_UDP, TLS, UDP. NLB giờ có thể gắn <b>security group</b> (khuyến nghị).</span><span class="en">Listeners: TCP, TCP_UDP, TLS, UDP. NLBs can now have a <b>security group</b> (recommended).</span></li>
     <li><span class="vi">Hands-on: target unhealthy vì SG của EC2 chỉ allow SG của ALB → thêm rule allow HTTP từ SG của NLB.</span><span class="en">Hands-on: targets were unhealthy because the EC2 SG only allowed the ALB SG → add a rule allowing HTTP from the NLB SG.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Thấy <b>UDP</b>, <b>hiệu năng cực cao</b>, hoặc "app chỉ được truy cập qua <b>1–3 IP cố định</b>" → <b>NLB</b> (+ Elastic IP). Cần static IP <i>và</i> routing HTTP → NLB trước ALB.</span><span class="en">See <b>UDP</b>, <b>extreme performance</b>, or "the app must be reachable via <b>1–3 fixed IPs</b>" → <b>NLB</b> (+ Elastic IPs). Need static IPs <i>and</i> HTTP routing → NLB in front of ALB.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Thấy <b>UDP</b>, <b>hiệu năng cực cao</b>, hoặc "app chỉ được truy cập qua <b>1–3 IP cố định</b>" → <b>NLB</b> (+ Elastic IP). Cần static IP <i>và</i> routing HTTP → NLB trước ALB.</span><span class="en">See <b>UDP</b>, <b>extreme performance</b>, or "the app must be reachable via <b>1–3 fixed IPs</b>" → <b>NLB</b> (+ Elastic IPs). Need static IPs <i>and</i> HTTP routing → NLB in front of ALB.</span></div>
 </section>
 
 <!-- 5.5 GWLB -->
@@ -1980,7 +1986,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi">Hai chức năng: <b>transparent network gateway</b> (một lối vào/ra cho mọi traffic VPC) + <b>load balancer</b> (phân phối tới các appliance).</span><span class="en">Two functions: a <b>transparent network gateway</b> (single entry/exit for all VPC traffic) + a <b>load balancer</b> (distributes to appliances).</span></li>
     <li><span class="vi">Target: EC2 (theo instance ID) hoặc <b>private IP</b> (vd appliance ở data center của bạn).</span><span class="en">Targets: EC2 (by instance ID) or <b>private IPs</b> (e.g. appliances in your own data center).</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Thấy <b>GENEVE port 6081</b>, hoặc "mọi traffic phải qua firewall/IDS bên thứ ba" → <b>GWLB</b>. Chỉ hỏi ở mức khái niệm.</span><span class="en">See <b>GENEVE port 6081</b>, or "all traffic must go through a third-party firewall/IDS" → <b>GWLB</b>. Asked only at a conceptual level.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Thấy <b>GENEVE port 6081</b>, hoặc "mọi traffic phải qua firewall/IDS bên thứ ba" → <b>GWLB</b>. Chỉ hỏi ở mức khái niệm.</span><span class="en">See <b>GENEVE port 6081</b>, or "all traffic must go through a third-party firewall/IDS" → <b>GWLB</b>. Asked only at a conceptual level.</span></div>
 </section>
 
 <!-- 5.6 STICKY -->
@@ -1997,7 +2003,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi">Bật ở <b>target group → Edit attributes → Stickiness</b>. Trình duyệt nhận cookie ở response và gửi lại ở mỗi request.</span><span class="en">Enable in <b>target group → Edit attributes → Stickiness</b>. The browser receives the cookie in the response and sends it back on every request.</span></li>
     <li><span class="vi">Đánh đổi: có thể gây <b>mất cân bằng tải</b> giữa các instance.</span><span class="en">Trade-off: may cause <b>load imbalance</b> across instances.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">User bị logout / mất session khi qua LB → bật <b>stickiness</b>. Một instance quá tải trong khi các instance khác nhàn → nghi stickiness.</span><span class="en">Users lose their session behind the LB → enable <b>stickiness</b>. One instance overloaded while others idle → suspect stickiness.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">User bị logout / mất session khi qua LB → bật <b>stickiness</b>. Một instance quá tải trong khi các instance khác nhàn → nghi stickiness.</span><span class="en">Users lose their session behind the LB → enable <b>stickiness</b>. One instance overloaded while others idle → suspect stickiness.</span></div>
 </section>
 
 <!-- 5.7 CROSS-ZONE -->
@@ -2064,7 +2070,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <tr><td><b>NLB</b> / <b>GWLB</b></td><td class="n"><span class="vi">Tắt</span><span class="en">Off</span></td><td class="n"><span class="vi">Tính phí nếu bật</span><span class="en">Charged if enabled</span></td><td><span class="vi">Bật trong LB attributes</span><span class="en">Enable in LB attributes</span></td></tr>
     <tr><td><b>CLB</b></td><td><span class="vi">Tắt (API/CLI) · Bật (console)</span><span class="en">Off (API/CLI) · On (console)</span><span class="upd">AWS docs 11/2026</span></td><td class="y"><span class="vi">Không tính</span><span class="en">None</span></td><td>Deprecated</td></tr>
   </table></div>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Instance ở AZ ít instance bị quá tải, AZ khác nhàn → <b>bật cross-zone load balancing</b> (nhớ: NLB/GWLB tính phí inter-AZ).</span><span class="en">Instances in the AZ with fewer instances are overloaded → <b>enable cross-zone load balancing</b> (remember: NLB/GWLB charge for inter-AZ data).</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Instance ở AZ ít instance bị quá tải, AZ khác nhàn → <b>bật cross-zone load balancing</b> (nhớ: NLB/GWLB tính phí inter-AZ).</span><span class="en">Instances in the AZ with fewer instances are overloaded → <b>enable cross-zone load balancing</b> (remember: NLB/GWLB charge for inter-AZ data).</span></div>
 </section>
 
 <!-- 5.8 SSL / SNI -->
@@ -2108,7 +2114,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <tr><td><b>ALB</b></td><td><span class="vi">Nhiều listener, nhiều cert — dùng <b>SNI</b></span><span class="en">Multiple listeners, multiple certs — uses <b>SNI</b></span></td></tr>
     <tr><td><b>NLB</b></td><td><span class="vi">Nhiều listener, nhiều cert — dùng <b>SNI</b></span><span class="en">Multiple listeners, multiple certs — uses <b>SNI</b></span></td></tr>
   </table></div>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi"><b>Nhiều SSL certificate trên một load balancer</b> (nhiều domain) → <b>ALB hoặc NLB</b> (hoặc CloudFront) với <b>SNI</b>. CLB không làm được.</span><span class="en"><b>Multiple SSL certificates on one load balancer</b> (several domains) → <b>ALB or NLB</b> (or CloudFront) with <b>SNI</b>. CLB can't.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi"><b>Nhiều SSL certificate trên một load balancer</b> (nhiều domain) → <b>ALB hoặc NLB</b> (hoặc CloudFront) với <b>SNI</b>. CLB không làm được.</span><span class="en"><b>Multiple SSL certificates on one load balancer</b> (several domains) → <b>ALB or NLB</b> (or CloudFront) with <b>SNI</b>. CLB can't.</span></div>
 </section>
 
 <!-- 5.9 TARGET GROUP SETTINGS -->
@@ -2125,7 +2131,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <tr><td>Success codes</td><td><span class="vi">Mặc định 200, tuỳ chỉnh được</span><span class="en">Default 200, customisable</span></td></tr>
   </table></div>
   <p><span class="vi">Trạng thái target: <b>initial</b> (đang đăng ký), <b>healthy</b>, <b>unhealthy</b>, <b>unused</b> (chưa đăng ký / instance stopped), <b>draining</b> (đang deregister), <b>unavailable</b> (tắt health check).</span><span class="en">Target states: <b>initial</b> (registering), <b>healthy</b>, <b>unhealthy</b>, <b>unused</b> (not registered / instance stopped), <b>draining</b> (deregistering), <b>unavailable</b> (health checks disabled).</span></p>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Target group <b>chỉ toàn target unhealthy</b> → ELB vẫn route tới <b>tất cả</b> target unhealthy (best effort — "fail open").</span><span class="en">A target group with <b>only unhealthy targets</b> → the ELB routes to <b>all</b> of them (best effort — "fail open").</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Target group <b>chỉ toàn target unhealthy</b> → ELB vẫn route tới <b>tất cả</b> target unhealthy (best effort — "fail open").</span><span class="en">A target group with <b>only unhealthy targets</b> → the ELB routes to <b>all</b> of them (best effort — "fail open").</span></div>
   <h4><span class="vi">Connection Draining / Deregistration Delay</span><span class="en">Connection Draining / Deregistration Delay</span></h4>
   <ul>
     <li><span class="vi">Tên: <b>Connection Draining</b> (CLB), <b>Deregistration Delay</b> (ALB, NLB). Cho instance thời gian hoàn thành request đang chạy khi bị deregister/unhealthy; ELB ngừng gửi request <b>mới</b> tới instance đó.</span><span class="en">Names: <b>Connection Draining</b> (CLB), <b>Deregistration Delay</b> (ALB, NLB). Gives an instance time to finish in-flight requests while deregistering/unhealthy; the ELB stops sending <b>new</b> requests to it.</span></li>
@@ -2141,7 +2147,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <tr><td><b>Weighted Random</b><span class="upd">AWS docs 11/2026</span></td><td>ALB</td><td><span class="vi">Chọn ngẫu nhiên có trọng số; bật được <b>Automatic Target Weights</b> (giảm traffic tới target bất thường)</span><span class="en">Weighted random choice; can enable <b>Automatic Target Weights</b> (shifts traffic away from anomalous targets)</span></td></tr>
     <tr><td><b>Flow Hash</b></td><td>NLB</td><td><span class="vi">Hash (protocol, src/dst IP, src/dst port, TCP sequence) → mỗi kết nối TCP/UDP gắn với <b>một target</b> suốt vòng đời (kiểu "sticky" của NLB)</span><span class="en">Hash of (protocol, src/dst IP, src/dst port, TCP sequence) → each TCP/UDP connection sticks to <b>one target</b> for its lifetime (NLB's "stickiness")</span></td></tr>
   </table></div>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Instance mới bị quá tải ngay khi vào service → <b>slow start</b>. Request dài bị cắt khi scale-in/deploy → tăng <b>deregistration delay</b>. Instance chậm bị dồn request → <b>Least Outstanding Requests</b>.</span><span class="en">New instances overwhelmed on entering service → <b>slow start</b>. Long requests cut off during scale-in/deploys → increase the <b>deregistration delay</b>. Slow instances piling up requests → <b>Least Outstanding Requests</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Instance mới bị quá tải ngay khi vào service → <b>slow start</b>. Request dài bị cắt khi scale-in/deploy → tăng <b>deregistration delay</b>. Instance chậm bị dồn request → <b>Least Outstanding Requests</b>.</span><span class="en">New instances overwhelmed on entering service → <b>slow start</b>. Long requests cut off during scale-in/deploys → increase the <b>deregistration delay</b>. Slow instances piling up requests → <b>Least Outstanding Requests</b>.</span></div>
 </section>
 
 <!-- 5.10 ELB MONITORING -->
@@ -2160,7 +2166,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><b><code>SurgeQueueLength</code></b>: <span class="vi">số request đang chờ route tới instance healthy — tối đa ~1,000, nên giữ gần 0 (có thể dùng để scale out ASG).</span><span class="en">requests pending routing to healthy instances — max ~1,000, keep near 0 (can drive ASG scale-out).</span> <b><code>SpilloverCount</code></b>: <span class="vi">request bị từ chối vì queue đầy — phải luôn bằng 0, &gt; 0 là client đang mất request → scale backend.</span><span class="en">requests rejected because the queue is full — should always be 0; &gt; 0 means clients are losing requests → scale the backend.</span></li>
   </ul>
   <div class="tbl-wrap"><table>
-    <tr><th><span class="vi">Lỗi</span><span class="en">Error</span></th><th>Troubleshooting</th></tr>
+    <tr><th><span class="vi">Lỗi</span><span class="en">Error</span></th><th><span class="vi">Cách xử lý</span><span class="en">Troubleshooting</span></th></tr>
     <tr><td>400 Bad Request</td><td><span class="vi">Client gửi request sai định dạng</span><span class="en">Client sent a malformed request</span></td></tr>
     <tr><td>503 Service Unavailable</td><td><span class="vi">Không còn instance healthy → xem <code>HealthyHostCount</code></span><span class="en">No healthy instances → check <code>HealthyHostCount</code></span></td></tr>
     <tr><td>504 Gateway Timeout</td><td><span class="vi">Kiểm tra keep-alive trên EC2 đã bật, và <b>keep-alive timeout &gt; idle timeout của LB</b></span><span class="en">Check keep-alive is enabled on EC2 and <b>keep-alive timeout &gt; the LB idle timeout</b></span></td></tr>
@@ -2169,7 +2175,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi"><b>Access logs</b> → <b>S3</b> (chỉ trả phí S3): thời gian, client IP, latency, request path, server response, trace ID. Được mã hoá; giữ được cả khi ELB/EC2 đã xoá; query bằng <b>Athena</b>. Bật trong LB attributes.</span><span class="en"><b>Access logs</b> → <b>S3</b> (pay only for S3): time, client IP, latencies, request path, server response, trace ID. Encrypted; kept even after the ELB/EC2 are gone; query with <b>Athena</b>. Enable in LB attributes.</span></li>
     <li><span class="vi"><b>Request tracing</b>: header <code>X-Amzn-Trace-Id</code> thêm vào mọi request HTTP → theo dõi một request trong log/tracing. (ALB chỉ thêm/cập nhật header này và ghi vào access log; ELB <b>không gửi dữ liệu tới X-Ray</b>, không hiện trên service map<span class="upd">AWS docs 11/2026</span>.)</span><span class="en"><b>Request tracing</b>: the <code>X-Amzn-Trace-Id</code> header is added to every HTTP request → track one request across logs/tracing. (ALB only adds/updates this header and logs it in access logs; ELB <b>sends no data to X-Ray</b> and is not a node on the service map<span class="upd">AWS docs 11/2026</span>.)</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">4XX = client, 5XX = server. <b>503</b> → hết target healthy. <b>504</b> → keep-alive/idle timeout. Cần log chi tiết từng request cho compliance → <b>access logs vào S3</b>.</span><span class="en">4XX = client, 5XX = server. <b>503</b> → no healthy targets. <b>504</b> → keep-alive/idle timeout. Per-request logs for compliance → <b>access logs to S3</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">4XX = client, 5XX = server. <b>503</b> → hết target healthy. <b>504</b> → keep-alive/idle timeout. Cần log chi tiết từng request cho compliance → <b>access logs vào S3</b>.</span><span class="en">4XX = client, 5XX = server. <b>503</b> → no healthy targets. <b>504</b> → keep-alive/idle timeout. Per-request logs for compliance → <b>access logs to S3</b>.</span></div>
   <div class="callout note"><span class="ttl"><span class="vi">Ghi chú thêm</span><span class="en">Extra note</span></span><span class="vi">Theo AWS docs, giới hạn chính xác của SurgeQueueLength (metric của CLB) là <b>1,024</b> request.</span><span class="en">Per AWS docs, the exact SurgeQueueLength limit (a CLB metric) is <b>1,024</b> requests.</span></div>
 </section>
 
@@ -2238,7 +2244,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi"><b>Scaling cooldown</b> (áp cho <b>simple scaling</b><span class="upd">AWS docs 11/2026</span>): sau mỗi scaling activity, mặc định <b>300s</b> ASG không launch/terminate thêm để metric ổn định. Dùng <b>AMI dựng sẵn</b> để instance phục vụ nhanh hơn → giảm cooldown; bật <b>detailed monitoring</b> (1 phút).</span><span class="en"><b>Scaling cooldown</b> (applies to <b>simple scaling</b><span class="upd">AWS docs 11/2026</span>): after each scaling activity, by default <b>300s</b> during which the ASG won't launch/terminate more, letting metrics stabilise. Use a <b>ready-to-use AMI</b> so instances serve faster → shorter cooldown; enable <b>detailed monitoring</b> (1 min).</span></li>
     <li><span class="vi">Hands-on target tracking CPU 40% (số datapoint theo bài giảng; docs chỉ nói AWS tự quản lý 2 alarm, không được sửa): tạo 2 alarm — <b>AlarmHigh</b> (CPU &gt; 40% trong 3 datapoint / 3 phút → scale out) và <b>AlarmLow</b> (CPU &lt; 28% trong 15 datapoint / 15 phút → scale in). Dùng <code>stress -c 4</code> để đẩy CPU 100%.</span><span class="en">Hands-on target tracking at CPU 40% (datapoints per the lecture; docs only say AWS manages two alarms you must not edit): creates 2 alarms — <b>AlarmHigh</b> (CPU &gt; 40% for 3 datapoints / 3 min → scale out) and <b>AlarmLow</b> (CPU &lt; 28% for 15 datapoints / 15 min → scale in). <code>stress -c 4</code> drives CPU to 100%.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Sự kiện biết trước → <b>scheduled</b>. Tải lặp theo chu kỳ → <b>predictive</b>. "Giữ CPU ~40%" → <b>target tracking</b>. ASG scale liên tục/không scale thêm ngay sau scaling → do <b>cooldown</b>.</span><span class="en">Known event → <b>scheduled</b>. Recurring cyclical load → <b>predictive</b>. "Keep CPU ~40%" → <b>target tracking</b>. ASG doesn't scale again right after a scaling event → <b>cooldown</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Sự kiện biết trước → <b>scheduled</b>. Tải lặp theo chu kỳ → <b>predictive</b>. "Giữ CPU ~40%" → <b>target tracking</b>. ASG scale liên tục/không scale thêm ngay sau scaling → do <b>cooldown</b>.</span><span class="en">Known event → <b>scheduled</b>. Recurring cyclical load → <b>predictive</b>. "Keep CPU ~40%" → <b>target tracking</b>. ASG doesn't scale again right after a scaling event → <b>cooldown</b>.</span></div>
 </section>
 
 <!-- 5.13 ASG LIFECYCLE -->
@@ -2308,7 +2314,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
       <text class="c t-acc" x="430" y="202"><tspan class="vi">Hook gửi sự kiện tới EventBridge (→ Lambda) · SNS · SQS</tspan><tspan class="en">Hooks notify EventBridge (→ Lambda) · SNS · SQS</tspan></text>
     </svg>
   </figure>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Cần chạy setup trước khi instance vào service, hoặc <b>lấy log / snapshot trước khi instance bị terminate</b> → <b>lifecycle hook</b>. Scale out chậm vì bootstrap lâu → <b>warm pool</b>. Thay hết instance theo AMI/launch template mới → <b>Instance Refresh</b>.</span><span class="en">Run setup before an instance enters service, or <b>grab logs / snapshots before termination</b> → <b>lifecycle hook</b>. Slow scale-out due to long bootstrap → <b>warm pool</b>. Replace all instances with a new AMI/launch template → <b>Instance Refresh</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Cần chạy setup trước khi instance vào service, hoặc <b>lấy log / snapshot trước khi instance bị terminate</b> → <b>lifecycle hook</b>. Scale out chậm vì bootstrap lâu → <b>warm pool</b>. Thay hết instance theo AMI/launch template mới → <b>Instance Refresh</b>.</span><span class="en">Run setup before an instance enters service, or <b>grab logs / snapshots before termination</b> → <b>lifecycle hook</b>. Slow scale-out due to long bootstrap → <b>warm pool</b>. Replace all instances with a new AMI/launch template → <b>Instance Refresh</b>.</span></div>
 </section>
 
 <!-- 5.14 ASG OPS -->
@@ -2366,7 +2372,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi">Backbone cho mọi resource scale được: <b>ASG</b>; <b>Spot Fleet</b> (launch/terminate, thay instance bị interrupt); <b>ECS</b> (desired count của service); <b>DynamoDB</b> (WCU/RCU của table &amp; GSI); <b>Aurora</b> (read replica động).</span><span class="en">Backbone for all scalable resources: <b>ASG</b>; <b>Spot Fleet</b> (launch/terminate, replace interrupted instances); <b>ECS</b> (service desired count); <b>DynamoDB</b> (table &amp; GSI WCU/RCU); <b>Aurora</b> (dynamic read replicas).</span></li>
     <li><span class="vi"><b>Scaling plan</b> (tìm resource theo CloudFormation stack, tag, ASG): dynamic scaling với chiến lược <b>Optimize for availability = 40%</b>, <b>Balance = 50%</b>, <b>Optimize for cost = 70%</b> utilization, hoặc custom metric/target; tuỳ chọn disable scale-in, cooldown, warm-up; kèm predictive scaling.</span><span class="en"><b>Scaling plans</b> (discover resources by CloudFormation stack, tags, ASGs): dynamic scaling with <b>Optimize for availability = 40%</b>, <b>Balance = 50%</b>, <b>Optimize for cost = 70%</b> utilization, or a custom metric/target; options to disable scale-in, cooldown, warm-up; plus predictive scaling.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Worker xử lý SQS → scale theo <code>ApproximateNumberOfMessages</code>. Muốn thấy số instance InService/Pending theo thời gian → <b>bật group metrics collection</b>. ASG không reboot instance lỗi mà thay mới.</span><span class="en">SQS workers → scale on <code>ApproximateNumberOfMessages</code>. Want InService/Pending counts over time → <b>enable group metrics collection</b>. ASGs don't reboot failed instances — they replace them.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Worker xử lý SQS → scale theo <code>ApproximateNumberOfMessages</code>. Muốn thấy số instance InService/Pending theo thời gian → <b>bật group metrics collection</b>. ASG không reboot instance lỗi mà thay mới.</span><span class="en">SQS workers → scale on <code>ApproximateNumberOfMessages</code>. Want InService/Pending counts over time → <b>enable group metrics collection</b>. ASGs don't reboot failed instances — they replace them.</span></div>
 </section>
 
 <!-- ============================ PART 6 ============================ -->
@@ -2421,7 +2427,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
       <text class="s" x="400" y="198"><tspan class="vi">EventBridge và Lambda đều serverless</tspan><tspan class="en">EventBridge and Lambda are both serverless</tspan></text>
     </svg>
   </figure>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Job chạy quá timeout tối đa (nay <b>30 phút</b>; đề cũ ghi 15 phút) → không dùng Lambda. Function chậm/thiếu CPU → <b>tăng memory</b> (CPU tăng theo). Thay cron trên EC2 → <b>EventBridge schedule + Lambda</b>.</span><span class="en">Jobs beyond the max timeout (now <b>30 minutes</b>; older exams say 15) → not Lambda. Function slow/CPU-bound → <b>increase memory</b> (CPU scales with it). Replace cron on EC2 → <b>EventBridge schedule + Lambda</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Job chạy quá timeout tối đa (nay <b>30 phút</b>; đề cũ ghi 15 phút) → không dùng Lambda. Function chậm/thiếu CPU → <b>tăng memory</b> (CPU tăng theo). Thay cron trên EC2 → <b>EventBridge schedule + Lambda</b>.</span><span class="en">Jobs beyond the max timeout (now <b>30 minutes</b>; older exams say 15) → not Lambda. Function slow/CPU-bound → <b>increase memory</b> (CPU scales with it). Replace cron on EC2 → <b>EventBridge schedule + Lambda</b>.</span></div>
 </section>
 
 <!-- 6.2 LAMBDA PERMISSIONS & TRIGGERS -->
@@ -2461,7 +2467,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi">Quyền gọi nằm ở <b>resource-based policy</b> của function (S3 tự thêm); event chứa bucket, key, size, ETag → code gọi <code>GetObject</code>. Bucket và function cùng region.</span><span class="en">Permission lives in the function's <b>resource-based policy</b> (added by S3); the event carries bucket, key, size, ETag → code calls <code>GetObject</code>. Bucket and function in the same region.</span></li>
   </ul>
   <p class="xref"><span class="vi">Loại event, filter, các đích (SNS / SQS / EventBridge), thời gian giao event, versioning → xem <a href="#s3-events">S3 Event Notifications</a>.</span><span class="en">Event types, filters, destinations (SNS / SQS / EventBridge), delivery timing, versioning → see <a href="#s3-events">S3 Event Notifications</a>.</span></p>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Function không ghi được log / không đọc được S3 → sửa <b>execution role</b>. Service khác không gọi được function → kiểm tra <b>resource-based policy</b> (hoặc role của service gọi).</span><span class="en">Function can't write logs / read S3 → fix the <b>execution role</b>. Another service can't invoke the function → check the <b>resource-based policy</b> (or the caller's role).</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Function không ghi được log / không đọc được S3 → sửa <b>execution role</b>. Service khác không gọi được function → kiểm tra <b>resource-based policy</b> (hoặc role của service gọi).</span><span class="en">Function can't write logs / read S3 → fix the <b>execution role</b>. Another service can't invoke the function → check the <b>resource-based policy</b> (or the caller's role).</span></div>
   <div class="callout note"><span class="ttl"><span class="vi">Ghi chú thêm</span><span class="en">Extra note</span></span><span class="vi">Managed policy của role cơ bản là <code>AWSLambdaBasicExecutionRole</code> (logs:CreateLogGroup, CreateLogStream, PutLogEvents). Timeout mặc định 3 giây, tối đa <b>1,800 giây</b> (từ 11/2026, trước đó 900). Memory 128 MB – 10,240 MB; <code>/tmp</code> 512 MB – 10 GB. Giá duration x86 ~$0.0000166667/GB-giây.<span class="upd">AWS docs 11/2026</span></span><span class="en">The basic role's managed policy is <code>AWSLambdaBasicExecutionRole</code> (logs:CreateLogGroup, CreateLogStream, PutLogEvents). Default timeout 3 seconds, max <b>1,800 seconds</b> (since Nov 2026, previously 900). Memory 128 MB – 10,240 MB; <code>/tmp</code> 512 MB – 10 GB. x86 duration ~$0.0000166667 per GB-second.<span class="upd">AWS docs 11/2026</span></span></div>
 </section>
 
@@ -2508,7 +2514,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
   </ul>
   <h4><span class="vi">Các loại volume</span><span class="en">Volume types</span></h4>
   <div class="tbl-wrap"><table>
-    <tr><th><span class="vi">Loại</span><span class="en">Type</span></th><th><span class="vi">Đặc điểm</span><span class="en">Characteristics</span></th><th>Boot?</th></tr>
+    <tr><th><span class="vi">Loại</span><span class="en">Type</span></th><th><span class="vi">Đặc điểm</span><span class="en">Characteristics</span></th><th><span class="vi">Boot được?</span><span class="en">Boot?</span></th></tr>
     <tr><td><b>gp3</b> (SSD)</td><td><span class="vi">Baseline 3,000 IOPS + 125 MB/s; tăng <b>độc lập</b> tới 80,000 IOPS / 2,000 MiB/s, size tới 64 TiB<span class="upd">AWS docs 11/2026</span>. General purpose, rẻ, latency thấp</span><span class="en">Baseline 3,000 IOPS + 125 MB/s; raise <b>independently</b> up to 80,000 IOPS / 2,000 MiB/s, up to 64 TiB<span class="upd">AWS docs 11/2026</span>. General purpose, cheap, low latency</span></td><td class="y">✓</td></tr>
     <tr><td><b>gp2</b> (SSD)</td><td><span class="vi">IOPS <b>gắn với size</b>: 3 IOPS/GB, volume nhỏ burst 3,000, tối đa 16,000 (~5,334 GB)</span><span class="en">IOPS <b>tied to size</b>: 3 IOPS/GB, small volumes burst to 3,000, max 16,000 (~5,334 GB)</span></td><td class="y">✓</td></tr>
     <tr><td><b>io1</b> (Provisioned IOPS SSD)</td><td><span class="vi">Tối đa 64,000 IOPS (Nitro) / 32,000 (khác); IOPS độc lập với size (~50:1), 1,000 MiB/s, tới 16 TiB. DB cần IOPS ổn định</span><span class="en">Max 64,000 IOPS (Nitro) / 32,000 (others); IOPS independent of size (~50:1), 1,000 MiB/s, up to 16 TiB. DBs needing sustained IOPS</span></td><td class="y">✓</td></tr>
@@ -2516,7 +2522,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <tr><td><b>st1</b> (HDD)</td><td><span class="vi">Throughput optimized: big data, data warehouse, log. 500 MB/s, 500 IOPS; tới 16 TB</span><span class="en">Throughput optimized: big data, data warehousing, logs. 500 MB/s, 500 IOPS; up to 16 TB</span></td><td class="n">✗</td></tr>
     <tr><td><b>sc1</b> (HDD)</td><td><span class="vi">Cold HDD: dữ liệu ít truy cập, <b>rẻ nhất</b>. 250 MB/s, 250 IOPS</span><span class="en">Cold HDD: infrequently accessed data, <b>lowest cost</b>. 250 MB/s, 250 IOPS</span></td><td class="n">✗</td></tr>
   </table></div>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Cần &gt; 32,000 IOPS → <b>io1/io2 trên Nitro</b>. Tăng IOPS mà không tăng size → <b>gp3</b> (gp2 phải tăng size). Boot volume chỉ gp2/gp3/io1/io2. Rẻ nhất cho dữ liệu lạnh → <b>sc1</b>. Giữ root volume sau terminate → tắt <b>DeleteOnTermination</b>.</span><span class="en">Need &gt; 32,000 IOPS → <b>io1/io2 on Nitro</b>. More IOPS without more size → <b>gp3</b> (gp2 must grow). Boot volumes only gp2/gp3/io1/io2. Cheapest for cold data → <b>sc1</b>. Keep the root volume after termination → disable <b>DeleteOnTermination</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Cần &gt; 32,000 IOPS → <b>io1/io2 trên Nitro</b>. Tăng IOPS mà không tăng size → <b>gp3</b> (gp2 phải tăng size). Boot volume chỉ gp2/gp3/io1/io2. Rẻ nhất cho dữ liệu lạnh → <b>sc1</b>. Giữ root volume sau terminate → tắt <b>DeleteOnTermination</b>.</span><span class="en">Need &gt; 32,000 IOPS → <b>io1/io2 on Nitro</b>. More IOPS without more size → <b>gp3</b> (gp2 must grow). Boot volumes only gp2/gp3/io1/io2. Cheapest for cold data → <b>sc1</b>. Keep the root volume after termination → disable <b>DeleteOnTermination</b>.</span></div>
 </section>
 
 <!-- 7.2 EBS SNAPSHOTS -->
@@ -2533,7 +2539,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <tr><td><b>Snapshot Archive</b></td><td><span class="vi">Tier archive <b>rẻ hơn tới 75%</b>; restore mất <b>tới 72 giờ</b>; lưu tối thiểu <b>90 ngày</b><span class="upd">AWS docs 11/2026</span></span><span class="en">Archive tier <b>up to 75% cheaper</b>; restore takes <b>up to 72 hours</b>; <b>90-day</b> minimum<span class="upd">AWS docs 11/2026</span></span></td></tr>
     <tr><td><b>Recycle Bin</b></td><td><span class="vi">Giữ snapshot (hoặc AMI) đã xoá <b>1 ngày – 1 năm</b> theo <b>retention rule</b> (tất cả hoặc theo tag) → khôi phục khi xoá nhầm. Nay hỗ trợ cả <b>EBS volume</b> (1–7 ngày)<span class="upd">AWS docs 11/2026</span>. <b>Rule lock</b> chống sửa/xoá rule</span><span class="en">Keeps deleted snapshots (or AMIs) for <b>1 day – 1 year</b> per <b>retention rule</b> (all or by tag) → recover accidental deletes. Now also <b>EBS volumes</b> (1–7 days)<span class="upd">AWS docs 11/2026</span>. <b>Rule lock</b> prevents changing/deleting the rule</span></td></tr>
   </table></div>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Backup EBS tự động theo tag → <b>DLM</b>. Volume restore từ snapshot bị chậm lúc đầu → <b>FSR</b> (hoặc pre-warm bằng dd/fio). Snapshot ít dùng, muốn rẻ → <b>Archive</b>. Chống xoá nhầm snapshot → <b>Recycle Bin</b>.</span><span class="en">Automated tag-based EBS backups → <b>DLM</b>. Restored volume slow at first → <b>FSR</b> (or pre-warm with dd/fio). Rarely used snapshots, cheaper → <b>Archive</b>. Protect against accidental snapshot deletion → <b>Recycle Bin</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Backup EBS tự động theo tag → <b>DLM</b>. Volume restore từ snapshot bị chậm lúc đầu → <b>FSR</b> (hoặc pre-warm bằng dd/fio). Snapshot ít dùng, muốn rẻ → <b>Archive</b>. Chống xoá nhầm snapshot → <b>Recycle Bin</b>.</span><span class="en">Automated tag-based EBS backups → <b>DLM</b>. Restored volume slow at first → <b>FSR</b> (or pre-warm with dd/fio). Rarely used snapshots, cheaper → <b>Archive</b>. Protect against accidental snapshot deletion → <b>Recycle Bin</b>.</span></div>
 </section>
 
 <!-- 7.3 EFS -->
@@ -2587,7 +2593,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <tr><td>OS</td><td>Linux + Windows</td><td><span class="vi">Chỉ Linux (POSIX)</span><span class="en">Linux only (POSIX)</span></td><td>—</td></tr>
     <tr><td><span class="vi">Giá / dung lượng</span><span class="en">Cost / capacity</span></td><td><span class="vi">Provision trước</span><span class="en">Provisioned</span></td><td><span class="vi">Đắt hơn, pay-per-use, tiết kiệm bằng tier</span><span class="en">Pricier, pay-per-use, save with tiers</span></td><td><span class="vi">Mất dữ liệu khi mất instance</span><span class="en">Data lost with the instance</span></td></tr>
   </table></div>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Nhiều instance (nhiều AZ) cần <b>dùng chung file</b> → <b>EFS</b>. Windows cần file share → không phải EFS. Mount EFS bị timeout → kiểm tra SG cho phép <b>NFS 2049</b>. Workload không đoán trước → throughput <b>Elastic</b>.</span><span class="en">Many instances (across AZs) need <b>shared files</b> → <b>EFS</b>. Windows file shares → not EFS. EFS mount times out → check the SG allows <b>NFS 2049</b>. Unpredictable workload → <b>Elastic</b> throughput.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Nhiều instance (nhiều AZ) cần <b>dùng chung file</b> → <b>EFS</b>. Windows cần file share → không phải EFS. Mount EFS bị timeout → kiểm tra SG cho phép <b>NFS 2049</b>. Workload không đoán trước → throughput <b>Elastic</b>.</span><span class="en">Many instances (across AZs) need <b>shared files</b> → <b>EFS</b>. Windows file shares → not EFS. EFS mount times out → check the SG allows <b>NFS 2049</b>. Unpredictable workload → <b>Elastic</b> throughput.</span></div>
 </section>
 
 <!-- ============================ PART 8 ============================ -->
@@ -2659,7 +2665,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <tr><td><span class="vi">Bắt buộc MFA</span><span class="en">Require MFA</span></td><td><code>aws:MultiFactorAuthPresent: true</code></td></tr>
     <tr><td><span class="vi">List + download</span><span class="en">List + download</span></td><td><code>s3:ListBucket</code> → <code>arn:…:bucket</code> <span class="vi">(không /)</span><span class="en">(no /)</span>; <code>s3:GetObject</code> → <code>arn:…:bucket/*</code></td></tr>
   </table></div>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Cross-account / public → <b>bucket policy</b>. EC2 truy cập S3 → <b>IAM role</b>. Đã có policy public mà vẫn AccessDenied → kiểm tra <b>Block Public Access</b>. Có explicit <b>Deny</b> → luôn thắng.</span><span class="en">Cross-account / public → <b>bucket policy</b>. EC2 accessing S3 → <b>IAM role</b>. Public policy but still AccessDenied → check <b>Block Public Access</b>. An explicit <b>Deny</b> always wins.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Cross-account / public → <b>bucket policy</b>. EC2 truy cập S3 → <b>IAM role</b>. Đã có policy public mà vẫn AccessDenied → kiểm tra <b>Block Public Access</b>. Có explicit <b>Deny</b> → luôn thắng.</span><span class="en">Cross-account / public → <b>bucket policy</b>. EC2 accessing S3 → <b>IAM role</b>. Public policy but still AccessDenied → check <b>Block Public Access</b>. An explicit <b>Deny</b> always wins.</span></div>
 </section>
 
 <!-- 8.2b S3 ENCRYPTION -->
@@ -2749,7 +2755,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
   { "Sid": "DenyHTTP", "Effect": "Deny", "Principal": "*",
     "Action": "s3:*", "Resource": ["arn:aws:s3:::my-bucket", "arn:aws:s3:::my-bucket/*"],
     "Condition": { "Bool": { "aws:SecureTransport": "false" } } } ] }</code></pre>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">"AWS quản lý key, AES-256" → <b>SSE-S3</b>. "Kiểm soát key / audit ai dùng key / xoay vòng key" → <b>SSE-KMS</b>. "Mã hoá 2 lớp" → <b>DSSE-KMS</b>. "Tự quản lý key ngoài AWS, S3 mã hoá" → <b>SSE-C</b> (bắt buộc HTTPS). "Mã hoá trước khi gửi" → <b>client-side</b>. Upload/download SSE-KMS bị throttle → quota KMS → bật <b>S3 Bucket Key</b> / xin tăng quota. Ép HTTPS → <code>aws:SecureTransport</code>.</span><span class="en">"AWS manages the keys, AES-256" → <b>SSE-S3</b>. "Control keys / audit key usage / rotate keys" → <b>SSE-KMS</b>. "Dual-layer encryption" → <b>DSSE-KMS</b>. "Manage our own keys outside AWS, S3 encrypts" → <b>SSE-C</b> (HTTPS required). "Encrypt before sending" → <b>client-side</b>. SSE-KMS uploads/downloads throttled → KMS quota → enable <b>S3 Bucket Keys</b> / raise the quota. Enforce HTTPS → <code>aws:SecureTransport</code>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">"AWS quản lý key, AES-256" → <b>SSE-S3</b>. "Kiểm soát key / audit ai dùng key / xoay vòng key" → <b>SSE-KMS</b>. "Mã hoá 2 lớp" → <b>DSSE-KMS</b>. "Tự quản lý key ngoài AWS, S3 mã hoá" → <b>SSE-C</b> (bắt buộc HTTPS). "Mã hoá trước khi gửi" → <b>client-side</b>. Upload/download SSE-KMS bị throttle → quota KMS → bật <b>S3 Bucket Key</b> / xin tăng quota. Ép HTTPS → <code>aws:SecureTransport</code>.</span><span class="en">"AWS manages the keys, AES-256" → <b>SSE-S3</b>. "Control keys / audit key usage / rotate keys" → <b>SSE-KMS</b>. "Dual-layer encryption" → <b>DSSE-KMS</b>. "Manage our own keys outside AWS, S3 encrypts" → <b>SSE-C</b> (HTTPS required). "Encrypt before sending" → <b>client-side</b>. SSE-KMS uploads/downloads throttled → KMS quota → enable <b>S3 Bucket Keys</b> / raise the quota. Enforce HTTPS → <code>aws:SecureTransport</code>.</span></div>
 </section>
 
 <!-- 8.3 VERSIONING -->
@@ -2760,7 +2766,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi">Object có trước khi bật versioning → version <b><code>null</code></b>. <b>Suspend</b> versioning không xoá version cũ.</span><span class="en">Objects uploaded before enabling → version <b><code>null</code></b>. <b>Suspending</b> versioning doesn't delete old versions.</span></li>
     <li><span class="vi"><b>Delete thường</b> → thêm <b>delete marker</b> (object "biến mất", GET → 404) → <b>xoá delete marker</b> để khôi phục. <b>Xoá theo version ID</b> = <b>permanent delete</b>, không hoàn tác.</span><span class="en"><b>Plain delete</b> → adds a <b>delete marker</b> (object "disappears", GET → 404) → <b>delete the marker</b> to restore. <b>Deleting a specific version ID</b> = <b>permanent delete</b>, irreversible.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Vừa bật versioning lần đầu: chờ tới <b>15 phút</b> để lan truyền; trong lúc đó GET object mới ghi có thể trả <b>HTTP 404 NoSuchKey</b> → đợi 15 phút rồi mới ghi.</span><span class="en">After first enabling versioning: allow up to <b>15 minutes</b> to propagate; meanwhile GETs of newly written objects may return <b>HTTP 404 NoSuchKey</b> → wait 15 minutes before writing.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Vừa bật versioning lần đầu: chờ tới <b>15 phút</b> để lan truyền; trong lúc đó GET object mới ghi có thể trả <b>HTTP 404 NoSuchKey</b> → đợi 15 phút rồi mới ghi.</span><span class="en">After first enabling versioning: allow up to <b>15 minutes</b> to propagate; meanwhile GETs of newly written objects may return <b>HTTP 404 NoSuchKey</b> → wait 15 minutes before writing.</span></div>
 </section>
 
 <!-- 8.4 REPLICATION -->
@@ -2800,7 +2806,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi"><b>Cross-account</b>: bucket policy đích cho role nguồn <code>ReplicateObject</code>, <code>ReplicateDelete</code>, <code>GetBucketVersioning</code>, <code>PutBucketVersioning</code>. Mặc định replica vẫn <b>thuộc account nguồn</b> → account đích có thể không đọc được. Muốn đổi owner: bật <b>owner override</b> trong rule + quyền <code>s3:ObjectOwnerOverrideToBucketOwner</code> cho role và trong bucket policy đích.</span><span class="en"><b>Cross-account</b>: the destination bucket policy grants the source role <code>ReplicateObject</code>, <code>ReplicateDelete</code>, <code>GetBucketVersioning</code>, <code>PutBucketVersioning</code>. By default replicas stay <b>owned by the source account</b> → the destination may not read them. To change owner: enable <b>owner override</b> in the rule + <code>s3:ObjectOwnerOverrideToBucketOwner</code> on the role and in the destination policy.</span></li>
     <li><span class="vi"><b>Replication Time Control (RTC)</b>: <b>99.9%</b><span class="upd">AWS docs 11/2026</span> object mới replicate trong <b>15 phút</b>, có CloudWatch metrics/cảnh báo; tốn thêm phí/GB — cho yêu cầu compliance.</span><span class="en"><b>Replication Time Control (RTC)</b>: <b>99.9%</b><span class="upd">AWS docs 11/2026</span> of new objects replicated within <b>15 minutes</b>, with CloudWatch metrics/alerts; extra cost per GB — for compliance needs.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Replicate object có sẵn → <b>Batch Replication</b>. Account đích không đọc được replica → <b>owner override</b>. Cần SLA thời gian replicate → <b>RTC</b>. Replication không chạy → kiểm tra versioning 2 bên + IAM role.</span><span class="en">Replicate existing objects → <b>Batch Replication</b>. Destination can't read replicas → <b>owner override</b>. Need a replication-time SLA → <b>RTC</b>. Replication not working → check versioning on both + the IAM role.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Replicate object có sẵn → <b>Batch Replication</b>. Account đích không đọc được replica → <b>owner override</b>. Cần SLA thời gian replicate → <b>RTC</b>. Replication không chạy → kiểm tra versioning 2 bên + IAM role.</span><span class="en">Replicate existing objects → <b>Batch Replication</b>. Destination can't read replicas → <b>owner override</b>. Need a replication-time SLA → <b>RTC</b>. Replication not working → check versioning on both + the IAM role.</span></div>
 </section>
 
 <!-- 8.4b STORAGE CLASSES -->
@@ -2886,7 +2892,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
   </ul>
 <pre><code>aws s3api restore-object --bucket my-bucket --key archive.zip \
   --restore-request '{"Days":7,"GlacierJobParameters":{"Tier":"Bulk"}}'</code></pre>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Access pattern không đoán trước → <b>Intelligent-Tiering</b>. Dữ liệu tạo lại được, rẻ → <b>One Zone-IA</b>. Archive nhưng cần đọc <b>ngay (ms)</b> → <b>Glacier Instant Retrieval</b>. Lấy archive trong vài phút → <b>Glacier Flexible + Expedited</b>. Rẻ nhất, chờ 12–48 giờ được → <b>Deep Archive</b>. Latency cực thấp cho ML/analytics cùng AZ → <b>Express One Zone</b>.</span><span class="en">Unpredictable access → <b>Intelligent-Tiering</b>. Re-creatable, cheap → <b>One Zone-IA</b>. Archive needing <b>immediate (ms)</b> reads → <b>Glacier Instant Retrieval</b>. Archive back within minutes → <b>Glacier Flexible + Expedited</b>. Cheapest, can wait 12–48 h → <b>Deep Archive</b>. Ultra-low latency for same-AZ ML/analytics → <b>Express One Zone</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Access pattern không đoán trước → <b>Intelligent-Tiering</b>. Dữ liệu tạo lại được, rẻ → <b>One Zone-IA</b>. Archive nhưng cần đọc <b>ngay (ms)</b> → <b>Glacier Instant Retrieval</b>. Lấy archive trong vài phút → <b>Glacier Flexible + Expedited</b>. Rẻ nhất, chờ 12–48 giờ được → <b>Deep Archive</b>. Latency cực thấp cho ML/analytics cùng AZ → <b>Express One Zone</b>.</span><span class="en">Unpredictable access → <b>Intelligent-Tiering</b>. Re-creatable, cheap → <b>One Zone-IA</b>. Archive needing <b>immediate (ms)</b> reads → <b>Glacier Instant Retrieval</b>. Archive back within minutes → <b>Glacier Flexible + Expedited</b>. Cheapest, can wait 12–48 h → <b>Deep Archive</b>. Ultra-low latency for same-AZ ML/analytics → <b>Express One Zone</b>.</span></div>
   <div class="callout note"><span class="ttl"><span class="vi">Ghi chú thêm</span><span class="en">Extra note</span></span><span class="vi">Theo AWS docs (11/2026). Dịch vụ <b>Amazon Glacier</b> dạng vault (API riêng, khác S3 Glacier storage class) <b>không nhận khách hàng mới</b>; AWS khuyến nghị dùng các S3 Glacier storage class. Giá là tham khảo us-east-1, luôn xem lại trang pricing.</span><span class="en">Per AWS docs (Nov 2026). The vault-based <b>Amazon Glacier</b> service (separate API, not the S3 Glacier storage classes) <b>no longer accepts new customers</b>; AWS recommends the S3 Glacier storage classes. Prices are approximate us-east-1 — always check the pricing page.</span></div>
 </section>
 
@@ -2917,7 +2923,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
       <path class="ln acc" d="M170 26 Q342 -26 514 26"/>
       <path class="ln acc" d="M410 26 Q522 -16 634 26"/>
       <text class="c s t-acc" x="342" y="-8">Standard-IA → Glacier IR</text>
-      <text class="s t-acc" x="644" y="8"><tspan class="vi">One Zone-IA chỉ → Flexible / Deep</tspan><tspan class="en">One Zone-IA only → Flexible / Deep</tspan></text>
+      <text class="s t-acc r" x="852" y="4"><tspan class="vi">One Zone-IA chỉ → Flexible / Deep</tspan><tspan class="en">One Zone-IA only → Flexible / Deep</tspan></text>
       <path class="ln" d="M550 52 H614"/>
       <path class="ln" d="M670 52 H734"/>
       <path class="ln acc" d="M42 112 V122 H762 V112" style="marker-end:none"/>
@@ -2983,7 +2989,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi"><b>EventBridge integration</b> (bật trong Properties): mọi event của bucket vào EventBridge → filter theo metadata, size, name; gửi nhiều đích (Step Functions, Kinesis Data Streams/Firehose…); archive, replay, delivery tin cậy hơn.</span><span class="en"><b>EventBridge integration</b> (enable in Properties): all bucket events go to EventBridge → filter by metadata, size, name; multiple targets (Step Functions, Kinesis Data Streams/Firehose…); archive, replay, more reliable delivery.</span></li>
     <li><span class="vi">Hands-on: lưu notification tới SQS báo lỗi validate cho tới khi sửa <b>SQS access policy</b>; S3 gửi một <b>test event</b> khi tạo xong; upload file → message <code>ObjectCreated:Put</code> chứa key.</span><span class="en">Hands-on: saving the SQS notification fails validation until the <b>SQS access policy</b> is fixed; S3 sends a <b>test event</b> on creation; uploading → an <code>ObjectCreated:Put</code> message with the key.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Notification lỗi "Unable to validate destination" → thiếu <b>resource policy</b> trên SNS/SQS/Lambda. Cần nhiều đích / filter phức tạp / replay → <b>EventBridge</b>.</span><span class="en">"Unable to validate destination" error → missing <b>resource policy</b> on SNS/SQS/Lambda. Need many targets / complex filters / replay → <b>EventBridge</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Notification lỗi "Unable to validate destination" → thiếu <b>resource policy</b> trên SNS/SQS/Lambda. Cần nhiều đích / filter phức tạp / replay → <b>EventBridge</b>.</span><span class="en">"Unable to validate destination" error → missing <b>resource policy</b> on SNS/SQS/Lambda. Need many targets / complex filters / replay → <b>EventBridge</b>.</span></div>
 </section>
 
 <!-- 8.7 PERFORMANCE -->
@@ -3012,7 +3018,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
       <use href="#ic-r-user" x="20" y="132" width="40" height="40"/>
       <text class="c s" x="40" y="188"><tspan class="vi">Mỹ</tspan><tspan class="en">USA</tspan></text>
       <path class="ln" d="M66 152 H186"/>
-      <text class="c s" x="126" y="144">public internet</text>
+      <text class="c s" x="126" y="144"><tspan class="vi">internet công cộng</tspan><tspan class="en">public internet</tspan></text>
       <use href="#ic-r-edge" x="194" y="130" width="44" height="44"/>
       <text class="c s" x="216" y="190">Edge location</text>
       <path class="ln ok" d="M246 152 H508"/>
@@ -3039,7 +3045,7 @@ aws s3api upload-part --bucket my-bucket --key 100MB.txt --part-number 1 \
 aws s3api list-parts --bucket my-bucket --key 100MB.txt --upload-id $UploadId
 aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-id $UploadId \
   --multipart-upload '{"Parts":[{"PartNumber":1,"ETag":"..."},{"PartNumber":2,"ETag":"..."}]}'</code></pre>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Upload file lớn chậm/hay lỗi → <b>multipart</b>. Upload từ xa (khác châu lục) → <b>Transfer Acceleration</b>. Tải nhanh file lớn / chỉ đọc 1 phần → <b>byte-range fetch</b>. Bucket đầy chi phí "ẩn" → lifecycle xoá <b>incomplete multipart uploads</b>. Cần nhiều request/giây hơn → chia nhiều <b>prefix</b>.</span><span class="en">Large uploads slow/failing → <b>multipart</b>. Uploading from far away (other continent) → <b>Transfer Acceleration</b>. Fast download of large files / partial reads → <b>byte-range fetch</b>. "Hidden" storage costs → lifecycle to delete <b>incomplete multipart uploads</b>. Need more requests/sec → spread across <b>prefixes</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Upload file lớn chậm/hay lỗi → <b>multipart</b>. Upload từ xa (khác châu lục) → <b>Transfer Acceleration</b>. Tải nhanh file lớn / chỉ đọc 1 phần → <b>byte-range fetch</b>. Bucket đầy chi phí "ẩn" → lifecycle xoá <b>incomplete multipart uploads</b>. Cần nhiều request/giây hơn → chia nhiều <b>prefix</b>.</span><span class="en">Large uploads slow/failing → <b>multipart</b>. Uploading from far away (other continent) → <b>Transfer Acceleration</b>. Fast download of large files / partial reads → <b>byte-range fetch</b>. "Hidden" storage costs → lifecycle to delete <b>incomplete multipart uploads</b>. Need more requests/sec → spread across <b>prefixes</b>.</span></div>
 </section>
 
 <!-- 8.8 BATCH & INVENTORY -->
@@ -3074,7 +3080,7 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
     <li><span class="vi">Hơn tự viết script: quản lý <b>retry</b>, theo dõi tiến độ, thông báo hoàn thành, <b>completion report</b>. Cần IAM role tin cậy S3 Batch Operations. Job chờ bạn <b>confirm</b> rồi mới chạy.</span><span class="en">Better than scripting: <b>retries</b>, progress tracking, completion notifications, <b>completion reports</b>. Needs an IAM role trusted by S3 Batch Operations. The job waits for your <b>confirmation</b> before running.</span></li>
     <li><span class="vi"><b>S3 Inventory</b>: liệt kê object + metadata (tốt hơn gọi List API) — audit trạng thái <b>replication/encryption</b>, đếm object, tổng dung lượng version cũ (có thể gồm all versions). Output <b>CSV</b> (cho Batch Operations/Excel), <b>ORC/Parquet</b> (cho Athena); <b>daily/weekly</b>, report đầu tiên trong 48 giờ; bucket đích <b>cùng region</b> + bucket policy cho S3 ghi. Query bằng Athena, Redshift, Presto, Hive, Spark.</span><span class="en"><b>S3 Inventory</b>: lists objects + metadata (better than the List API) — audit <b>replication/encryption</b> status, count objects, total size of old versions (can include all versions). Output <b>CSV</b> (for Batch Operations/Excel), <b>ORC/Parquet</b> (for Athena); <b>daily/weekly</b>, first report within 48 hours; destination bucket in the <b>same region</b> + a bucket policy letting S3 write. Query with Athena, Redshift, Presto, Hive, Spark.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">"Mã hoá toàn bộ object cũ chưa mã hoá" → <b>S3 Inventory (+ Athena) → S3 Batch Operations</b>. Audit trạng thái encryption/replication của mọi object → <b>S3 Inventory</b>.</span><span class="en">"Encrypt all existing unencrypted objects" → <b>S3 Inventory (+ Athena) → S3 Batch Operations</b>. Audit encryption/replication status of every object → <b>S3 Inventory</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">"Mã hoá toàn bộ object cũ chưa mã hoá" → <b>S3 Inventory (+ Athena) → S3 Batch Operations</b>. Audit trạng thái encryption/replication của mọi object → <b>S3 Inventory</b>.</span><span class="en">"Encrypt all existing unencrypted objects" → <b>S3 Inventory (+ Athena) → S3 Batch Operations</b>. Audit encryption/replication status of every object → <b>S3 Inventory</b>.</span></div>
 </section>
 
 <!-- 8.9 ATHENA -->
@@ -3116,7 +3122,7 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
   <ul>
     <li><span class="vi">Hands-on: đặt <b>query result location</b> (bucket S3) → <code>CREATE DATABASE</code> → <code>CREATE EXTERNAL TABLE</code> trỏ <code>LOCATION</code> tới bucket access log (có dấu <code>/</code> cuối) → query đếm theo HTTP status, tìm 403/404.</span><span class="en">Hands-on: set the <b>query result location</b> (S3 bucket) → <code>CREATE DATABASE</code> → <code>CREATE EXTERNAL TABLE</code> with <code>LOCATION</code> pointing at the access-log bucket (trailing <code>/</code>) → count by HTTP status, find 403/404s.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl">Exam tip</span><span class="vi">Phân tích dữ liệu/log trong S3 bằng <b>SQL serverless</b> → <b>Athena</b>. Giảm chi phí/tăng tốc Athena → <b>Parquet/ORC + nén + partition + file lớn</b>. Query xuyên nhiều nguồn (DynamoDB, RDS, on-prem) → <b>Federated Query</b> (Lambda connector).</span><span class="en">Analyse data/logs in S3 with <b>serverless SQL</b> → <b>Athena</b>. Cut Athena cost/speed it up → <b>Parquet/ORC + compression + partitions + larger files</b>. Query across sources (DynamoDB, RDS, on-prem) → <b>Federated Query</b> (Lambda connectors).</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Phân tích dữ liệu/log trong S3 bằng <b>SQL serverless</b> → <b>Athena</b>. Giảm chi phí/tăng tốc Athena → <b>Parquet/ORC + nén + partition + file lớn</b>. Query xuyên nhiều nguồn (DynamoDB, RDS, on-prem) → <b>Federated Query</b> (Lambda connector).</span><span class="en">Analyse data/logs in S3 with <b>serverless SQL</b> → <b>Athena</b>. Cut Athena cost/speed it up → <b>Parquet/ORC + compression + partitions + larger files</b>. Query across sources (DynamoDB, RDS, on-prem) → <b>Federated Query</b> (Lambda connectors).</span></div>
 </section>
 
 <!-- ============================ CHEAT SHEET ============================ -->
@@ -3242,7 +3248,7 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
     commitT=setTimeout(function(){ if(!svgEl) return; rs=s; svgEl.style.width=Math.round(natW*rs)+'px'; svgEl.style.height=Math.round(natH*rs)+'px'; render(); },140);
   }
   function bounds(){
-    var W=stage.clientWidth, H=stage.clientHeight, cw=natW*s, ch=natH*s, P=24;
+    var W=stage.clientWidth, H=stage.clientHeight, cw=natW*s, ch=natH*s, P=16;
     var minX=cw+2*P<=W?(W-cw)/2:W-cw-P, maxX=cw+2*P<=W?(W-cw)/2:P;
     var minY=ch+2*P<=H?(H-ch)/2:H-ch-P, maxY=ch+2*P<=H?(H-ch)/2:P;
     return {minX:minX,maxX:maxX,minY:minY,maxY:maxY};
@@ -3263,21 +3269,25 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
     if(animated){ animateTo(fitS,W/2,H/2); return; }
     s=fitS; x=(W-natW*s)/2; y=(H-natH*s)/2; render(); commit();
   }
-  function openViewer(fig){
+  var lastFocus=null;
+  function openViewer(fig,opener){
     var svg=fig.querySelector('svg.dg'); if(!svg) return;
     var vb=svg.viewBox.baseVal; natW=vb&&vb.width?vb.width:860; natH=vb&&vb.height?vb.height:300;
     stage.innerHTML=''; canvas=document.createElement('div'); canvas.className='dv-canvas';
     svgEl=svg.cloneNode(true); svgEl.removeAttribute('role'); canvas.appendChild(svgEl); stage.appendChild(canvas);
     var h=fig.closest('section'); h=h&&h.querySelector('h3');
-    var lang=d.dataset.lang; var t=h?[].map.call(h.childNodes,function(n){return n.nodeType===1&&n.classList.contains(lang==='vi'?'en':'vi')?'':n.textContent}).join('').trim():'Diagram';
-    dvTitle.textContent=t||'Diagram';
+    var lang=d.dataset.lang, num=h&&h.querySelector('.sec-num');
+    var t=h?[].map.call(h.childNodes,function(n){return n.nodeType===1&&(n.classList.contains(lang==='vi'?'en':'vi')||n.classList.contains('sec-num'))?'':n.textContent}).join('').trim():'Diagram';
+    dvTitle.textContent=(num?num.textContent+' · ':'')+(t||'Diagram');
+    lastFocus=opener||document.activeElement;
     viewer.hidden=false; body.classList.add('dv-open');
+    document.getElementById('dvClose').focus({preventScroll:true});
     rs=1; svgEl.style.width=natW+'px'; svgEl.style.height=natH+'px';
     fit(false);
     /* narrow portrait phone: start zoomed so labels are readable, aligned to the left edge */
     if(natW*fitS<natW*0.62){ var W=stage.clientWidth; s=Math.min(MAXS,(W-32)/natW*1.9); x=16; y=(stage.clientHeight-natH*s)/2; clampXY(); render(); commit(); }
   }
-  function closeViewer(){ cancelAnimationFrame(anim); viewer.hidden=true; body.classList.remove('dv-open'); stage.innerHTML=''; canvas=svgEl=null; }
+  function closeViewer(){ cancelAnimationFrame(anim); viewer.hidden=true; body.classList.remove('dv-open'); stage.innerHTML=''; canvas=svgEl=null; if(lastFocus&&lastFocus.focus) lastFocus.focus({preventScroll:true}); lastFocus=null; }
 
   /* gestures: 1 pointer = pan (with inertia), 2 pointers = pinch, double-tap = zoom toggle, wheel = zoom */
   var ptrs={}, last=null, vel={x:0,y:0}, lastT=0, tapT=0, tapX=0, tapY=0, moved=0;
@@ -3337,17 +3347,20 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
   window.addEventListener('resize',function(){ if(canvas) fit(false); });
   document.addEventListener('keydown',function(e){
     if(viewer.hidden) return;
+    if(e.key==='Tab'){ var f=[].slice.call(viewer.querySelectorAll('button')); var i=f.indexOf(document.activeElement); e.preventDefault(); f[(i+(e.shiftKey?-1:1)+f.length)%f.length].focus(); return; }
     if(e.key==='Escape') closeViewer(); else if(e.key==='+'||e.key==='=') centerZoom(1.6); else if(e.key==='-') centerZoom(1/1.6); else if(e.key==='0') fit(true);
   });
   [].forEach.call(document.querySelectorAll('figure.diagram'),function(fig){
     var wrap=document.createElement('div'); wrap.className='dg-wrap';
     fig.parentNode.insertBefore(wrap,fig); wrap.appendChild(fig);
-    var b=document.createElement('button'); b.className='dv-btn'; b.type='button'; b.title='Phóng to / Zoom'; b.setAttribute('aria-label','Open diagram full screen'); b.textContent='⤢';
-    b.addEventListener('click',function(){openViewer(fig)});
-    wrap.appendChild(b);
+    var bar=document.createElement('div'); bar.className='dv-bar-under';
+    var b=document.createElement('button'); b.className='dv-btn'; b.type='button';
+    b.innerHTML='<span class="ic" aria-hidden="true">⤢</span><span class="vi">Phóng to</span><span class="en">Zoom</span>';
+    b.addEventListener('click',function(){openViewer(fig,b)});
+    bar.appendChild(b); wrap.appendChild(bar);
     /* tap on the diagram itself also opens the viewer (but not after a horizontal scroll) */
     var sx=0; fig.addEventListener('pointerdown',function(){sx=fig.scrollLeft});
-    fig.querySelector('svg.dg').addEventListener('click',function(){ if(Math.abs(fig.scrollLeft-sx)<4) openViewer(fig); });
+    fig.querySelector('svg.dg').addEventListener('click',function(){ if(Math.abs(fig.scrollLeft-sx)<4) openViewer(fig,b); });
   });
 
   /* PWA: offline cache (only when served over http/https, not file://) */
@@ -3366,8 +3379,10 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
   var crumb=document.getElementById('crumb');
   function offset(){return topbar.offsetHeight+16}
   function lang(){return d.dataset.lang==='en'?'en':'vi'}
-  function txt(node){ /* visible text of a node in the current language */
-    var c=node.cloneNode(true); [].forEach.call(c.querySelectorAll(lang()==='vi'?'.en':'.vi'),function(x){x.remove()});
+  function txt(node){ /* visible text of a node in the current language, with spaces between blocks/cells */
+    var c=node.cloneNode(true);
+    [].forEach.call(c.querySelectorAll((lang()==='vi'?'.en':'.vi')+',.sec-num,.sec-foot,.dv-bar-under'),function(x){x.remove()});
+    [].forEach.call(c.querySelectorAll('td,th,li,p,h2,h3,h4,div,figcaption,pre,text,.ttl,br'),function(x){x.appendChild(document.createTextNode(' '))});
     return c.textContent.replace(/\s+/g,' ').trim();
   }
   var secs=[].slice.call(sidebar.querySelectorAll('.toc-sec'));
@@ -3381,12 +3396,13 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
       var num=part==='R'?'★':part+'.'+n;
       row.querySelector('.toc-num').textContent=num;
       var it={id:id,a:a,row:row,sec:sec,el:el,num:num,label:row.querySelector('.toc-label'),done:row.querySelector('.toc-done'),snip:row.querySelector('.toc-snip')};
-      if(el.tagName==='SECTION'){
-        var h=el.querySelector('h3');
-        if(h){ var sp=document.createElement('span'); sp.className='sec-num'; sp.textContent=num; var ic=h.querySelector('svg.ico'); h.insertBefore(sp, ic?ic.nextSibling:h.firstChild); }
+      var h=el.tagName==='SECTION'?el.querySelector('h3'):(el.tagName==='H2'?el:null);
+      if(h){ var sp=document.createElement('span'); sp.className='sec-num'; sp.textContent=num; var ic=h.querySelector('svg.ico'); h.insertBefore(sp, ic?ic.nextSibling:h.firstChild); if(el.tagName==='H2') sp.style.marginRight='10px'; }
+      var host=el.tagName==='SECTION'?el:(id==='cheatsheet'?document.getElementById('cheat-body'):null);
+      if(host){
         var foot=document.createElement('div'); foot.className='sec-foot';
         foot.innerHTML='<button class="done-btn" type="button" aria-pressed="false"><span class="vi">Đánh dấu đã học</span><span class="en">Mark as learned</span></button>';
-        el.appendChild(foot); it.btn=foot.firstChild;
+        host.appendChild(foot); it.btn=foot.firstChild;
       }
       it.content=id==='cheatsheet'?document.getElementById('cheat-body'):el;
       items.push(it);
@@ -3513,8 +3529,7 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
     searching=false; result.hidden=true; clearBtn.hidden=true;
     items.forEach(function(it){ it.row.hidden=false; it.snip.hidden=true; it.snip.innerHTML=''; it.label.innerHTML=it.labelHTML; });
     secs.forEach(function(sec){ sec.hidden=false; });
-    if(savedOpen){ secs.forEach(function(sec,i){ setOpen(sec,savedOpen[i]) }); savedOpen=null; }
-    if(current) setOpen(current.sec,true);
+    secs.forEach(function(sec){ setOpen(sec,!!manual[sec.dataset.part]||(current&&current.sec===sec)) }); savedOpen=null;
     syncToggleAll(); revealActive();
   }
   items.forEach(function(it){ it.labelHTML=it.label.innerHTML; });
@@ -3548,9 +3563,21 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
     else if(e.key==='Escape'){ e.stopPropagation(); input.value=''; resetSearch(); input.blur(); }
   });
   clearBtn.addEventListener('click',function(){ input.value=''; resetSearch(); input.focus(); });
+  var A11Y=[['#menuBtn','Mục lục','Table of contents'],['#themeBtn','Đổi giao diện sáng / tối','Toggle light / dark theme'],
+    ['#tocClear','Xoá tìm kiếm','Clear search'],['#toTop','Lên đầu trang','Back to top'],['#dvIn','Phóng to','Zoom in'],
+    ['#dvOut','Thu nhỏ','Zoom out'],['#dvClose','Đóng','Close'],['#sidebar','Mục lục','Table of contents'],['#tocSearch','Tìm trong ghi chú','Search the notes']];
+  function refreshA11y(){
+    var v=lang()==='vi';
+    A11Y.forEach(function(x){ var el=document.querySelector(x[0]); if(el) el.setAttribute('aria-label',v?x[1]:x[2]); });
+    document.getElementById('toTop').title=v?'Lên đầu trang':'Back to top';
+    document.getElementById('langBtn').setAttribute('aria-label',v?'Ngôn ngữ: Tiếng Việt — chuyển sang English':'Language: English — switch to Tiếng Việt');
+  }
+  var menuBtn=document.getElementById('menuBtn');
+  new MutationObserver(function(){ menuBtn.setAttribute('aria-expanded',body.classList.contains('nav-open')?'true':'false'); }).observe(body,{attributes:true,attributeFilter:['class']});
   function refreshLang(){
+    refreshA11y();
     input.placeholder=input.getAttribute(lang()==='vi'?'data-ph-vi':'data-ph-en');
-    renderDone(); updateCrumb(); if(searching) runSearch();
+    cache={}; renderDone(); updateCrumb(); if(searching) runSearch();
   }
   document.getElementById('langBtn').addEventListener('click',refreshLang);
   refreshLang();

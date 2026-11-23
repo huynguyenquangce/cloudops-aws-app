@@ -3,7 +3,7 @@
      falls back to the cached copy when offline.
    - Static assets (icons, manifest): cache-first.
    Bump CACHE only when the list of PRECACHE files changes. */
-const CACHE = 'cloudops-v1';
+const CACHE = 'cloudops-v2';
 const PRECACHE = [
   './',
   './index.html',
@@ -30,18 +30,28 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   const req = e.request;
-  if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
+  const url = new URL(req.url);
+  if (req.method !== 'GET' || url.origin !== self.location.origin) return;
 
-  const isPage = req.mode === 'navigate' || new URL(req.url).pathname.endsWith('/index.html');
-  if (isPage) {
+  // The app page: the scope root ("./") or "./index.html" (query/hash ignored).
+  const scopePath = new URL(self.registration.scope).pathname;
+  const isAppPage = url.pathname === scopePath || url.pathname === scopePath + 'index.html';
+
+  if (req.mode === 'navigate' || isAppPage) {
     e.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put('./index.html', copy));
+          // Only a successful response for the real app page may replace the offline copy
+          // (never cache a 404 / error page as index.html).
+          if (res.ok && isAppPage) {
+            const copy = res.clone();
+            caches.open(CACHE).then((c) => c.put('./index.html', copy));
+          }
           return res;
         })
-        .catch(() => caches.match('./index.html').then((r) => r || caches.match('./')))
+        .catch(() => (isAppPage
+          ? caches.match('./index.html').then((r) => r || caches.match('./'))
+          : caches.match(req).then((r) => r || caches.match('./index.html'))))
     );
     return;
   }
