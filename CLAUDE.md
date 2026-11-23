@@ -37,7 +37,7 @@ Repository để học AWS CloudOps. User sẽ paste transcript bài giảng và
 
 - Một file tự chứa (self-contained): CSS/JS inline, icon nhúng inline (SVG) — mở trực tiếp bằng trình duyệt không cần server.
 - Có sidebar mục lục (TOC) để điều hướng nhanh giữa các section, highlight section đang xem.
-- Responsive (đọc được trên điện thoại).
+- Responsive chuẩn: không được tràn ngang ở mọi khổ từ 320px (iPhone SE) → desktop, cả iPhone xoay ngang. Bảng/diagram/code chỉ cuộn ngang **bên trong** khung của chúng (`.tbl-wrap`, `figure.diagram`, `pre`). Chuỗi dài không có khoảng trắng (ARN, path, lệnh) phải tự xuống dòng (`overflow-wrap:anywhere` đã có cho `code` và `.cheat`). Header: các nút không được co lại, chỉ phần brand được rút gọn.
 - Hỗ trợ light/dark mode.
 
 ## PWA (cài lên iPhone)

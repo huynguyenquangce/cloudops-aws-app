@@ -46,17 +46,20 @@ html[data-lang="vi"] .en, html[data-lang="en"] .vi{display:none !important}
 
 *{box-sizing:border-box}
 :root{--st:env(safe-area-inset-top,0px);--sl:env(safe-area-inset-left,0px);--sr:env(safe-area-inset-right,0px);--sbm:env(safe-area-inset-bottom,0px)}
-html{scroll-behavior:smooth;scroll-padding-top:calc(72px + var(--st))}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:calc(72px + var(--st))}
 body{margin:0;background:var(--bg);color:var(--text);font:15.5px/1.65 "Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif}
 a{color:var(--link)}
-code{font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;font-size:.88em;background:var(--surface-2);border:1px solid var(--border);border-radius:4px;padding:.05em .35em}
+code{overflow-wrap:anywhere;font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;font-size:.88em;background:var(--surface-2);border:1px solid var(--border);border-radius:4px;padding:.05em .35em}
 pre{background:var(--code-bg);color:var(--code-text);border-radius:8px;padding:14px 16px;overflow-x:auto;font-size:13.5px;line-height:1.55}
-pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit}
+pre code{background:none;border:0;padding:0;color:inherit;font-size:inherit;overflow-wrap:normal}
 pre .cm{color:#8b97a5}
 
 /* header */
 .topbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;height:calc(56px + var(--st));padding:var(--st) max(16px,var(--sr)) 0 max(16px,var(--sl));background:var(--surface);border-bottom:1px solid var(--border)}
-.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;white-space:nowrap}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;white-space:nowrap;min-width:0;overflow:hidden}
+.brand>span{overflow:hidden;text-overflow:ellipsis}
+.brand svg{flex:none}
+.topbar .btn{flex:none}
 .brand svg{width:28px;height:28px;border-radius:4px}
 .spacer{flex:1}
 .btn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface-2);color:var(--text);font:inherit;font-size:14px;cursor:pointer}
@@ -74,7 +77,7 @@ html[data-lang="vi"] .lang-toggle .l-vi, html[data-lang="en"] .lang-toggle .l-en
 .sidebar a:hover{background:var(--surface-2)}
 .sidebar a.active{background:var(--accent-soft);border-left-color:var(--accent);font-weight:600}
 main{flex:1;min-width:0;padding:28px 40px 80px}
-.content{max-width:900px}
+.content{max-width:900px;overflow-wrap:break-word}
 
 /* typography */
 h1{font-size:30px;line-height:1.25;margin:0 0 8px}
@@ -160,8 +163,8 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
 .dg .ram-empty{fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 3}
 
 /* cheat sheet */
-.cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:12px}
-.cheat div{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14.3px}
+.cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr));gap:12px;margin-top:12px}
+.cheat div{overflow-wrap:anywhere;min-width:0;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:14.3px}
 .cheat b{display:block;margin-bottom:4px;color:var(--accent)}
 .upd{display:inline-block;font-size:11px;font-weight:700;color:var(--info);border:1px solid var(--info);border-radius:10px;padding:0 6px;margin-left:4px;vertical-align:1px;white-space:nowrap}
 .foot{margin-top:48px;color:var(--muted);font-size:13px}
@@ -176,6 +179,21 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
   section.topic{padding:18px 16px}
   h1{font-size:25px}
   .brand .full{display:none}
+  .sidebar a{padding:9px 10px}
+  .tbl-wrap table{font-size:13.8px}
+  th,td{padding:8px 10px}
+}
+@media (max-width: 360px){.brand .aws{display:none}}
+@media (max-width: 400px){
+  .topbar{gap:8px;padding-left:max(10px,var(--sl));padding-right:max(10px,var(--sr))}
+  .brand{font-size:15px;gap:8px}
+  .brand svg{width:24px;height:24px}
+  .lang-toggle span{padding:0 8px}
+  .btn:not(.lang-toggle){padding:0 10px}
+  section.topic{padding:16px 12px}
+  section.topic h3{font-size:19px}
+  figure.diagram{padding:10px}
+  .callout{padding:10px 12px}
 }
 </style>
 </head>
@@ -296,7 +314,7 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
 
 <header class="topbar">
   <button class="btn menu-btn" id="menuBtn" aria-label="Menu">☰</button>
-  <div class="brand"><svg><use href="#ic-ec2"/></svg><span>AWS CloudOps <span class="full">Notes</span></span></div>
+  <div class="brand"><svg><use href="#ic-ec2"/></svg><span><span class="aws">AWS </span>CloudOps <span class="full">Notes</span></span></div>
   <div class="spacer"></div>
   <button class="btn lang-toggle" id="langBtn" title="Tiếng Việt / English"><span class="l-vi">VI</span><span class="l-en">EN</span></button>
   <button class="btn" id="themeBtn" title="Light / Dark">◐</button>
