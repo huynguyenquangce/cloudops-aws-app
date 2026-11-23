@@ -45,6 +45,7 @@ Repository để học AWS CloudOps. User sẽ paste transcript bài giảng và
 - Trang được đóng gói dạng **PWA**: `manifest.webmanifest`, `sw.js` (service worker), `icons/` (nguồn: `icons/icon.svg`).
 - `sw.js`: trang (index.html) **network-first** → sửa nội dung xong deploy là app tự nhận bản mới khi có mạng; offline thì dùng bản cache. Chỉ tăng `CACHE` version khi đổi danh sách file `PRECACHE`.
 - Giữ tương thích iPhone: dùng biến safe-area (`--st`, `--sl`, `--sr`, `--sbm`) cho phần tử sát mép; không bỏ `viewport-fit=cover`.
-- Diagram mới tự có nút ⤢ (viewer toàn màn hình) — chỉ cần đặt trong `<figure class="diagram">`.
+- Diagram mới tự có viewer toàn màn hình (nút ⤢ hoặc chạm vào diagram) — chỉ cần đặt trong `<figure class="diagram">` với `viewBox` đúng. Viewer zoom bằng CSS transform rồi vẽ lại SVG khi dừng thao tác (giữ nét); không đổi cơ chế này sang đổi `width` liên tục.
+- `tools/build_icons.py` chỉ nhúng icon **đang được dùng** → thêm diagram dùng icon mới thì phải chạy lại script.
 - Host trên GitHub Pages (HTTPS bắt buộc cho service worker). Mở file trực tiếp (file://) vẫn chạy nhưng không có offline cache.
 

@@ -7,8 +7,12 @@ AWS Architecture Icons SVG set). Usage in index.html:
 
     <use href="#ic-ec2" x="10" y="10" width="48" height="48"/>
 
-To add an icon: add an entry to ICONS below, then run
+To add an icon: add an entry to ICONS below, reference it in index.html, then run
     python3 tools/build_icons.py
+
+Only icons actually referenced by index.html (href="#ic-...") are embedded, and path
+coordinates are rounded to 2 decimals, to keep the page small. Re-run the script after
+adding a diagram that uses an icon not embedded yet.
 """
 import io
 import pathlib
@@ -130,24 +134,39 @@ ICONS = {
 
 # General (dark navy) resource icons follow the text colour so they work in dark mode.
 NAVY = re.compile(r'fill="#(242f3e|232f3d|232f3e)"')
+LONG_DECIMAL = re.compile(r"(\d+\.\d{2})\d+")
+
+
+def referenced_ids(html):
+    """Icon ids used outside the sprite block (diagrams, headings, brand)."""
+    body = re.sub(r"<!-- ICONS:START -->.*?<!-- ICONS:END -->", "", html, flags=re.S)
+    return set(re.findall(r'href="#ic-([a-z0-9-]+)"', body))
 
 
 def main():
+    html = INDEX.read_text(encoding="utf-8")
+    used = referenced_ids(html)
+    missing = sorted(used - set(ICONS))
+    if missing:
+        raise SystemExit(f"Icons used in index.html but not listed in ICONS: {missing}")
     data = urllib.request.urlopen(PKG_URL).read()
     tar = tarfile.open(fileobj=io.BytesIO(data))
     out = ['<svg xmlns="http://www.w3.org/2000/svg" style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">']
     for sid, rel in ICONS.items():
+        if sid not in used:
+            continue
         svg = tar.extractfile(f"package/icons/{rel}").read().decode()
         vb = re.search(r'viewBox="([^"]+)"', svg).group(1)
         inner = re.sub(r"^.*?<svg[^>]*>|</svg>\s*$", "", svg, flags=re.S)
         inner = re.sub(r"<title>.*?</title>", "", inner, flags=re.S)
         if rel.startswith("resource/"):
             inner = NAVY.sub('fill="currentColor"', inner)
+        inner = LONG_DECIMAL.sub(r"\1", inner)
+        inner = re.sub(r">\s+<", "><", inner).strip()
         out.append(f'<symbol id="ic-{sid}" viewBox="{vb}">{inner}</symbol>')
     out.append("</svg>")
     sprite = "\n".join(out)
 
-    html = INDEX.read_text(encoding="utf-8")
     new, n = re.subn(
         r"(<!-- ICONS:START -->).*?(<!-- ICONS:END -->)",
         lambda m: f"{m.group(1)}\n{sprite}\n{m.group(2)}",
@@ -157,7 +176,7 @@ def main():
     if n != 1:
         raise SystemExit("ICONS markers not found in index.html")
     INDEX.write_text(new, encoding="utf-8")
-    print(f"Injected {len(ICONS)} icons into {INDEX}")
+    print(f"Injected {len(out) - 2} of {len(ICONS)} icons (only those referenced) into {INDEX}")
 
 
 if __name__ == "__main__":
