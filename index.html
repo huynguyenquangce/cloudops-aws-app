@@ -321,6 +321,130 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
   figure.diagram{padding:10px}
   .callout{padding:10px 12px}
 }
+/* ===== practice exams ===== */
+.hero-cta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:14px}
+.btn-cta{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding:0 18px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--c-compute),var(--c-mgmt));color:#fff;font:inherit;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 8px 20px -10px var(--c-mgmt)}
+.btn-cta:hover{filter:brightness(1.06)}
+.btn-cta svg{width:20px;height:20px;flex:none}
+.hero-cta .cta-sub{font-size:13px;color:var(--muted)}
+.toc-exam{display:flex;align-items:center;gap:8px;width:100%;margin-top:10px;min-height:36px;padding:0 12px;border:1px solid color-mix(in srgb,var(--c-mgmt) 40%,var(--border));border-radius:10px;background:color-mix(in srgb,var(--c-mgmt) 8%,var(--surface));color:var(--text);font:inherit;font-size:14px;font-weight:600;cursor:pointer;text-align:left}
+.toc-exam svg{width:18px;height:18px;flex:none;color:var(--c-mgmt-t)}
+.toc-exam:hover{border-color:var(--c-mgmt)}
+body.ex-open{overflow:hidden}
+body.ex-open #toTop{display:none}
+#exam{position:fixed;inset:0;z-index:60;background:var(--bg);display:flex;flex-direction:column}
+#exam[hidden]{display:none}
+.ex-bar{flex:none;display:flex;align-items:center;gap:8px;padding:calc(8px + var(--st)) max(12px,var(--sr)) 8px max(12px,var(--sl));background:var(--surface);border-bottom:1px solid var(--border)}
+.ex-title{flex:1;min-width:0;font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ex-timer{flex:none;font-variant-numeric:tabular-nums;font-weight:700;font-size:14px;padding:4px 10px;border-radius:8px;background:var(--surface-2);border:1px solid var(--border)}
+.ex-timer[hidden]{display:none}
+.ex-timer.low{color:var(--bad);border-color:var(--bad);background:var(--bad-soft)}
+.ex-bar .btn{flex:none}
+.ex-prog{flex:none;height:3px;background:var(--surface-2)}
+.ex-prog i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+.ex-main{flex:1;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.ex-inner{max-width:860px;margin:0 auto;padding:20px max(16px,var(--sr)) 28px max(16px,var(--sl))}
+.ex-foot{flex:none;display:flex;align-items:center;gap:8px;padding:10px max(12px,var(--sr)) calc(10px + var(--sbm)) max(12px,var(--sl));background:var(--surface);border-top:1px solid var(--border)}
+.ex-foot[hidden]{display:none}
+.ex-foot .grow{flex:1}
+.ex-btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:0 14px;border:1px solid var(--border);border-radius:10px;background:var(--surface-2);color:var(--text);font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.ex-btn:hover{border-color:var(--accent)}
+.ex-btn:disabled{opacity:.45;cursor:default;border-color:var(--border)}
+.ex-btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.ex-btn.pri:hover{filter:brightness(1.07)}
+.ex-btn.ghost{background:transparent}
+.ex-btn.on{border-color:var(--accent);background:var(--accent-soft);color:var(--c-compute-t)}
+.ex-h{font-size:22px;margin:0 0 6px;letter-spacing:-.01em}
+.ex-muted{color:var(--muted);font-size:14px}
+/* home */
+.ex-info{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0}
+.ex-info div{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:10px 12px;font-size:12.5px;color:var(--muted)}
+.ex-info b{display:block;font-size:20px;color:var(--text);font-variant-numeric:tabular-nums}
+.ex-card{background:var(--surface);border:1px solid var(--border);border-top:4px solid var(--c-net);border-radius:18px;padding:18px 20px;margin:14px 0}
+.ex-card+.ex-card{border-top-color:var(--c-storage)}
+.ex-card h3{margin:0 0 4px;font-size:19px}
+.ex-dom{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.ex-dom>span{font-size:12px;padding:2px 8px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted)}
+.ex-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.ex-last{font-size:13.5px;margin-top:8px}
+.ex-last b.ok{color:var(--ok)} .ex-last b.bad{color:var(--bad)}
+.ex-note{font-size:13px;color:var(--muted);background:var(--surface-2);border-radius:12px;padding:10px 12px;margin-top:16px}
+/* question */
+.ex-qhead{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-bottom:10px}
+.ex-qnum{font-weight:800;font-size:15px;white-space:nowrap}
+.ex-qmeta{white-space:nowrap}
+.tbl-wrap .ex-domtbl td:first-child,.tbl-wrap .ex-domtbl th:first-child{position:static;max-width:none;box-shadow:none}
+.ex-qmeta{font-size:12px;color:var(--muted)}
+.ex-flag{margin-left:auto}
+.ex-flag svg{width:16px;height:16px}
+.ex-stem{font-size:16.5px;line-height:1.6;margin:0 0 6px;white-space:pre-line}
+.ex-pick{font-weight:700;color:var(--c-compute-t);font-size:14.5px;margin:0 0 12px}
+.ex-opts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px}
+.ex-opt{position:relative}
+.ex-opt label{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1.5px solid var(--border);border-radius:14px;background:var(--surface);cursor:pointer;font-size:15px;line-height:1.5;transition:border-color .12s,background .12s}
+.ex-opt label:hover{border-color:color-mix(in srgb,var(--accent) 60%,var(--border))}
+.ex-opt input{position:absolute;opacity:0;pointer-events:none}
+.ex-letter{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;border:1.5px solid var(--border);background:var(--surface-2)}
+.ex-opt.multi .ex-letter{border-radius:7px}
+.ex-opt input:checked+label{border-color:var(--accent);background:var(--accent-soft)}
+.ex-opt input:checked+label .ex-letter{background:var(--accent);border-color:var(--accent);color:#fff}
+.ex-opt input:focus-visible+label{outline:2px solid var(--link);outline-offset:2px}
+.ex-opt input:disabled+label{cursor:default}
+.ex-opt input:disabled:not(:checked)+label{opacity:.6}
+.ex-opt.right label{border-color:var(--ok);background:var(--ok-soft)}
+.ex-opt.right label .ex-letter{background:var(--ok);border-color:var(--ok);color:#fff}
+.ex-opt.wrong label{border-color:var(--bad);background:var(--bad-soft)}
+.ex-opt.wrong label .ex-letter{background:var(--bad);border-color:var(--bad);color:#fff}
+.ex-opt.shown input:disabled+label{opacity:1}
+.ex-why{display:block;margin-top:4px;font-size:13.5px;color:var(--muted)}
+.ex-why b{color:var(--text)}
+.ex-txt{min-width:0;overflow-wrap:anywhere}
+.ex-verdict{margin:14px 0 0;padding:12px 14px;border-radius:14px;border:1px solid;font-size:14.5px}
+.ex-verdict.ok{background:var(--ok-soft);border-color:color-mix(in srgb,var(--ok) 45%,transparent)}
+.ex-verdict.bad{background:var(--bad-soft);border-color:color-mix(in srgb,var(--bad) 45%,transparent)}
+.ex-verdict .ttl{display:block;font-weight:700;margin-bottom:2px}
+.ex-verdict.ok .ttl{color:var(--ok)} .ex-verdict.bad .ttl{color:var(--bad)}
+.ex-ref{display:inline-block;margin-top:6px;font-weight:600;font-size:14px}
+/* review grid */
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:8px;margin:14px 0}
+.ex-cell{position:relative;height:44px;border-radius:10px;border:1.5px dashed color-mix(in srgb,var(--muted) 60%,var(--border));background:var(--surface);color:var(--muted);font:inherit;font-weight:700;font-size:14px;cursor:pointer;font-variant-numeric:tabular-nums}
+.ex-cell.ans{border-style:solid;border-color:var(--accent);background:var(--accent-soft);color:var(--text)}
+.ex-cell.partial{border-color:var(--accent)}
+.ex-cell.flag::after{content:"";position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--c-mgmt)}
+.ex-cell.cur{outline:2px solid var(--link);outline-offset:1px}
+.ex-cell.r-ok{border-style:solid;border-color:var(--ok);background:var(--ok-soft);color:var(--ok)}
+.ex-cell.r-bad{border-style:solid;border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+.ex-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted)}
+.ex-legend i{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1.5px dashed var(--border)}
+.ex-legend i.a{border:1.5px solid var(--accent);background:var(--accent-soft)}
+.ex-legend i.f{border:0;border-radius:50%;background:var(--c-mgmt);width:9px;height:9px}
+.ex-tabs{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+/* result */
+.ex-score{display:flex;flex-wrap:wrap;align-items:center;gap:18px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px;margin:10px 0 16px}
+.ex-score .big{font-size:48px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.ex-score .big small{font-size:18px;color:var(--muted);font-weight:600}
+.ex-badge{display:inline-block;padding:4px 12px;border-radius:999px;font-weight:800;font-size:14px;letter-spacing:.04em}
+.ex-badge.pass{background:var(--ok-soft);color:var(--ok);border:1px solid var(--ok)}
+.ex-badge.fail{background:var(--bad-soft);color:var(--bad);border:1px solid var(--bad)}
+.ex-domtbl td:nth-child(2),.ex-domtbl th:nth-child(2){text-align:right;white-space:nowrap;vertical-align:top}
+.ex-domtbl .ex-st{display:block;font-size:13px;margin-top:2px}
+.ex-dbar{display:block;width:100%;min-width:60px;height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden;margin-top:4px}
+.ex-dbar i{display:block;height:100%}
+.ex-st{font-weight:700;white-space:nowrap} .ex-st.ok{color:var(--ok)} .ex-st.bad{color:var(--bad)}
+.ex-weak{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.ex-weak a{font-size:13.5px;padding:4px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--border);text-decoration:none;font-weight:600}
+.ex-rv{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px 18px;margin:14px 0}
+.ex-rv.bad{border-left:4px solid var(--bad)} .ex-rv.ok{border-left:4px solid var(--ok)}
+@media (max-width:640px){
+  .ex-info{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ex-foot .lbl{display:none}
+  .ex-btn{padding:0 12px}
+  .ex-stem{font-size:16px}
+  .ex-score .big{font-size:40px}
+}
+@media (max-width:420px){.ex-hl,.ex-flag .lbl2{display:none}.ex-flag{padding:0 10px}}
+@media (orientation:landscape) and (max-height:500px){.ex-bar{padding-top:calc(4px + var(--st));padding-bottom:4px}.ex-foot{padding-top:6px;padding-bottom:calc(6px + var(--sbm))}.ex-btn{min-height:36px}.ex-inner{padding-top:12px}}
+@media (max-width:360px){.ex-bar .ex-title{font-size:14px}.ex-foot{gap:6px}.ex-btn{padding:0 10px}}
 </style>
 </head>
 <body>
@@ -452,6 +576,19 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
   <div class="dv-hint"><span class="vi">Chụm để zoom · chạm 2 lần phóng to · kéo để xem</span><span class="en">Pinch to zoom · double-tap to zoom in · drag to pan</span></div>
 </div>
 
+<div id="exam" hidden role="dialog" aria-modal="true" aria-labelledby="exTitle">
+  <div class="ex-bar">
+    <button class="btn" id="exHome" type="button" hidden aria-label="Exams">‹<span class="ex-hl">&nbsp;<span class="vi">Danh sách</span><span class="en">Exams</span></span></button>
+    <span class="ex-title" id="exTitle"><span class="vi">Luyện đề thi thử</span><span class="en">Practice exams</span></span>
+    <span class="ex-timer" id="exTimer" hidden>2:10:00</span>
+    <button class="btn" id="exLang" type="button" aria-label="VI / EN"><span class="vi">EN</span><span class="en">VI</span></button>
+    <button class="btn" id="exClose" type="button" aria-label="Close">✕</button>
+  </div>
+  <div class="ex-prog" aria-hidden="true"><i id="exProg"></i></div>
+  <div class="ex-main" id="exMain"><div class="ex-inner" id="exBody"></div></div>
+  <div class="ex-foot" id="exFoot" hidden></div>
+</div>
+
 <div id="navBackdrop" aria-hidden="true"></div>
 <button id="toTop" type="button" aria-label="Back to top" title="Lên đầu trang / Back to top">↑</button>
 
@@ -466,6 +603,7 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
       <div class="toc-progress" title="Đã học / Learned"><div class="bar"><i id="progBar"></i></div><span id="progText">0/0</span></div>
       <button id="tocToggleAll" class="toc-mini" type="button"><span class="vi">Mở hết</span><span class="en">Expand all</span></button>
     </div>
+    <button class="toc-exam" type="button" data-open-exam><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6v3H9zM7 5.5H5.5v15h13v-15H17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 13.5l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="vi">Luyện đề thi thử</span><span class="en">Practice exams</span></button>
     <div id="tocResult" class="toc-result" hidden></div>
   </div>
   <div class="toc-sec" data-part="1" data-cat="compute">
@@ -603,6 +741,7 @@ figure.diagram figcaption{font-size:13px;color:var(--muted);margin-top:8px;text-
   <div class="hs"><b id="hsFigs">0</b><span class="vi">diagram</span><span class="en">diagrams</span></div>
   <div class="hs hs-prog"><div class="ring" id="hsRing"><b id="hsPct">0%</b></div><div><span id="hsDone"></span><a href="#" class="resume" id="hsResume"><span class="vi">Học tiếp →</span><span class="en">Continue →</span></a></div></div>
 </div>
+<div class="hero-cta"><button class="btn-cta" type="button" data-open-exam><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4h6v3H9zM7 5.5H5.5v15h13v-15H17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8.5 13.5l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="vi">Luyện đề thi thử</span><span class="en">Practice exams</span></button><span class="cta-sub"><span class="vi">2 đề × 65 câu · 130 phút · format SOA-C03</span><span class="en">2 exams × 65 questions · 130 min · SOA-C03 format</span></span></div>
 </header>
 <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Khung màu cam "Mẹo thi" = điểm hay ra thi (SOA-C02/C03).</span><span class="en">Orange boxes = points that often appear on the exam (SOA-C02/C03).</span></div>
 <div class="callout note"><span class="ttl"><span class="vi">Ghi chú thêm</span><span class="en">Extra note</span></span><span class="vi">Khung màu xanh = kiến thức bổ sung ngoài transcript. Nhãn <span class="upd">AWS docs 11/2026</span> = con số đã đối chiếu/cập nhật theo AWS docs mới nhất (có thể khác bài giảng; đề thi đôi khi vẫn dùng số cũ).</span><span class="en">Blue boxes = knowledge added beyond the transcripts. The <span class="upd">AWS docs 11/2026</span> tag = figures checked/updated against the latest AWS docs (may differ from the lecture; exams sometimes still use older numbers).</span></div>
@@ -1720,7 +1859,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
   <p class="sub-lead"><span class="vi">Tự động patch managed instance: OS, application, security update. EC2 + on-prem; Linux, macOS, Windows. Chạy <b>on-demand</b> hoặc <b>theo lịch</b> (Maintenance Window). Scan → <b>patch compliance report</b> (gửi S3 được).</span><span class="en">Automates patching of managed instances: OS, application and security updates. EC2 + on-prem; Linux, macOS, Windows. <b>On demand</b> or <b>scheduled</b> (Maintenance Window). Scans → <b>patch compliance report</b> (can be sent to S3).</span></p>
   <div class="tbl-wrap"><table>
     <tr><th><span class="vi">Thành phần</span><span class="en">Component</span></th><th><span class="vi">Vai trò</span><span class="en">Role</span></th></tr>
-    <tr><td><b>Patch baseline</b></td><td><span class="vi">Patch nào được/không được cài; approve/reject; <b>auto-approve sau N ngày</b> kể từ khi phát hành. Mặc định: chỉ cài patch <b>critical</b> và <b>security</b>.</span><span class="en">Which patches should/shouldn't be installed; approve/reject; <b>auto-approve N days</b> after release. Default: only <b>critical</b> and <b>security</b> patches.</span></td></tr>
+    <tr><td><b>Patch baseline</b></td><td><span class="vi">Patch nào được/không được cài; approve/reject; <b>auto-approve sau N ngày</b> kể từ khi phát hành. Baseline mặc định (predefined) khác nhau theo OS: Windows Server chỉ approve update <b>Critical</b> + <b>Security</b>; Amazon Linux 2/2023 approve security Critical/Important <b>và Bugfix</b><span class="upd">AWS docs 11/2026</span> (bài giảng: "chỉ critical + security").</span><span class="en">Which patches should/shouldn't be installed; approve/reject; <b>auto-approve N days</b> after release. Predefined baselines differ by OS: Windows Server approves only <b>Critical</b> + <b>Security</b> updates; Amazon Linux 2/2023 approve Critical/Important security <b>and Bugfix</b> patches<span class="upd">AWS docs 11/2026</span> (lecture: "only critical + security").</span></td></tr>
     <tr><td><b>Patch group</b></td><td><span class="vi">Gắn một nhóm instance với một baseline (vd dev, test, prod) qua tag key <b><code>Patch Group</code></b>. Một instance chỉ thuộc <b>1</b> patch group; một patch group chỉ đăng ký với <b>1</b> baseline.</span><span class="en">Associates a set of instances with a baseline (e.g. dev, test, prod) via the tag key <b><code>Patch Group</code></b>. An instance belongs to <b>one</b> patch group; a patch group registers with <b>one</b> baseline.</span></td></tr>
   </table></div>
   <div class="tbl-wrap"><table>
@@ -1762,7 +1901,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi">Gồm: <b>schedule</b> (cron/rate), <b>duration</b>, <b>registered targets</b>, <b>registered tasks</b> (vd Run Command <code>AWS-RunPatchBaseline</code>) + concurrency/error threshold. Tuỳ chọn "stop initiating tasks N giờ trước khi window đóng".</span><span class="en">Contains: a <b>schedule</b> (cron/rate), a <b>duration</b>, <b>registered targets</b>, <b>registered tasks</b> (e.g. Run Command <code>AWS-RunPatchBaseline</code>) + concurrency/error threshold. Option "stop initiating tasks N hours before the window closes".</span></li>
     <li><span class="vi"><b>Patch policy</b> (console mới): <i>Scan</i> hoặc <i>Scan &amp; install</i>, lịch scan (vd hằng ngày 1:00) và lịch cài (vd Chủ nhật), cho reboot, chọn baseline theo OS, log ra S3, target nhiều region, rate control (vd 10%), error threshold.</span><span class="en"><b>Patch policy</b> (new console): <i>Scan</i> or <i>Scan &amp; install</i>, scan schedule (e.g. daily 1:00 AM) and install schedule (e.g. Sunday), allow reboot, baseline per OS, log to S3, multi-region targets, rate control (e.g. 10%), error threshold.</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Patch instance → <b>Patch Manager</b> (document <b><code>AWS-RunPatchBaseline</code></b>), chạy trong <b>Maintenance Window</b> với <b>rate control</b>. Baseline khác nhau cho dev/prod → tag <code>Patch Group</code>. Baseline mặc định chỉ cài critical + security.</span><span class="en">Patching instances → <b>Patch Manager</b> (document <b><code>AWS-RunPatchBaseline</code></b>), run within a <b>Maintenance Window</b> with <b>rate control</b>. Different baselines for dev/prod → <code>Patch Group</code> tag. The default baseline installs only critical + security patches.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Patch instance → <b>Patch Manager</b> (document <b><code>AWS-RunPatchBaseline</code></b>), chạy trong <b>Maintenance Window</b> với <b>rate control</b>. Baseline khác nhau cho dev/prod → tag <code>Patch Group</code>. Cần patch khác baseline mặc định (vd thêm severity Medium/Low) → tạo <b>custom baseline</b>.</span><span class="en">Patching instances → <b>Patch Manager</b> (document <b><code>AWS-RunPatchBaseline</code></b>), run within a <b>Maintenance Window</b> with <b>rate control</b>. Different baselines for dev/prod → <code>Patch Group</code> tag. Need patches beyond the predefined baseline (e.g. Medium/Low severity) → create a <b>custom baseline</b>.</span></div>
 </section>
 
 <!-- 4.9 SESSION MANAGER -->
@@ -2270,14 +2409,14 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
   <div class="tbl-wrap"><table>
     <tr><th><span class="vi">Lỗi</span><span class="en">Error</span></th><th><span class="vi">Cách xử lý</span><span class="en">Troubleshooting</span></th></tr>
     <tr><td>400 Bad Request</td><td><span class="vi">Client gửi request sai định dạng</span><span class="en">Client sent a malformed request</span></td></tr>
-    <tr><td>503 Service Unavailable</td><td><span class="vi">Không còn instance healthy → xem <code>HealthyHostCount</code></span><span class="en">No healthy instances → check <code>HealthyHostCount</code></span></td></tr>
-    <tr><td>504 Gateway Timeout</td><td><span class="vi">Kiểm tra keep-alive trên EC2 đã bật, và <b>keep-alive timeout &gt; idle timeout của LB</b></span><span class="en">Check keep-alive is enabled on EC2 and <b>keep-alive timeout &gt; the LB idle timeout</b></span></td></tr>
+    <tr><td>503 Service Unavailable</td><td><span class="vi">Target group <b>không có target nào được đăng ký</b> → xem <code>HealthyHostCount</code>. Nếu có target nhưng <b>tất cả unhealthy</b>, ALB <b>fail open</b> (vẫn gửi tới mọi target)<span class="upd">AWS docs 11/2026</span> (bài giảng: "không còn instance healthy")</span><span class="en">The target group has <b>no registered targets</b> → check <code>HealthyHostCount</code>. If targets exist but <b>all are unhealthy</b>, the ALB <b>fails open</b> (still routes to all of them)<span class="upd">AWS docs 11/2026</span> (lecture: "no healthy instances")</span></td></tr>
+    <tr><td>504 Gateway Timeout</td><td><span class="vi"><b>CLB</b>: bật keep-alive trên EC2 và <b>keep-alive timeout &gt; idle timeout của LB</b> (như bài giảng). <b>ALB</b>: target không phản hồi trong <b>idle timeout</b> (request chạy lâu → tăng idle timeout), hoặc không kết nối được target trong 10 giây (security group / NACL chặn). Với ALB, keep-alive của target ngắn hơn idle timeout gây <b>502</b><span class="upd">AWS docs 11/2026</span></span><span class="en"><b>CLB</b>: enable keep-alive on EC2 with <b>keep-alive timeout &gt; the LB idle timeout</b> (as in the lecture). <b>ALB</b>: the target didn't respond within the <b>idle timeout</b> (long requests → raise the idle timeout), or the ALB couldn't connect within 10 seconds (security group / NACL blocking). On ALB, a target keep-alive shorter than the idle timeout causes <b>502</b><span class="upd">AWS docs 11/2026</span></span></td></tr>
   </table></div>
   <ul>
     <li><span class="vi"><b>Access logs</b> → <b>S3</b> (chỉ trả phí S3): thời gian, client IP, latency, request path, server response, trace ID. Được mã hoá; giữ được cả khi ELB/EC2 đã xoá; query bằng <b>Athena</b>. Bật trong LB attributes.</span><span class="en"><b>Access logs</b> → <b>S3</b> (pay only for S3): time, client IP, latencies, request path, server response, trace ID. Encrypted; kept even after the ELB/EC2 are gone; query with <b>Athena</b>. Enable in LB attributes.</span></li>
     <li><span class="vi"><b>Request tracing</b>: header <code>X-Amzn-Trace-Id</code> thêm vào mọi request HTTP → theo dõi một request trong log/tracing. (ALB chỉ thêm/cập nhật header này và ghi vào access log; ELB <b>không gửi dữ liệu tới X-Ray</b>, không hiện trên service map<span class="upd">AWS docs 11/2026</span>.)</span><span class="en"><b>Request tracing</b>: the <code>X-Amzn-Trace-Id</code> header is added to every HTTP request → track one request across logs/tracing. (ALB only adds/updates this header and logs it in access logs; ELB <b>sends no data to X-Ray</b> and is not a node on the service map<span class="upd">AWS docs 11/2026</span>.)</span></li>
   </ul>
-  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">4XX = client, 5XX = server. <b>503</b> → hết target healthy. <b>504</b> → keep-alive/idle timeout. Cần log chi tiết từng request cho compliance → <b>access logs vào S3</b>.</span><span class="en">4XX = client, 5XX = server. <b>503</b> → no healthy targets. <b>504</b> → keep-alive/idle timeout. Per-request logs for compliance → <b>access logs to S3</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">4XX = client, 5XX = server. <b>503</b> → target group không có target. <b>504</b> → timeout (idle timeout; CLB: keep-alive &lt; idle timeout; ALB: SG chặn kết nối). Cần log chi tiết từng request cho compliance → <b>access logs vào S3</b>.</span><span class="en">4XX = client, 5XX = server. <b>503</b> → no registered targets. <b>504</b> → timeout (idle timeout; CLB: keep-alive &lt; idle timeout; ALB: SG blocks the connection). Per-request logs for compliance → <b>access logs to S3</b>.</span></div>
   <div class="callout note"><span class="ttl"><span class="vi">Ghi chú thêm</span><span class="en">Extra note</span></span><span class="vi">Theo AWS docs, giới hạn chính xác của SurgeQueueLength (metric của CLB) là <b>1,024</b> request.</span><span class="en">Per AWS docs, the exact SurgeQueueLength limit (a CLB metric) is <b>1,024</b> requests.</span></div>
 </section>
 
@@ -2386,7 +2525,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi">Trạng thái trong pool: <b>Running, Stopped, Hibernated</b>. Có thể dùng lifecycle hook để tuỳ chỉnh phút chót khi instance chuyển từ pool sang ASG. Instance trong pool <b>không tính vào metric</b> của ASG (không ảnh hưởng scaling policy).</span><span class="en">Pool states: <b>Running, Stopped, Hibernated</b>. Lifecycle hooks can do last-minute customisation as instances move from the pool into the ASG. Pool instances <b>don't count towards ASG metrics</b> (no effect on scaling policies).</span></li>
   </ul>
   <h4>Lifecycle Hooks</h4>
-  <p><span class="vi">Instance chờ ở trạng thái <code>:Wait</code> tới khi gọi <code>complete-lifecycle-action</code> hoặc hết <b>heartbeat timeout</b> (mặc định <b>1 giờ</b>; tối đa 48 giờ hoặc 100 × heartbeat)<span class="upd">AWS docs 11/2026</span>.</span><span class="en">The instance waits in <code>:Wait</code> until <code>complete-lifecycle-action</code> is called or the <b>heartbeat timeout</b> expires (default <b>1 hour</b>; max 48 hours or 100 × heartbeat)<span class="upd">AWS docs 11/2026</span>.</span></p>
+  <p><span class="vi">Instance chờ ở trạng thái <code>:Wait</code> tới khi gọi <code>complete-lifecycle-action</code> hoặc hết <b>heartbeat timeout</b> (mặc định <b>1 giờ</b>, đặt được 30 giây – 2 giờ; gọi <code>record-lifecycle-action-heartbeat</code> để gia hạn, tổng thời gian chờ tối đa 48 giờ hoặc 100 × heartbeat)<span class="upd">AWS docs 11/2026</span>.</span><span class="en">The instance waits in <code>:Wait</code> until <code>complete-lifecycle-action</code> is called or the <b>heartbeat timeout</b> expires (default <b>1 hour</b>, configurable 30 seconds – 2 hours; call <code>record-lifecycle-action-heartbeat</code> to extend, total wait max 48 hours or 100 × heartbeat)<span class="upd">AWS docs 11/2026</span>.</span></p>
   <figure class="diagram">
     <svg class="dg" viewBox="0 0 860 210" role="img" aria-label="Lifecycle hooks">
       <text class="s" x="20" y="20"><tspan class="vi">Scale out (launch)</tspan><tspan class="en">Scale out (launch)</tspan></text>
@@ -3167,7 +3306,7 @@ aws ssm get-parameters-by-path --path /my-app/ --recursive --with-decryption</co
     <li><span class="vi">Bắt buộc <b>versioning ở cả 2 bucket</b>; copy <b>async</b>; có thể khác account; S3 cần <b>IAM role</b> đọc/ghi. Version ID được giữ nguyên ở bản replica.</span><span class="en">Requires <b>versioning on both buckets</b>; <b>asynchronous</b> copy; can be cross-account; S3 needs an <b>IAM role</b> to read/write. Version IDs are preserved in the replica.</span></li>
     <li><span class="vi">Use case: <b>CRR</b> — compliance, latency thấp hơn, replicate cross-account. <b>SRR</b> — gom log từ nhiều bucket, replicate live prod → test.</span><span class="en">Use cases: <b>CRR</b> — compliance, lower-latency access, cross-account replication. <b>SRR</b> — aggregate logs from many buckets, live prod → test replication.</span></li>
     <li><span class="vi">Chỉ replicate <b>object mới</b> sau khi bật. Object cũ / object replicate lỗi → <b>S3 Batch Replication</b>.</span><span class="en">Only <b>new objects</b> after enabling are replicated. Existing / failed objects → <b>S3 Batch Replication</b>.</span></li>
-    <li><span class="vi"><b>Cross-account</b>: bucket policy đích cho role nguồn <code>ReplicateObject</code>, <code>ReplicateDelete</code>, <code>GetBucketVersioning</code>, <code>PutBucketVersioning</code>. Mặc định replica vẫn <b>thuộc account nguồn</b> → account đích có thể không đọc được. Muốn đổi owner: bật <b>owner override</b> trong rule + quyền <code>s3:ObjectOwnerOverrideToBucketOwner</code> cho role và trong bucket policy đích.</span><span class="en"><b>Cross-account</b>: the destination bucket policy grants the source role <code>ReplicateObject</code>, <code>ReplicateDelete</code>, <code>GetBucketVersioning</code>, <code>PutBucketVersioning</code>. By default replicas stay <b>owned by the source account</b> → the destination may not read them. To change owner: enable <b>owner override</b> in the rule + <code>s3:ObjectOwnerOverrideToBucketOwner</code> on the role and in the destination policy.</span></li>
+    <li><span class="vi"><b>Cross-account</b>: bucket policy đích cho role nguồn <code>ReplicateObject</code>, <code>ReplicateDelete</code>, <code>GetBucketVersioning</code>, <code>PutBucketVersioning</code>. Mặc định replica vẫn <b>thuộc account nguồn</b> → account đích có thể không đọc được. Muốn đổi owner: bật <b>owner override</b> trong rule + quyền <code>s3:ObjectOwnerOverrideToBucketOwner</code> cho role và trong bucket policy đích. Cách AWS khuyến nghị hiện nay: đặt Object Ownership của bucket đích = <b>Bucket owner enforced</b> (tắt ACL, bucket owner tự sở hữu mọi object)<span class="upd">AWS docs 11/2026</span>.</span><span class="en"><b>Cross-account</b>: the destination bucket policy grants the source role <code>ReplicateObject</code>, <code>ReplicateDelete</code>, <code>GetBucketVersioning</code>, <code>PutBucketVersioning</code>. By default replicas stay <b>owned by the source account</b> → the destination may not read them. To change owner: enable <b>owner override</b> in the rule + <code>s3:ObjectOwnerOverrideToBucketOwner</code> on the role and in the destination policy. AWS's recommended approach today: set the destination's Object Ownership to <b>Bucket owner enforced</b> (ACLs off, the bucket owner owns every object)<span class="upd">AWS docs 11/2026</span>.</span></li>
     <li><span class="vi"><b>Replication Time Control (RTC)</b>: <b>99.9%</b><span class="upd">AWS docs 11/2026</span> object mới replicate trong <b>15 phút</b>, có CloudWatch metrics/cảnh báo; tốn thêm phí/GB — cho yêu cầu compliance.</span><span class="en"><b>Replication Time Control (RTC)</b>: <b>99.9%</b><span class="upd">AWS docs 11/2026</span> of new objects replicated within <b>15 minutes</b>, with CloudWatch metrics/alerts; extra cost per GB — for compliance needs.</span></li>
   </ul>
   <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Replicate object có sẵn → <b>Batch Replication</b>. Account đích không đọc được replica → <b>owner override</b>. Cần SLA thời gian replicate → <b>RTC</b>. Replication không chạy → kiểm tra versioning 2 bên + IAM role.</span><span class="en">Replicate existing objects → <b>Batch Replication</b>. Destination can't read replicas → <b>owner override</b>. Need a replication-time SLA → <b>RTC</b>. Replication not working → check versioning on both + the IAM role.</span></div>
@@ -3569,9 +3708,9 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
     <tr><td><b><span class="vi">Kích hoạt (activation key)</span><span class="en">Activation key</span></b></td><td><span class="vi">Cách 1: Gateway VM CLI → <code>0: Get activation key</code> → dán vào console. Cách 2 (cũ): web request tới gateway VM qua <b>port 80</b></span><span class="en">Option 1: Gateway VM CLI → <code>0: Get activation key</code> → paste into the console. Option 2 (older): web request to the gateway VM on <b>port 80</b></span></td></tr>
     <tr><td><b><span class="vi">Activation thất bại</span><span class="en">Activation failure</span></b></td><td><span class="vi">Kiểm tra gateway VM đã mở <b>port 80</b>; thời gian VM đúng và <b>đồng bộ với NTP server</b></span><span class="en">Check the gateway VM has <b>port 80</b> open; the VM clock is correct and <b>synced with an NTP server</b></span></td></tr>
     <tr><td><b>Volume Gateway – cached mode</b></td><td><span class="vi">Chỉ dữ liệu mới nhất nằm trên gateway → theo dõi CloudWatch: <b><code>CacheHitPercent</code></b> càng <b>cao</b> càng tốt (vd 80%; cache miss phải kéo từ S3), <b><code>CachePercentUsed</code></b> không quá cao</span><span class="en">Only the most recent data lives on the gateway → watch CloudWatch: <b><code>CacheHitPercent</code></b> should be <b>high</b> (e.g. 80%; misses fetch from S3), <b><code>CachePercentUsed</code></b> shouldn't be too high</span></td></tr>
-    <tr><td><b><span class="vi">Tăng cache</span><span class="en">Bigger cache</span></b></td><td><span class="vi">Cache hit thấp (vd 30%) → tạo <b>cache disk lớn hơn</b>: <b>clone</b> cached volume sang volume lớn hơn → chọn disk mới làm cached volume của gateway</span><span class="en">Low hit rate (e.g. 30%) → create a <b>larger cache disk</b>: <b>clone</b> the cached volume to a bigger volume → select the new disk as the gateway's cached volume</span></td></tr>
+    <tr><td><b><span class="vi">Tăng cache</span><span class="en">Bigger cache</span></b></td><td><span class="vi">Cache hit thấp (vd 30%) → <b>tăng cache</b>: thêm disk mới vào VM gateway rồi <b>cấu hình làm cache storage</b>; không resize/gỡ cache disk đang dùng<span class="upd">AWS docs 11/2026</span> (bài giảng: clone cached volume sang volume lớn hơn)</span><span class="en">Low hit rate (e.g. 30%) → <b>add cache</b>: attach a new disk to the gateway VM and <b>allocate it as cache storage</b>; don't resize or remove existing cache disks<span class="upd">AWS docs 11/2026</span> (lecture: clone the cached volume to a bigger volume)</span></td></tr>
   </table></div>
-  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Reboot Volume/Tape Gateway → phải <b>stop service trước</b>. Activation fail → <b>port 80</b> + <b>NTP</b>. <code>CacheHitPercent</code> thấp → <b>tăng kích thước cache disk</b>.</span><span class="en">Rebooting a Volume/Tape Gateway → <b>stop the service first</b>. Activation fails → <b>port 80</b> + <b>NTP</b>. Low <code>CacheHitPercent</code> → <b>increase the cache disk size</b>.</span></div>
+  <div class="callout tip"><span class="ttl"><span class="vi">Mẹo thi</span><span class="en">Exam tip</span></span><span class="vi">Reboot Volume/Tape Gateway → phải <b>stop service trước</b>. Activation fail → <b>port 80</b> + <b>NTP</b>. <code>CacheHitPercent</code> thấp → <b>thêm dung lượng cache</b> (add disk → allocate as cache).</span><span class="en">Rebooting a Volume/Tape Gateway → <b>stop the service first</b>. Activation fails → <b>port 80</b> + <b>NTP</b>. Low <code>CacheHitPercent</code> → <b>add cache capacity</b> (add disk → allocate as cache).</span></div>
 </section>
 
 <!-- ============================ CHEAT SHEET ============================ -->
@@ -3625,7 +3764,7 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
   <div><b>Cross-zone</b><span class="vi">ALB bật sẵn, free (tắt được ở TG). NLB/GWLB tắt sẵn, bật thì tính phí inter-AZ. CLB tắt sẵn, free.</span><span class="en">ALB on, free (can disable per TG). NLB/GWLB off, charged if enabled. CLB off, free.</span></div>
   <div><b>SSL / SNI</b><span class="vi">Cert trong ACM, SSL termination ở LB. Nhiều cert / nhiều domain → SNI → ALB, NLB, CloudFront (không CLB).</span><span class="en">Certs in ACM, SSL termination at the LB. Many certs / domains → SNI → ALB, NLB, CloudFront (not CLB).</span></div>
   <div><b>Target group</b><span class="vi">Deregistration delay 1–3600s (mặc định 300, 0 = tắt). Slow start 30–900s. Round Robin / Least Outstanding (ALB/CLB), Flow Hash (NLB). Toàn unhealthy → route tới tất cả.</span><span class="en">Deregistration delay 1–3600s (default 300, 0 = off). Slow start 30–900s. Round Robin / Least Outstanding (ALB/CLB), Flow Hash (NLB). All unhealthy → route to all.</span></div>
-  <div><b>ELB errors</b><span class="vi">4XX client, 5XX server. 503 = không còn healthy host. 504 = keep-alive &lt; idle timeout. Spillover &gt; 0 = mất request. Access logs → S3.</span><span class="en">4XX client, 5XX server. 503 = no healthy hosts. 504 = keep-alive &lt; idle timeout. Spillover &gt; 0 = lost requests. Access logs → S3.</span></div>
+  <div><b>ELB errors</b><span class="vi">4XX client, 5XX server. 503 = không có target. 504 = timeout (idle; CLB keep-alive &lt; idle). ALB keep-alive ngắn → 502. Spillover &gt; 0 = mất request. Access logs → S3.</span><span class="en">4XX client, 5XX server. 503 = no targets. 504 = timeout (idle; CLB keep-alive &lt; idle). ALB short keep-alive → 502. Spillover &gt; 0 = lost requests. Access logs → S3.</span></div>
 </div>
 <h3 class="cheat-h"><span class="vi">Phần 6 · Auto Scaling</span><span class="en">Part 6 · Auto Scaling</span></h3>
 <div class="cheat">
@@ -3666,7 +3805,7 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
 <h3 class="cheat-h"><span class="vi">Phần 11 · Storage Gateway</span><span class="en">Part 11 · Storage Gateway</span></h3>
 <div class="cheat">
   <div><b>Storage Gateway</b><span class="vi">S3 File (NFS/SMB, cache, S3 Std/IA/IT) · Volume (iSCSI, EBS snapshot; cached vs stored) · Tape (iSCSI VTL → Glacier). VM tại on-prem.</span><span class="en">S3 File (NFS/SMB, cache, S3 Std/IA/IT) · Volume (iSCSI, EBS snapshots; cached vs stored) · Tape (iSCSI VTL → Glacier). VM on-prem.</span></div>
-  <div><b>Storage Gateway ops</b><span class="vi">Reboot Volume/Tape: stop service → reboot → start (File: chỉ reboot). Activation: port 80 + NTP. CacheHitPercent thấp → clone sang cache disk lớn hơn.</span><span class="en">Reboot Volume/Tape: stop service → reboot → start (File: just reboot). Activation: port 80 + NTP. Low CacheHitPercent → clone to a bigger cache disk.</span></div>
+  <div><b>Storage Gateway ops</b><span class="vi">Reboot Volume/Tape: stop service → reboot → start (File: chỉ reboot). Activation: port 80 + NTP. CacheHitPercent thấp → thêm disk làm cache.</span><span class="en">Reboot Volume/Tape: stop service → reboot → start (File: just reboot). Activation: port 80 + NTP. Low CacheHitPercent → add a disk as cache.</span></div>
 </div>
 </div>
 
@@ -4069,6 +4208,289 @@ aws s3api complete-multipart-upload --bucket my-bucket --key 100MB.txt --upload-
   refreshLang();
   syncToggleAll();
   spy();
+})();
+</script>
+<script>
+/* ===== practice exams (data lazy-loaded from exams.js) ===== */
+(function(){
+  var d=document.documentElement, body=document.body;
+  var box=document.getElementById('exam'), main=document.getElementById('exMain'), bodyEl=document.getElementById('exBody'),
+      foot=document.getElementById('exFoot'), timerEl=document.getElementById('exTimer'), progEl=document.getElementById('exProg'),
+      homeBtn=document.getElementById('exHome');
+  var DATA=null, cur=null /* {ex, st} */, tick=0, lastFocus=null, rvFilter='all', gridFilter='all';
+  var DOM={1:['Giám sát, logging, phân tích, khắc phục & tối ưu hiệu năng','Monitoring, Logging, Analysis, Remediation & Performance Optimization'],
+    2:['Độ tin cậy & tính liên tục kinh doanh','Reliability & Business Continuity'],
+    3:['Triển khai, cấp phát & tự động hoá','Deployment, Provisioning & Automation'],
+    4:['Bảo mật & tuân thủ','Security & Compliance'],
+    5:['Mạng & phân phối nội dung','Networking & Content Delivery']};
+  var WEIGHT={1:22,2:22,3:22,4:16,5:18}, DURATION=130*60*1000, PASS=720;
+  var PICKW={2:['HAI','TWO'],3:['BA','THREE'],4:['BỐN','FOUR']};
+  function lang(){return d.dataset.lang==='en'?'en':'vi'}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function fmt(s){return esc(s).replace(/`([^`]+)`/g,'<code>$1</code>')}
+  function T(o){return '<span class="vi">'+fmt(o.vi)+'</span><span class="en">'+fmt(o.en)+'</span>'}
+  function L(vi,en){return '<span class="vi">'+vi+'</span><span class="en">'+en+'</span>'}
+  function get(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}}
+  function put(k,v){try{if(v==null)localStorage.removeItem(k);else localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  function hms(ms){ms=Math.max(0,Math.round(ms/1000));var h=Math.floor(ms/3600),m=Math.floor(ms%3600/60),s=ms%60;return h+':'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s}
+  function LETTER(i){return String.fromCharCode(65+i)}
+  function same(a,b){if(!a||a.length!==b.length)return false;a=a.slice().sort();b=b.slice().sort();for(var i=0;i<a.length;i++)if(a[i]!==b[i])return false;return true}
+  function svgFlag(){return '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 15V1.5M3 2h9l-2 3.5L12 9H3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>'}
+
+  /* ---------- data ---------- */
+  function load(){
+    if(window.CLOUDOPS_EXAMS) return Promise.resolve(DATA=window.CLOUDOPS_EXAMS);
+    return new Promise(function(res,rej){
+      var s=document.createElement('script'); s.src='exams.js'; s.async=true;
+      s.onload=function(){ window.CLOUDOPS_EXAMS?res(DATA=window.CLOUDOPS_EXAMS):rej(); };
+      s.onerror=function(){ s.remove(); rej(); };
+      document.head.appendChild(s);
+    });
+  }
+  function exById(id){for(var i=0;i<DATA.exams.length;i++)if(DATA.exams[i].id===id)return DATA.exams[i];return null}
+  function key(id){return 'exam-state-'+id}
+  function hist(){return get('exam-hist')||[]}
+
+  /* ---------- open / close ---------- */
+  function open(){
+    if(box.hidden) lastFocus=document.activeElement; box.hidden=false; body.classList.add('ex-open'); a11y(); setInert(true);
+    bodyEl.innerHTML='<p class="ex-muted">'+L('Đang tải đề…','Loading exams…')+'</p>'; foot.hidden=true;
+    load().then(function(){ var exp=expireAll(); if(exp){ cur=exp; result(true); } else home(); },
+      function(){ bodyEl.innerHTML='<p>'+L('Không tải được dữ liệu đề (exams.js). Kiểm tra kết nối mạng rồi thử lại.','Could not load the exam data (exams.js). Check your connection and try again.')+'</p><button class="ex-btn pri" type="button" id="exRetry">'+L('Thử lại','Retry')+'</button>'; document.getElementById('exRetry').onclick=function(){ open(); }; });
+    clearInterval(tick); tick=setInterval(onTick,1000);
+    setTimeout(function(){document.getElementById('exClose').focus()},30);
+  }
+  function close(){
+    box.hidden=true; body.classList.remove('ex-open'); clearInterval(tick); cur=null; screen=null; setInert(false);
+    var f=lastFocus; if(f&&f.closest&&f.closest('.sidebar')&&getComputedStyle(document.getElementById('menuBtn')).display!=='none') f=document.querySelector('.btn-cta');
+    if(f&&f.focus) try{f.focus({preventScroll:true})}catch(e){}
+  }
+  function finalize(ex,st){ var r=score(ex,st); st.done=true; st.end=Math.min(Date.now(),st.deadline||Date.now()); st.res=r; put(key(ex.id),st);
+    var H=hist(); H.push({id:ex.id,mode:st.mode,date:st.end,score:r.score,correct:r.correct,total:r.total,dom:r.dom,secs:Math.round((st.end-st.start)/1000)}); put('exam-hist',H.slice(-30)); }
+  function expireAll(){ var last=null; DATA.exams.forEach(function(ex){ var st=get(key(ex.id)); if(st&&!st.done&&st.mode==='exam'&&Date.now()>st.deadline){ finalize(ex,st); last={ex:ex,st:st}; } }); return last; }
+  function setInert(on){ ['.topbar','.layout','#toTop'].forEach(function(q){ var el=document.querySelector(q); if(el){ if(on){ el.setAttribute('inert',''); el.setAttribute('aria-hidden','true'); } else { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); } } }); }
+  function activeState(){ if(!DATA) return null; for(var i=0;i<DATA.exams.length;i++){ var st=get(key(DATA.exams[i].id)); if(st&&!st.done) return {ex:DATA.exams[i],st:st}; } return null; }
+  function onTick(){
+    if(!cur||cur.st.mode!=='exam'||cur.st.done){ timerEl.hidden=true; return; }
+    var left=cur.st.deadline-Date.now(); timerEl.hidden=false; timerEl.textContent=hms(left);
+    timerEl.classList.toggle('low',left<10*60*1000);
+    timerEl.setAttribute('aria-label',(lang()==='vi'?'Thời gian còn lại ':'Time remaining ')+hms(left));
+    if(left<=0) submit(true);
+  }
+  var screen=null;
+  function setBar(title,showHome){
+    document.getElementById('exTitle').innerHTML=title; homeBtn.hidden=!showHome;
+  }
+  function scrollTop(){ main.scrollTop=0; }
+
+  /* ---------- home ---------- */
+  function home(){
+    screen=function(){home()}; cur=null; timerEl.hidden=true; progEl.style.width='0'; foot.hidden=true; foot.innerHTML='';
+    setBar(L('Luyện đề thi thử','Practice exams'),false);
+    var h='<h2 class="ex-h">'+L('Đề thi thử SOA-C03 (CloudOps Engineer – Associate)','SOA-C03 practice exams (CloudOps Engineer – Associate)')+'</h2>'+
+      '<p class="ex-muted">'+L('Câu hỏi tự soạn theo đúng format đề thật, chỉ dùng kiến thức trong ghi chú bạn đã học.','Original questions in the real exam format, using only topics covered in these notes.')+'</p>'+
+      '<div class="ex-info"><div><b>65</b>'+L('câu hỏi','questions')+'</div><div><b>130</b>'+L('phút','minutes')+'</div><div><b>720</b>'+L('điểm đạt / 1000','to pass / 1000')+'</div><div><b>5</b>'+L('domain','domains')+'</div></div>';
+    DATA.exams.forEach(function(ex){
+      var st=get(key(ex.id)), H=hist().filter(function(x){return x.id===ex.id&&x.mode==='exam'}), best=null;
+      H.forEach(function(x){ if(!best||x.score>best.score) best=x; });
+      var cnt={}; ex.q.forEach(function(q){cnt[q.d]=(cnt[q.d]||0)+1});
+      var multi=ex.q.filter(function(q){return q.type==='multi'}).length;
+      h+='<div class="ex-card"><h3>'+T(ex.title)+'</h3><div class="ex-muted">'+ex.q.length+L(' câu',' questions')+' · '+multi+L(' câu nhiều đáp án',' multiple-response')+'</div>'+
+        '<div class="ex-dom">'+[1,2,3,4,5].map(function(k){return '<span title="'+esc(DOM[k][lang()==='vi'?0:1])+'">D'+k+' · '+(cnt[k]||0)+L(' câu',' q')+'</span>'}).join('')+'</div>';
+      if(st&&!st.done){
+        var n=Object.keys(st.ans).filter(function(k){return st.ans[k].length}).length;
+        h+='<div class="ex-last">'+L('Đang làm dở','In progress')+': <b>'+n+'/'+ex.q.length+'</b> '+L('câu đã trả lời','answered')+(st.mode==='exam'?' · '+L('còn','time left')+' <b>'+hms(st.deadline-Date.now())+'</b>':' · '+L('chế độ luyện tập','practice mode'))+'</div>';
+      }
+      if(H.length){ var last=H[H.length-1];
+        h+='<div class="ex-last">'+L('Lần thi gần nhất','Last exam')+': <b class="'+(last.score>=PASS?'ok':'bad')+'">'+last.score+'</b> ('+last.correct+'/'+last.total+')'+(best&&H.length>1?' · '+L('cao nhất','best')+': <b class="'+(best.score>=PASS?'ok':'bad')+'">'+best.score+'</b>':'')+' · '+H.length+L(' lần',' attempt'+(H.length>1?'s':''))+'</div>'; }
+      h+='<div class="ex-acts">';
+      if(st&&!st.done) h+='<button class="ex-btn pri" data-act="resume" data-id="'+ex.id+'">'+L('Tiếp tục','Resume')+'</button><button class="ex-btn" data-act="restart" data-id="'+ex.id+'">'+L('Làm lại từ đầu','Start over')+'</button>';
+      else h+='<button class="ex-btn pri" data-act="exam" data-id="'+ex.id+'">'+L('Thi thật · 130 phút','Exam mode · 130 min')+'</button><button class="ex-btn" data-act="practice" data-id="'+ex.id+'">'+L('Luyện tập · xem đáp án ngay','Practice · instant feedback')+'</button>';
+      if(st&&st.done) h+='<button class="ex-btn ghost" data-act="result" data-id="'+ex.id+'">'+L('Xem kết quả gần nhất','Last result')+'</button>';
+      h+='</div></div>';
+    });
+    h+='<div class="ex-note">'+L('<b>Cách chấm:</b> đề thật có 50 câu tính điểm + 15 câu thử nghiệm (không biết câu nào), thang điểm 100–1000, đạt từ 720, không trừ điểm khi đoán sai. App chấm cả 65 câu và quy đổi tuyến tính 100 + 900 × tỉ lệ đúng (≈ 69% để đạt), nên điểm chỉ mang tính tham khảo. Câu nhiều đáp án phải chọn đủ và đúng hết mới được tính. Bài làm tự lưu trên máy này; đóng app giữa chừng vẫn tiếp tục được (đồng hồ thi vẫn chạy).',
+      '<b>Scoring:</b> the real exam has 50 scored + 15 unscored (unidentified) questions, a 100–1000 scaled score, 720 to pass, and no penalty for guessing. This app scores all 65 questions and maps them linearly to 100 + 900 × fraction correct (≈ 69% to pass), so treat the score as an estimate. Multiple-response questions count only when every correct option is chosen. Progress is saved on this device; you can close the app and resume (the exam clock keeps running).')+'</div>';
+    bodyEl.innerHTML=h; scrollTop();
+  }
+
+  /* ---------- start / resume ---------- */
+  function start(ex,mode){
+    var st={mode:mode,ans:{},flag:{},chk:{},i:0,start:Date.now(),deadline:mode==='exam'?Date.now()+DURATION:0,done:false};
+    put(key(ex.id),st); cur={ex:ex,st:st}; question(0);
+  }
+  function save(){ if(cur) put(key(cur.ex.id),cur.st); }
+
+  /* ---------- question ---------- */
+  function question(i){
+    screen=function(){var y=main.scrollTop;question(cur.st.i);main.scrollTop=y};
+    var ex=cur.ex, st=cur.st, q=ex.q[i], n=ex.q.length; st.i=i; save();
+    setBar(T(ex.title)+(st.mode==='practice'?' · '+L('Luyện tập','Practice'):''),true); onTick();
+    progEl.style.width=((i+1)/n*100)+'%';
+    var sel=st.ans[i]||[], checked=st.mode==='practice'&&st.chk[i], multi=q.type==='multi';
+    var h='<div class="ex-qhead"><span class="ex-qnum">'+L('Câu','Question')+' '+(i+1)+' / '+n+'</span>'+
+      (st.mode==='practice'?'<span class="ex-qmeta">D'+q.d+' · Task '+q.task+'</span>':'')+
+      '<button class="ex-btn ex-flag'+(st.flag[i]?' on':'')+'" type="button" data-act="flag" aria-pressed="'+(st.flag[i]?'true':'false')+'" aria-label="'+(lang()==='vi'?'Đánh dấu xem lại':'Flag for review')+'">'+svgFlag()+'<span class="lbl2">'+L(st.flag[i]?'Đã đánh dấu':'Đánh dấu xem lại',st.flag[i]?'Flagged':'Flag for review')+'</span></button></div>';
+    h+='<p class="ex-stem">'+T(q.q)+'</p>';
+    if(multi) h+='<p class="ex-pick">'+L('(Chọn '+PICKW[q.pick][0]+'.)','(Choose '+PICKW[q.pick][1]+'.)')+'</p>';
+    h+='<ul class="ex-opts" role="'+(multi?'group':'radiogroup')+'" aria-label="'+(lang()==='vi'?'Đáp án':'Answers')+'">';
+    q.o.forEach(function(o,k){
+      var on=sel.indexOf(k)>=0, cls='ex-opt'+(multi?' multi':'');
+      if(checked){ cls+=' shown'; if(q.a.indexOf(k)>=0) cls+=' right'; else if(on) cls+=' wrong'; }
+      var full=multi&&!on&&sel.length>=q.pick;
+      h+='<li class="'+cls+'"><input type="'+(multi?'checkbox':'radio')+'" name="exq" id="exo'+k+'" value="'+k+'"'+(on?' checked':'')+(checked||full?' disabled':'')+'>'+
+        '<label for="exo'+k+'"><span class="ex-letter">'+LETTER(k)+'</span><span class="ex-txt">'+T(o)+(checked?'<span class="ex-why">'+T(q.why[k])+'</span>':'')+'</span></label></li>';
+    });
+    h+='</ul>';
+    if(checked) h+=verdict(q,sel);
+    bodyEl.innerHTML=h; scrollTop();
+    var f='<button class="ex-btn" data-act="prev"'+(i?'':' disabled')+' aria-label="'+(lang()==='vi'?'Câu trước':'Previous')+'">←<span class="lbl">&nbsp;'+L('Trước','Previous')+'</span></button>'+
+      '<button class="ex-btn" data-act="grid">'+L('Tổng quan','Review')+'</button><span class="grow"></span>';
+    if(st.mode==='practice'&&!checked) f+='<button class="ex-btn pri" data-act="check"'+(sel.length===q.pick?'':' disabled')+'>'+L('Kiểm tra','Check')+'</button>';
+    f+= i<n-1 ? '<button class="ex-btn'+(st.mode==='practice'&&!checked?'':' pri')+'" data-act="next" aria-label="'+(lang()==='vi'?'Câu tiếp':'Next')+'"><span class="lbl">'+L('Tiếp','Next')+'&nbsp;</span>→</button>'
+              : '<button class="ex-btn pri" data-act="grid">'+L('Nộp bài…','Finish…')+'</button>';
+    foot.innerHTML=f; foot.hidden=false;
+  }
+  function verdict(q,sel){
+    var ok=same(sel,q.a);
+    return '<div class="ex-verdict '+(ok?'ok':'bad')+'"><span class="ttl">'+(ok?L('Chính xác','Correct'):L('Chưa đúng','Incorrect')+' · '+L('Đáp án','Answer')+': '+q.a.map(LETTER).join(', '))+'</span>'+T(q.ex)+
+      '<br><a class="ex-ref" href="#'+q.ref+'">'+L('Ôn lại mục này →','Review this topic →')+'</a></div>';
+  }
+  function choose(k,fromKey){
+    var st=cur.st, i=st.i, q=cur.ex.q[i];
+    if(st.mode==='practice'&&st.chk[i]) return;
+    var sel=(st.ans[i]||[]).slice(), at=sel.indexOf(k);
+    if(q.type==='multi'){ if(at>=0) sel.splice(at,1); else if(sel.length<q.pick) sel.push(k); }
+    else sel=[k];
+    st.ans[i]=sel; save(); var y=main.scrollTop; question(i); main.scrollTop=y;
+    var el=fromKey?bodyEl.querySelector('.ex-qnum'):document.getElementById('exo'+k);
+    if(el){ if(fromKey) el.setAttribute('tabindex','-1'); el.focus({preventScroll:true}); }
+  }
+
+  /* ---------- review grid ---------- */
+  function grid(){
+    screen=function(){grid()};
+    var ex=cur.ex, st=cur.st, n=ex.q.length;
+    var answered=0, flagged=0; for(var i=0;i<n;i++){ if((st.ans[i]||[]).length===ex.q[i].pick) answered++; if(st.flag[i]) flagged++; }
+    setBar(T(ex.title),true); onTick();
+    var h='<h2 class="ex-h">'+L('Tổng quan bài làm','Review your answers')+'</h2>'+
+      '<p class="ex-muted">'+L('Đã trả lời','Answered')+' <b>'+answered+'/'+n+'</b> · '+L('Đánh dấu','Flagged')+' <b>'+flagged+'</b> · '+L('Chưa trả lời','Unanswered')+' <b>'+(n-answered)+'</b></p>'+
+      '<div class="ex-tabs">'+[['all',L('Tất cả','All')],['un',L('Chưa trả lời','Unanswered')],['flag',L('Đã đánh dấu','Flagged')]].map(function(t){return '<button class="ex-btn'+(gridFilter===t[0]?' on':'')+'" data-act="gf" data-f="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>'+
+      '<div class="ex-legend"><span><i class="a"></i>'+L('Đã trả lời','Answered')+'</span><span><i></i>'+L('Chưa trả lời','Unanswered')+'</span><span><i class="f"></i>'+L('Đánh dấu','Flagged')+'</span></div><div class="ex-grid">';
+    for(i=0;i<n;i++){
+      var a=(st.ans[i]||[]).length===ex.q[i].pick;
+      if(gridFilter==='un'&&a) continue; if(gridFilter==='flag'&&!st.flag[i]) continue;
+      var cls='ex-cell'+(a?' ans':((st.ans[i]||[]).length?' partial':''))+(st.flag[i]?' flag':'')+(i===st.i?' cur':'');
+      if(st.mode==='practice'&&st.chk[i]) cls+=same(st.ans[i],ex.q[i].a)?' r-ok':' r-bad';
+      h+='<button class="'+cls+'" data-act="go" data-i="'+i+'" aria-label="'+(lang()==='vi'?'Câu ':'Question ')+(i+1)+'">'+(i+1)+'</button>';
+    }
+    h+='</div>';
+    bodyEl.innerHTML=h; scrollTop();
+    foot.innerHTML='<button class="ex-btn" data-act="go" data-i="'+st.i+'">← '+L('Quay lại câu hỏi','Back to questions')+'</button><span class="grow"></span><button class="ex-btn pri" data-act="submit">'+L('Nộp bài','End exam')+'</button>';
+    foot.hidden=false;
+  }
+
+  /* ---------- scoring ---------- */
+  function score(ex,st){
+    var dom={}, c=0; ex.q.forEach(function(q,i){ var ok=same(st.ans[i]||[],q.a); if(ok)c++; var x=dom[q.d]||(dom[q.d]=[0,0]); x[1]++; if(ok)x[0]++; });
+    return {correct:c,total:ex.q.length,score:Math.round(100+900*c/ex.q.length),dom:dom};
+  }
+  function submit(auto){
+    var ex=cur.ex, st=cur.st;
+    if(!auto){
+      var n=ex.q.length, un=0; for(var i=0;i<n;i++) if((st.ans[i]||[]).length!==ex.q[i].pick) un++;
+      var v=lang()==='vi', msg=un?(v?'Còn '+un+' câu chưa trả lời (bị tính là sai). Nộp bài?':un+' question(s) unanswered (scored as incorrect). End the exam?'):(v?'Nộp bài và xem kết quả?':'End the exam and see your score?');
+      if(!window.confirm(msg)) return;
+    }
+    finalize(ex,st); result(auto);
+  }
+  function result(auto){
+    screen=function(){result(auto)};
+    var ex=cur.ex, st=cur.st, r=st.res||score(ex,st), pass=r.score>=PASS;
+    timerEl.hidden=true; progEl.style.width='100%'; setBar(T(ex.title)+' · '+L('Kết quả','Result'),true);
+    var h=(auto?'<p class="ex-muted">'+L('Hết giờ — bài đã được nộp tự động.','Time is up — the exam was submitted automatically.')+'</p>':'')+
+      '<div class="ex-score"><div class="big">'+r.score+'<small> / 1000</small></div><div><span class="ex-badge '+(pass?'pass':'fail')+'">'+(pass?'PASS':'FAIL')+'</span>'+
+      '<div class="ex-muted" style="margin-top:6px">'+L('Đúng','Correct')+' <b>'+r.correct+'/'+r.total+'</b> ('+Math.round(r.correct/r.total*100)+'%) · '+L('Điểm đạt','Passing')+' 720 · '+L('Thời gian','Time')+' '+hms((st.end||Date.now())-st.start)+(st.mode==='practice'?' · '+L('luyện tập','practice'):'')+'</div></div></div>'+
+      '<h3>'+L('Kết quả theo domain','Performance by domain')+'</h3><div class="tbl-wrap"><table class="ex-domtbl"><tr><th>Domain</th><th>'+L('Đúng','Correct')+'</th></tr>';
+    [1,2,3,4,5].forEach(function(k){ var x=r.dom[k]; if(!x) return; var p=x[0]/x[1], ok=p>=0.72;
+      h+='<tr><td>D'+k+' · '+L(DOM[k][0],DOM[k][1])+' <span class="ex-muted">('+WEIGHT[k]+'%)</span><span class="ex-dbar"><i style="width:'+Math.round(p*100)+'%;background:var(--'+(ok?'ok':'bad')+')"></i></span></td><td>'+x[0]+'/'+x[1]+'<span class="ex-st '+(ok?'ok':'bad')+'">'+(ok?L('Đạt yêu cầu','Meets competencies'):L('Cần cải thiện','Needs improvement'))+'</span></td></tr>'; });
+    h+='</table></div>';
+    var weak={}; ex.q.forEach(function(q,i){ if(!same(st.ans[i]||[],q.a)) weak[q.ref]=(weak[q.ref]||0)+1; });
+    var refs=Object.keys(weak).sort(function(a,b){return weak[b]-weak[a]});
+    if(refs.length){ h+='<h3>'+L('Nên ôn lại','Topics to review')+'</h3><div class="ex-weak">'+refs.map(function(id){ var a=document.querySelector('.toc-item a[href="#'+id+'"]'); var nm=a?a.querySelector('.toc-num').textContent+' '+a.querySelector('.toc-label').innerHTML:id; return '<a href="#'+id+'">'+nm+' · '+weak[id]+'</a>'; }).join('')+'</div>'; }
+    h+='<div class="ex-acts"><button class="ex-btn pri" data-act="rv" data-f="bad">'+L('Xem câu sai','Review incorrect')+'</button><button class="ex-btn" data-act="rv" data-f="all">'+L('Xem tất cả đáp án','Review all answers')+'</button><button class="ex-btn" data-act="again">'+L('Thi lại','Retake')+'</button></div>';
+    bodyEl.innerHTML=h; scrollTop(); foot.hidden=true; foot.innerHTML='';
+  }
+
+  /* ---------- answer review ---------- */
+  function review(f){
+    screen=function(){var y=main.scrollTop;review();main.scrollTop=y};
+    rvFilter=f||rvFilter; var ex=cur.ex, st=cur.st;
+    setBar(T(ex.title)+' · '+L('Đáp án','Answers'),true);
+    var h='<div class="ex-tabs">'+[['bad',L('Câu sai','Incorrect')],['flag',L('Đã đánh dấu','Flagged')],['all',L('Tất cả','All')]].map(function(t){return '<button class="ex-btn'+(rvFilter===t[0]?' on':'')+'" data-act="rv" data-f="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>', shown=0;
+    ex.q.forEach(function(q,i){
+      var sel=st.ans[i]||[], ok=same(sel,q.a);
+      if(rvFilter==='bad'&&ok) return; if(rvFilter==='flag'&&!st.flag[i]) return; shown++;
+      h+='<div class="ex-rv '+(ok?'ok':'bad')+'"><div class="ex-qhead"><span class="ex-qnum">'+L('Câu','Question')+' '+(i+1)+'</span><span class="ex-qmeta">D'+q.d+' · Task '+q.task+(sel.length?'':' · '+L('chưa trả lời','unanswered'))+'</span></div>'+
+        '<p class="ex-stem">'+T(q.q)+'</p>'+(q.type==='multi'?'<p class="ex-pick">'+L('(Chọn '+PICKW[q.pick][0]+'.)','(Choose '+PICKW[q.pick][1]+'.)')+'</p>':'')+'<ul class="ex-opts">';
+      q.o.forEach(function(o,k){ var on=sel.indexOf(k)>=0, cls='ex-opt shown'+(q.type==='multi'?' multi':'')+(q.a.indexOf(k)>=0?' right':(on?' wrong':''));
+        h+='<li class="'+cls+'"><label><span class="ex-letter">'+LETTER(k)+'</span><span class="ex-txt">'+T(o)+(on?' <b class="ex-qmeta">· '+L('bạn chọn','your answer')+'</b>':'')+'<span class="ex-why">'+T(q.why[k])+'</span></span></label></li>'; });
+      h+='</ul>'+verdict(q,sel)+'</div>';
+    });
+    if(!shown) h+='<p class="ex-muted">'+L('Không có câu nào trong mục này.','Nothing to show here.')+'</p>';
+    bodyEl.innerHTML=h; scrollTop();
+    foot.innerHTML='<button class="ex-btn" data-act="result">← '+L('Kết quả','Result')+'</button><span class="grow"></span><button class="ex-btn" data-act="home">'+L('Danh sách đề','All exams')+'</button>'; foot.hidden=false;
+  }
+
+  /* ---------- events ---------- */
+  function onAct(e){
+    var b=e.target.closest('[data-act]'); if(!b||!box.contains(b)) return;
+    var act=b.dataset.act, id=+b.dataset.id;
+    if(act==='exam'||act==='practice'){ start(exById(id),act); }
+    else if(act==='resume'){ cur={ex:exById(id),st:get(key(id))}; if(cur.st.mode==='exam'&&Date.now()>cur.st.deadline) submit(true); else question(cur.st.i||0); }
+    else if(act==='restart'){ if(window.confirm(lang()==='vi'?'Xoá bài đang làm và bắt đầu lại?':'Discard this attempt and start over?')){ put(key(id),null); home(); } }
+    else if(act==='result'){ if(!cur){ cur={ex:exById(id),st:get(key(id))}; } result(false); }
+    else if(act==='again'){ var ex=cur.ex, m=cur.st.mode; start(ex,m); }
+    else if(act==='home'){ home(); }
+    else if(!cur) return;
+    else if(act==='flag'){ var i=cur.st.i; if(cur.st.flag[i]) delete cur.st.flag[i]; else cur.st.flag[i]=1; save(); var y=main.scrollTop; question(i); main.scrollTop=y; }
+    else if(act==='prev'){ question(Math.max(0,cur.st.i-1)); }
+    else if(act==='next'){ question(Math.min(cur.ex.q.length-1,cur.st.i+1)); }
+    else if(act==='check'){ cur.st.chk[cur.st.i]=1; save(); var y2=main.scrollTop; question(cur.st.i); main.scrollTop=y2; }
+    else if(act==='grid'){ gridFilter='all'; grid(); }
+    else if(act==='gf'){ gridFilter=b.dataset.f; grid(); }
+    else if(act==='go'){ question(+b.dataset.i); }
+    else if(act==='submit'){ submit(false); }
+    else if(act==='rv'){ review(b.dataset.f); }
+  }
+  function refocus(b){
+    if(box.contains(document.activeElement)&&document.activeElement!==body) return;
+    var sel=b&&b.dataset.act?'[data-act="'+b.dataset.act+'"]'+(b.dataset.i?'[data-i="'+b.dataset.i+'"]':'')+(b.dataset.f?'[data-f="'+b.dataset.f+'"]':''):null;
+    var t=sel&&box.querySelector(sel);
+    if(!t||t.disabled){ t=bodyEl.querySelector('.ex-qnum,.ex-h,.ex-score,.ex-tabs .ex-btn'); if(t&&!t.matches('button')) t.setAttribute('tabindex','-1'); }
+    if(t) try{t.focus({preventScroll:true})}catch(e){}
+  }
+  box.addEventListener('click',function(e){ var b=e.target.closest('[data-act]'); onAct(e); if(b) refocus(b); });
+  box.addEventListener('change',function(e){ if(e.target.name==='exq'&&cur) choose(+e.target.value); });
+  box.addEventListener('click',function(e){ var a=e.target.closest('a[href^="#"]'); if(!a||a.getAttribute('href').length<2) return; e.preventDefault(); close(); var t=document.querySelector('.sidebar .toc-item a[href="'+a.getAttribute('href')+'"]'); if(t) t.click(); else { var el=document.querySelector(a.getAttribute('href')); if(el) el.scrollIntoView(); } });
+  homeBtn.addEventListener('click',function(){ if(cur&&!cur.st.done&&cur.st.mode==='exam'){ /* timer keeps running */ } home(); });
+  document.getElementById('exClose').addEventListener('click',close);
+  document.getElementById('exLang').addEventListener('click',function(){ document.getElementById('langBtn').click(); a11y(); if(!box.hidden&&DATA&&screen){ screen(); } });
+  function a11y(){ var v=lang()==='vi'; homeBtn.setAttribute('aria-label',v?'Danh sách đề':'All exams'); document.getElementById('exClose').setAttribute('aria-label',v?'Đóng':'Close'); document.getElementById('exLang').setAttribute('aria-label',v?'Chuyển sang English':'Switch to Tiếng Việt'); }
+  document.addEventListener('keydown',function(e){
+    if(box.hidden) return;
+    if(e.key==='Escape'){ e.preventDefault(); close(); return; }
+    if(e.key==='Tab'){ var f=box.querySelectorAll('button:not([disabled]):not([hidden]),input:not([disabled]),a[href]'); f=[].filter.call(f,function(x){return x.offsetParent!==null}); if(!f.length) return;
+      var first=f[0], last=f[f.length-1]; if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()} else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()} return; }
+    if(!cur||cur.st.done||!bodyEl.querySelector('.ex-opts')||e.ctrlKey||e.metaKey||e.altKey) return;
+    var k=e.key.toUpperCase();
+    if(k>='A'&&k<='F'&&k.length===1){ var idx=k.charCodeAt(0)-65; if(idx<cur.ex.q[cur.st.i].o.length){ e.preventDefault(); choose(idx,true); } }
+    else if(e.target&&e.target.name==='exq'){}
+    else if(e.key==='ArrowRight'&&cur.st.i<cur.ex.q.length-1){ e.preventDefault(); question(cur.st.i+1); }
+    else if(e.key==='ArrowLeft'&&cur.st.i>0){ e.preventDefault(); question(cur.st.i-1); }
+  });
+  [].forEach.call(document.querySelectorAll('[data-open-exam]'),function(b){ b.addEventListener('click',function(e){ e.preventDefault(); if(body.classList.contains('nav-open')){ var bd=document.getElementById('navBackdrop'); if(bd) bd.click(); } open(); }); });
+  if(location.hash==='#exam') open();
 })();
 </script>
 </body>

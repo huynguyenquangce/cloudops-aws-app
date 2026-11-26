@@ -1,0 +1,3672 @@
+{
+ "id": 1,
+ "title": {
+  "vi": "Đề thi thử 1",
+  "en": "Practice exam 1"
+ },
+ "q": [
+  {
+   "d": 2,
+   "task": "2.3",
+   "ref": "s3-replication",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "Account A replicates objects from its S3 bucket to a backup bucket in Account B. Replication succeeds, but users in Account B receive Access Denied when they read the replicas. The security team wants Account B to fully own the replicated objects. Which actions should a CloudOps engineer take?",
+    "vi": "Account A replicate object từ S3 bucket của mình sang một bucket backup ở Account B. Replication thành công, nhưng người dùng ở Account B nhận lỗi Access Denied khi đọc các replica. Đội security muốn Account B sở hữu hoàn toàn các object được replicate. CloudOps engineer nên thực hiện những hành động nào?"
+   },
+   "o": [
+    {
+     "en": "Grant `s3:ObjectOwnerOverrideToBucketOwner` to the replication IAM role and allow it in the destination bucket policy.",
+     "vi": "Cấp `s3:ObjectOwnerOverrideToBucketOwner` cho IAM role replication và cho phép trong bucket policy đích."
+    },
+    {
+     "en": "Disable versioning on the destination bucket.",
+     "vi": "Tắt versioning trên bucket đích."
+    },
+    {
+     "en": "Enable S3 Replication Time Control on the replication rule.",
+     "vi": "Bật S3 Replication Time Control trên replication rule."
+    },
+    {
+     "en": "Run an S3 Batch Replication job from Account B back to Account A.",
+     "vi": "Chạy S3 Batch Replication job từ Account B ngược về Account A."
+    },
+    {
+     "en": "Enable the owner override option in the replication rule.",
+     "vi": "Bật tuỳ chọn owner override trong replication rule."
+    }
+   ],
+   "a": [
+    0,
+    4
+   ],
+   "why": [
+    {
+     "en": "Correct: the owner override requires this permission on both the role and the destination bucket policy.",
+     "vi": "Đúng: owner override cần quyền này ở cả role lẫn bucket policy đích."
+    },
+    {
+     "en": "Wrong: replication requires versioning on both buckets; disabling it breaks replication.",
+     "vi": "Sai: replication bắt buộc versioning ở cả 2 bucket; tắt đi sẽ làm hỏng replication."
+    },
+    {
+     "en": "Wrong: RTC controls replication speed, not object ownership.",
+     "vi": "Sai: RTC kiểm soát tốc độ replicate, không phải quyền sở hữu object."
+    },
+    {
+     "en": "Wrong: copying in the reverse direction does not change who owns the replicas in Account B.",
+     "vi": "Sai: copy theo chiều ngược lại không thay đổi ai sở hữu replica ở Account B."
+    },
+    {
+     "en": "Correct: owner override changes replica ownership to the destination bucket owner.",
+     "vi": "Đúng: owner override chuyển quyền sở hữu replica sang owner của bucket đích."
+    }
+   ],
+   "ex": {
+    "en": "Cross-account replication: replicas stay owned by the source account by default. To let the destination own them → owner override in the rule + `s3:ObjectOwnerOverrideToBucketOwner` on the role and destination policy.",
+    "vi": "Replication cross-account: mặc định replica vẫn thuộc account nguồn. Muốn account đích sở hữu → owner override trong rule + `s3:ObjectOwnerOverrideToBucketOwner` cho role và bucket policy đích."
+   }
+  },
+  {
+   "d": 4,
+   "task": "4.1",
+   "ref": "lambda-triggers",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A Lambda function is invoked by an S3 event notification when a new object is uploaded. The function starts correctly, but its CloudWatch Logs show `AccessDenied` when the code calls `GetObject` on the uploaded object. The bucket uses SSE-S3 and has no bucket policy. What should a CloudOps engineer do to fix the issue?",
+    "vi": "Một Lambda function được gọi bởi S3 event notification khi có object mới. Function chạy bình thường nhưng CloudWatch Logs của nó báo `AccessDenied` khi code gọi `GetObject` lên object vừa upload. Bucket dùng SSE-S3 và không có bucket policy. CloudOps engineer nên làm gì?"
+   },
+   "o": [
+    {
+     "en": "Add a statement to the function's resource-based policy that allows `s3:GetObject`.",
+     "vi": "Thêm statement vào resource-based policy của function cho phép `s3:GetObject`."
+    },
+    {
+     "en": "Increase the function timeout and memory so the download can complete.",
+     "vi": "Tăng timeout và memory của function để tải xong object."
+    },
+    {
+     "en": "Add `s3:GetObject` on the bucket's objects to the function's execution role.",
+     "vi": "Thêm quyền `s3:GetObject` trên object của bucket vào execution role của function."
+    },
+    {
+     "en": "Configure an SQS dead-letter queue so failed events are retried.",
+     "vi": "Cấu hình SQS dead-letter queue để event lỗi được retry."
+    }
+   ],
+   "a": [
+    2
+   ],
+   "why": [
+    {
+     "en": "Wrong: the resource-based policy controls who may invoke the function, not what the function may access.",
+     "vi": "Sai: resource-based policy quy định ai được gọi function, không quy định function được truy cập gì."
+    },
+    {
+     "en": "Wrong: AccessDenied is a permission error, not a resource or timing problem.",
+     "vi": "Sai: AccessDenied là lỗi quyền, không phải do tài nguyên hay thời gian."
+    },
+    {
+     "en": "Correct: the execution role is the function's identity; the basic role only allows CloudWatch Logs, so S3 read access must be added there.",
+     "vi": "Đúng: execution role là identity của function; role cơ bản chỉ cho ghi CloudWatch Logs, nên phải thêm quyền đọc S3 vào đây."
+    },
+    {
+     "en": "Wrong: a DLQ keeps failed events but every retry would still fail with AccessDenied.",
+     "vi": "Sai: DLQ giữ event lỗi nhưng mọi lần retry vẫn bị AccessDenied."
+    }
+   ],
+   "ex": {
+    "en": "Function cannot read S3 / write logs → fix the execution role. Another service cannot invoke the function → fix the resource-based policy.",
+    "vi": "Function không đọc được S3 / không ghi được log → sửa execution role. Service khác không gọi được function → sửa resource-based policy."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.1",
+   "ref": "ami-noreboot",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company uses AWS Backup to create daily AMIs of an EC2 instance that runs a file-based application. During a restore test, the restored instance had a corrupted file system. The company needs scheduled AMIs that guarantee file system integrity and can tolerate a brief reboot. Which solution meets these requirements?",
+    "vi": "Một công ty dùng AWS Backup để tạo AMI hằng ngày cho một EC2 instance chạy ứng dụng ghi file. Khi thử restore, instance khôi phục bị hỏng file system. Công ty cần tạo AMI theo lịch đảm bảo toàn vẹn file system và chấp nhận reboot ngắn. Giải pháp nào đáp ứng yêu cầu?"
+   },
+   "o": [
+    {
+     "en": "Enable the No-Reboot option on a scheduled `CreateImage` call to avoid interrupting the application.",
+     "vi": "Bật tuỳ chọn No-Reboot cho lệnh `CreateImage` chạy theo lịch để không làm gián đoạn ứng dụng."
+    },
+    {
+     "en": "Increase the AWS Backup frequency to hourly so that a consistent recovery point is more likely to exist.",
+     "vi": "Tăng tần suất AWS Backup lên mỗi giờ để có nhiều khả năng tồn tại một recovery point nhất quán."
+    },
+    {
+     "en": "Copy each AWS Backup AMI to a second Region and restore from the copy during tests.",
+     "vi": "Copy mỗi AMI của AWS Backup sang region thứ hai và restore từ bản copy khi kiểm thử."
+    },
+    {
+     "en": "Use an EventBridge schedule and a Lambda function that calls `CreateImage` with reboot allowed.",
+     "vi": "Dùng EventBridge schedule và một Lambda function gọi `CreateImage` có cho phép reboot."
+    }
+   ],
+   "a": [
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong: No-Reboot is exactly what removes the file system integrity guarantee.",
+     "vi": "Sai: No-Reboot chính là thứ làm mất đảm bảo toàn vẹn file system."
+    },
+    {
+     "en": "Wrong: AWS Backup still uses no-reboot, so no backup is guaranteed to be consistent.",
+     "vi": "Sai: AWS Backup vẫn dùng no-reboot nên không bản nào được đảm bảo nhất quán."
+    },
+    {
+     "en": "Wrong: copying an inconsistent AMI does not make it consistent.",
+     "vi": "Sai: copy một AMI không nhất quán không làm nó nhất quán."
+    },
+    {
+     "en": "Correct: `CreateImage` without No-Reboot shuts the instance down first, so the file system is consistent; EventBridge + Lambda provides the schedule.",
+     "vi": "Đúng: `CreateImage` không bật No-Reboot sẽ shutdown instance trước nên file system nhất quán; EventBridge + Lambda lo phần lịch."
+    }
+   ],
+   "ex": {
+    "en": "AWS Backup creates EC2 AMIs with no-reboot (no downtime, no file system integrity guarantee). For consistent scheduled AMIs, use EventBridge schedule + Lambda `CreateImage` with reboot.",
+    "vi": "AWS Backup tạo AMI với no-reboot (không gián đoạn, không đảm bảo toàn vẹn file system). Muốn AMI nhất quán theo lịch → EventBridge schedule + Lambda `CreateImage` có reboot."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.2",
+   "ref": "run-command",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A CloudOps engineer must run a configuration script on 1,000 managed EC2 instances. The rollout must proceed in batches of 50 instances, and it must stop automatically if more than 5% of the instances fail. SSH is not allowed. Which solution meets these requirements with the LEAST effort?",
+    "vi": "Một CloudOps engineer phải chạy script cấu hình trên 1.000 managed EC2 instance. Việc rollout phải theo lô 50 instance và tự dừng nếu hơn 5% instance thất bại. Không được dùng SSH. Giải pháp nào ít công sức NHẤT?"
+   },
+   "o": [
+    {
+     "en": "Create an EventBridge rule that invokes a Lambda function to open SSH sessions to 50 instances at a time.",
+     "vi": "Tạo EventBridge rule gọi Lambda function mở phiên SSH tới 50 instance mỗi lần."
+    },
+    {
+     "en": "Use SSM Run Command with concurrency set to 5% and error threshold set to 50.",
+     "vi": "Dùng SSM Run Command với concurrency 5% và error threshold 50."
+    },
+    {
+     "en": "Add the script to the instances' user data and reboot the instances in groups of 50.",
+     "vi": "Thêm script vào user data của instance rồi reboot theo nhóm 50 instance."
+    },
+    {
+     "en": "Use SSM Run Command with concurrency set to 50 and error threshold set to 5%.",
+     "vi": "Dùng SSM Run Command với concurrency 50 và error threshold 5%."
+    }
+   ],
+   "a": [
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong: SSH is not allowed, and this requires custom code.",
+     "vi": "Sai: không được dùng SSH và cần tự viết code."
+    },
+    {
+     "en": "Wrong: the values are swapped; this would tolerate 50 failures instead of stopping at 5%.",
+     "vi": "Sai: hai giá trị bị đảo; cấu hình này chấp nhận 50 lỗi thay vì dừng ở 5%."
+    },
+    {
+     "en": "Wrong: user data runs at first boot by default and provides no error threshold.",
+     "vi": "Sai: mặc định user data chỉ chạy ở lần boot đầu và không có error threshold."
+    },
+    {
+     "en": "Correct: Run Command rate control (concurrency + error threshold) provides exactly this behaviour without SSH.",
+     "vi": "Đúng: rate control của Run Command (concurrency + error threshold) đáp ứng đúng yêu cầu mà không cần SSH."
+    }
+   ],
+   "ex": {
+    "en": "Run Command rate control: concurrency = how many targets at once (number or %); error threshold = stop after this many/percentage of failures (0 = stop on first error).",
+    "vi": "Rate control của Run Command: concurrency = số target chạy cùng lúc (số hoặc %); error threshold = dừng khi số/tỉ lệ lỗi vượt ngưỡng (0 = dừng ngay lỗi đầu)."
+   }
+  },
+  {
+   "d": 4,
+   "task": "4.1",
+   "ref": "s3-audit",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A security team needs to find out which S3 buckets in an account are accessible publicly or are shared with other AWS accounts through bucket policies, ACLs or access point policies. The team wants to review each finding and mark intended access as accepted. Which solution meets these requirements with the LEAST operational overhead?",
+    "vi": "Đội security cần tìm ra các S3 bucket trong account đang truy cập được công khai hoặc đang được share với AWS account khác qua bucket policy, ACL hoặc access point policy. Đội muốn xem từng finding và đánh dấu các truy cập có chủ đích là đã chấp nhận. Giải pháp nào đáp ứng với operational overhead THẤP NHẤT?"
+   },
+   "o": [
+    {
+     "en": "Generate an S3 Inventory report for each bucket and filter it with Athena.",
+     "vi": "Tạo báo cáo S3 Inventory cho từng bucket và lọc bằng Athena."
+    },
+    {
+     "en": "Enable S3 server access logs on every bucket and query the logs with Athena for requests from external accounts.",
+     "vi": "Bật S3 server access logs cho mọi bucket và dùng Athena truy vấn log tìm request từ account ngoài."
+    },
+    {
+     "en": "Use IAM Access Analyzer for S3 to review findings, archive intended access and fix the rest.",
+     "vi": "Dùng IAM Access Analyzer for S3 để xem finding, archive truy cập có chủ đích và sửa phần còn lại."
+    },
+    {
+     "en": "Create a CloudTrail trail with S3 data events and an EventBridge rule for `GetObject` calls.",
+     "vi": "Tạo CloudTrail trail với S3 data events và EventBridge rule cho lời gọi `GetObject`."
+    }
+   ],
+   "a": [
+    2
+   ],
+   "why": [
+    {
+     "en": "Wrong: S3 Inventory lists objects and their encryption/replication status, not bucket access policies.",
+     "vi": "Sai: S3 Inventory liệt kê object và trạng thái encryption/replication, không phân tích policy truy cập của bucket."
+    },
+    {
+     "en": "Wrong: access logs show requests that already happened, not which policies grant public or cross-account access, and need custom queries.",
+     "vi": "Sai: access log chỉ cho thấy request đã xảy ra, không cho biết policy nào cấp quyền public/cross-account, và phải tự viết truy vấn."
+    },
+    {
+     "en": "Correct: Access Analyzer analyses bucket policies, ACLs and access point policies and reports public or cross-account buckets; intended findings can be archived.",
+     "vi": "Đúng: Access Analyzer phân tích bucket policy, ACL, access point policy và báo bucket public hoặc share cross-account; finding có chủ đích có thể archive."
+    },
+    {
+     "en": "Wrong: this tracks API activity and requires extra processing; it does not evaluate who is granted access.",
+     "vi": "Sai: chỉ theo dõi hoạt động API, phải xử lý thêm; không đánh giá ai đang được cấp quyền."
+    }
+   ],
+   "ex": {
+    "en": "Finding buckets that are unintentionally public or shared cross-account → IAM Access Analyzer for S3 (archive intended findings, fix the rest).",
+    "vi": "Tìm bucket bị public / share cross-account ngoài ý muốn → IAM Access Analyzer for S3 (archive finding có chủ đích, sửa phần còn lại)."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.2",
+   "ref": "parameter-store",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "An application stores a 6 KB certificate bundle in SSM Parameter Store. Security policy requires the parameter to expire after 90 days, and the operations team must receive an alert 15 days before it expires. Which combination of steps meets these requirements?",
+    "vi": "Một ứng dụng lưu bộ certificate 6 KB trong SSM Parameter Store. Chính sách bảo mật yêu cầu parameter hết hạn sau 90 ngày, và đội vận hành phải nhận cảnh báo 15 ngày trước khi hết hạn. Kết hợp bước nào đáp ứng yêu cầu?"
+   },
+   "o": [
+    {
+     "en": "Attach a `NoChangeNotification` policy configured for 75 days.",
+     "vi": "Gắn policy `NoChangeNotification` cấu hình 75 ngày."
+    },
+    {
+     "en": "Store the value as an Advanced tier parameter.",
+     "vi": "Lưu giá trị dưới dạng parameter Advanced tier."
+    },
+    {
+     "en": "Create a CloudWatch alarm on the parameter's age metric with a 75-day threshold.",
+     "vi": "Tạo CloudWatch alarm trên metric tuổi của parameter với ngưỡng 75 ngày."
+    },
+    {
+     "en": "Attach `Expiration` and `ExpirationNotification` parameter policies and create an EventBridge rule that notifies the team.",
+     "vi": "Gắn parameter policy `Expiration` và `ExpirationNotification`, tạo EventBridge rule gửi thông báo cho đội."
+    },
+    {
+     "en": "Store the value as a Standard tier `SecureString` parameter encrypted with a customer managed KMS key.",
+     "vi": "Lưu giá trị dưới dạng `SecureString` Standard tier mã hoá bằng KMS key do khách hàng quản lý."
+    }
+   ],
+   "a": [
+    1,
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong: it alerts when a parameter is not changed; it does not make the parameter expire.",
+     "vi": "Sai: policy này báo khi parameter không được thay đổi; không làm parameter hết hạn."
+    },
+    {
+     "en": "Correct: values above 4 KB and parameter policies both require the Advanced tier.",
+     "vi": "Đúng: value trên 4 KB và parameter policy đều cần Advanced tier."
+    },
+    {
+     "en": "Wrong: Parameter Store does not publish such a metric; notifications go through EventBridge.",
+     "vi": "Sai: Parameter Store không phát metric như vậy; thông báo đi qua EventBridge."
+    },
+    {
+     "en": "Correct: these policies set the TTL and emit an EventBridge event before expiry.",
+     "vi": "Đúng: các policy này đặt TTL và phát event EventBridge trước khi hết hạn."
+    },
+    {
+     "en": "Wrong: Standard tier is limited to 4 KB and does not support parameter policies.",
+     "vi": "Sai: Standard tier giới hạn 4 KB và không hỗ trợ parameter policy."
+    }
+   ],
+   "ex": {
+    "en": "Value > 4 KB or need TTL/expiry alerts → Advanced tier + parameter policies (`Expiration`, `ExpirationNotification`, `NoChangeNotification`) + EventBridge.",
+    "vi": "Value > 4 KB hoặc cần TTL/cảnh báo hết hạn → Advanced tier + parameter policy (`Expiration`, `ExpirationNotification`, `NoChangeNotification`) + EventBridge."
+   }
+  },
+  {
+   "d": 5,
+   "task": "5.3",
+   "ref": "storage-gateway-ops",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "A CloudOps engineer deploys an AWS Storage Gateway VM on premises. When the engineer tries to activate the gateway, the activation fails. Which checks should the engineer perform?",
+    "vi": "Một CloudOps engineer deploy Storage Gateway VM on-premises. Khi kích hoạt gateway thì activation thất bại. Engineer nên kiểm tra những gì?"
+   },
+   "o": [
+    {
+     "en": "Stop the Storage Gateway service, reboot the gateway VM, and then start the service again to reset the activation state.",
+     "vi": "Stop Storage Gateway service, reboot gateway VM rồi start lại service để reset trạng thái activation."
+    },
+    {
+     "en": "Verify that the gateway VM's clock is correct and synchronized with an NTP server.",
+     "vi": "Kiểm tra đồng hồ của gateway VM đúng và đồng bộ với NTP server."
+    },
+    {
+     "en": "Verify that port 80 on the gateway VM is reachable from the client used for activation.",
+     "vi": "Kiểm tra port 80 trên gateway VM có truy cập được từ máy client dùng để kích hoạt."
+    },
+    {
+     "en": "Verify that NFS port 2049 is open from the gateway VM to Amazon S3.",
+     "vi": "Kiểm tra NFS port 2049 mở từ gateway VM tới Amazon S3."
+    },
+    {
+     "en": "Increase the size of the gateway's cache disk.",
+     "vi": "Tăng kích thước cache disk của gateway."
+    }
+   ],
+   "a": [
+    1,
+    2
+   ],
+   "why": [
+    {
+     "en": "Wrong. That is the reboot procedure for Volume/Tape Gateways, not an activation fix.",
+     "vi": "Sai. Đó là quy trình reboot Volume/Tape Gateway, không phải cách sửa activation."
+    },
+    {
+     "en": "Correct. A skewed VM clock is a known cause of activation failure.",
+     "vi": "Đúng. Đồng hồ VM lệch là nguyên nhân phổ biến khiến activation thất bại."
+    },
+    {
+     "en": "Correct. Activation (the web-request method) needs port 80 open on the gateway VM.",
+     "vi": "Đúng. Activation (cách web request) cần port 80 mở trên gateway VM."
+    },
+    {
+     "en": "Wrong. Port 2049 is for NFS clients mounting a share, not for activation.",
+     "vi": "Sai. Port 2049 dùng cho NFS client mount share, không dùng cho activation."
+    },
+    {
+     "en": "Wrong. Cache size addresses a low `CacheHitPercent`, not activation.",
+     "vi": "Sai. Kích thước cache dùng để xử lý `CacheHitPercent` thấp, không liên quan activation."
+    }
+   ],
+   "ex": {
+    "en": "Storage Gateway activation fails → check port 80 to the gateway VM and the VM time (NTP sync).",
+    "vi": "Storage Gateway activation thất bại → kiểm tra port 80 tới gateway VM và giờ của VM (đồng bộ NTP)."
+   }
+  },
+  {
+   "d": 4,
+   "task": "4.2",
+   "ref": "s3-protection",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A healthcare company must keep audit records in S3 for 7 years. During that period, no user, including the root user of the account, may delete or overwrite the records. Which solution meets this requirement?",
+    "vi": "Một công ty y tế phải giữ audit record trên S3 trong 7 năm. Trong thời gian đó không user nào, kể cả root user của account, được xoá hay ghi đè record. Giải pháp nào đáp ứng yêu cầu?"
+   },
+   "o": [
+    {
+     "en": "Place a legal hold on every object.",
+     "vi": "Đặt legal hold cho mọi object."
+    },
+    {
+     "en": "Enable S3 Object Lock in governance mode with a 7-year retention period.",
+     "vi": "Bật S3 Object Lock ở governance mode với retention 7 năm."
+    },
+    {
+     "en": "Enable versioning with MFA Delete.",
+     "vi": "Bật versioning kèm MFA Delete."
+    },
+    {
+     "en": "Enable S3 Object Lock in compliance mode with a 7-year retention period.",
+     "vi": "Bật S3 Object Lock ở compliance mode với retention 7 năm."
+    }
+   ],
+   "a": [
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong: a legal hold has no fixed duration and can be removed by users with the right permission.",
+     "vi": "Sai: legal hold không có thời hạn cố định và user có quyền phù hợp có thể gỡ bỏ."
+    },
+    {
+     "en": "Wrong: users with `s3:BypassGovernanceRetention` can still delete objects in governance mode.",
+     "vi": "Sai: user có quyền `s3:BypassGovernanceRetention` vẫn xoá được object ở governance mode."
+    },
+    {
+     "en": "Wrong: MFA Delete only requires an MFA code; the root user with MFA can still permanently delete versions.",
+     "vi": "Sai: MFA Delete chỉ đòi mã MFA; root user có MFA vẫn xoá vĩnh viễn version được."
+    },
+    {
+     "en": "Correct: in compliance mode nobody, including root, can delete or overwrite a locked version until the retention period ends.",
+     "vi": "Đúng: ở compliance mode không ai, kể cả root, xoá hay ghi đè được version bị khoá cho tới khi hết retention."
+    }
+   ],
+   "ex": {
+    "en": "\"Nobody, not even root, may delete for N years\" → Object Lock compliance mode. Admin exceptions → governance. Unknown duration (lawsuit) → legal hold.",
+    "vi": "\"Không ai, kể cả root, được xoá trong N năm\" → Object Lock compliance mode. Admin có ngoại lệ → governance. Không biết thời hạn (vụ kiện) → legal hold."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.1",
+   "ref": "status-checks",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A CloudOps engineer configured a CloudWatch alarm on `StatusCheckFailed_System` that triggers the EC2 Recover action and sends an SNS notification. Before go-live, the engineer must prove that the alarm actions work, without waiting for a real hardware failure. What is the MOST efficient way to do this?",
+    "vi": "Một CloudOps engineer đã cấu hình CloudWatch alarm trên `StatusCheckFailed_System` để kích hoạt action EC2 Recover và gửi SNS notification. Trước khi go-live, engineer phải chứng minh các action của alarm hoạt động mà không cần chờ lỗi phần cứng thật. Cách nào HIỆU QUẢ NHẤT?"
+   },
+   "o": [
+    {
+     "en": "Stop and start the instance so that it moves to a new host and fails the system check.",
+     "vi": "Stop rồi start instance để nó chuyển sang host mới và làm system check bị fail."
+    },
+    {
+     "en": "Run `aws cloudwatch set-alarm-state` to set the alarm to `ALARM`, then check the alarm history.",
+     "vi": "Chạy `aws cloudwatch set-alarm-state` để đặt alarm sang `ALARM`, rồi kiểm tra history của alarm."
+    },
+    {
+     "en": "Use `aws cloudwatch put-metric-data` to publish a value of 1 for `StatusCheckFailed_System` in the `AWS/EC2` namespace.",
+     "vi": "Dùng `aws cloudwatch put-metric-data` gửi giá trị 1 cho `StatusCheckFailed_System` trong namespace `AWS/EC2`."
+    },
+    {
+     "en": "Reboot the operating system from inside the instance to make the system check fail.",
+     "vi": "Reboot hệ điều hành từ bên trong instance để làm system check bị fail."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "A stop/start is a normal operation; it does not make the system status check fail.",
+     "vi": "Stop/start là thao tác bình thường; nó không làm system status check bị fail."
+    },
+    {
+     "en": "Correct. Forcing the state runs the actions; history shows OK → ALARM and the executed recover action.",
+     "vi": "Đúng. Ép trạng thái sẽ chạy các action; history hiển thị OK → ALARM và action recover đã thực thi."
+    },
+    {
+     "en": "Namespaces starting with `AWS/` are reserved for AWS services; you cannot publish into them.",
+     "vi": "Namespace bắt đầu bằng `AWS/` dành riêng cho AWS service; bạn không thể gửi metric vào đó."
+    },
+    {
+     "en": "The system check monitors the AWS host, not the guest OS, so a reboot does not trip it.",
+     "vi": "System check theo dõi host của AWS, không phải OS bên trong, nên reboot không làm nó fail."
+    }
+   ],
+   "ex": {
+    "en": "To test alarm actions (SNS, Recover, Auto Scaling) without a real event, use `set-alarm-state` to force the alarm into `ALARM` temporarily.",
+    "vi": "Để test action của alarm (SNS, Recover, Auto Scaling) mà không cần sự cố thật, dùng `set-alarm-state` ép alarm tạm thời sang `ALARM`."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.3",
+   "ref": "athena",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "A company stores two years of application logs in Amazon S3 as uncompressed CSV, split into many small files. Analysts query the logs with Amazon Athena, almost always filtering on a date range and selecting a few columns. Queries are slow and expensive. Which actions will MOST reduce query cost and runtime?",
+    "vi": "Một công ty lưu hai năm log ứng dụng trong Amazon S3 dưới dạng CSV không nén, chia thành nhiều file nhỏ. Analyst query log bằng Amazon Athena, hầu như luôn lọc theo khoảng ngày và chỉ chọn vài cột. Query chậm và tốn kém. Hành động nào giảm chi phí và thời gian query NHIỀU NHẤT?"
+   },
+   "o": [
+    {
+     "en": "Split the data into even smaller files to increase query parallelism.",
+     "vi": "Chia dữ liệu thành các file còn nhỏ hơn để tăng song song khi query."
+    },
+    {
+     "en": "Convert the data to Apache Parquet with an AWS Glue ETL job.",
+     "vi": "Chuyển dữ liệu sang Apache Parquet bằng AWS Glue ETL job."
+    },
+    {
+     "en": "Use Athena Federated Query with a Lambda connector to read the files.",
+     "vi": "Dùng Athena Federated Query với Lambda connector để đọc file."
+    },
+    {
+     "en": "Enable S3 Transfer Acceleration on the log bucket.",
+     "vi": "Bật S3 Transfer Acceleration trên bucket log."
+    },
+    {
+     "en": "Partition the data in S3 by year, month and day and register the partitions in the table.",
+     "vi": "Partition dữ liệu trong S3 theo year, month, day và đăng ký partition vào bảng."
+    }
+   ],
+   "a": [
+    1,
+    4
+   ],
+   "why": [
+    {
+     "en": "Many small files add overhead; larger files (about 128 MB or more) perform better.",
+     "vi": "Nhiều file nhỏ làm tăng overhead; file lớn (khoảng 128 MB trở lên) cho hiệu năng tốt hơn."
+    },
+    {
+     "en": "Correct. A columnar format lets Athena scan only the selected columns, so less data is billed.",
+     "vi": "Đúng. Định dạng columnar giúp Athena chỉ scan các cột được chọn, nên ít dữ liệu bị tính phí hơn."
+    },
+    {
+     "en": "Federated Query is for sources outside S3 (DynamoDB, RDS, on-premises), not for optimizing S3 data.",
+     "vi": "Federated Query dành cho nguồn ngoài S3 (DynamoDB, RDS, on-prem), không để tối ưu dữ liệu S3."
+    },
+    {
+     "en": "Transfer Acceleration speeds up uploads/downloads over long distances, not Athena scans.",
+     "vi": "Transfer Acceleration tăng tốc upload/download đường xa, không giúp Athena scan."
+    },
+    {
+     "en": "Correct. Date filters then read only the matching folders.",
+     "vi": "Đúng. Khi lọc theo ngày, Athena chỉ đọc đúng các folder khớp."
+    }
+   ],
+   "ex": {
+    "en": "Athena bills per TB scanned. Reduce scanning with columnar formats (Parquet/ORC), compression, partitioning and larger files.",
+    "vi": "Athena tính phí theo TB được scan. Giảm lượng scan bằng định dạng columnar (Parquet/ORC), nén, partition và file lớn."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.2",
+   "ref": "tg-settings",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "Users upload large video files to an application behind an Application Load Balancer. Each upload can take up to 10 minutes. When the Auto Scaling group scales in, some users report that their uploads fail partway through. The target group uses default settings. What should a CloudOps engineer change?",
+    "vi": "Người dùng upload file video lớn lên một ứng dụng đứng sau Application Load Balancer. Mỗi lần upload có thể mất tới 10 phút. Khi Auto Scaling group scale in, một số người dùng báo upload bị lỗi giữa chừng. Target group đang dùng cấu hình mặc định. CloudOps engineer nên thay đổi gì?"
+   },
+   "o": [
+    {
+     "en": "Set the deregistration delay to 0 so that terminating instances are removed immediately.",
+     "vi": "Đặt deregistration delay bằng 0 để instance đang terminate được gỡ ngay."
+    },
+    {
+     "en": "Increase the deregistration delay of the target group to 600 seconds or more.",
+     "vi": "Tăng deregistration delay của target group lên 600 giây hoặc hơn."
+    },
+    {
+     "en": "Enable slow start on the target group.",
+     "vi": "Bật slow start trên target group."
+    },
+    {
+     "en": "Lower the unhealthy threshold of the health check to 2.",
+     "vi": "Giảm unhealthy threshold của health check xuống 2."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "Wrong: 0 disables draining, so in-flight uploads would be cut off even more often.",
+     "vi": "Sai: 0 tắt draining, nên upload đang chạy sẽ bị cắt còn nhiều hơn."
+    },
+    {
+     "en": "Correct: the default 300 seconds is shorter than the uploads; a longer delay lets in-flight requests finish before the target is removed.",
+     "vi": "Đúng: mặc định 300 giây ngắn hơn thời gian upload; delay dài hơn cho request đang chạy kịp hoàn tất trước khi target bị gỡ."
+    },
+    {
+     "en": "Wrong: slow start affects targets entering service, not targets being removed.",
+     "vi": "Sai: slow start ảnh hưởng tới target mới vào service, không phải target đang bị gỡ."
+    },
+    {
+     "en": "Wrong: the ALB default is already 2, and it has nothing to do with scale-in draining.",
+     "vi": "Sai: mặc định của ALB đã là 2, và không liên quan tới việc draining khi scale in."
+    }
+   ],
+   "ex": {
+    "en": "Long requests cut off during scale-in or deploys → raise the deregistration delay (1–3,600 s, default 300 s). Short requests → set it low.",
+    "vi": "Request dài bị cắt khi scale in hoặc deploy → tăng deregistration delay (1–3,600 giây, mặc định 300 giây). Request ngắn → đặt thấp."
+   }
+  },
+  {
+   "d": 5,
+   "task": "5.3",
+   "ref": "alb",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "An application behind an Application Load Balancer records the source IP of each request for fraud detection. After the migration to the ALB, every logged IP address is a private address from the VPC. How should the developers obtain the real client IP address?",
+    "vi": "Một ứng dụng sau Application Load Balancer ghi lại source IP của mỗi request để phát hiện gian lận. Sau khi chuyển sang ALB, mọi IP được ghi đều là địa chỉ private trong VPC. Developer lấy IP thật của client bằng cách nào?"
+   },
+   "o": [
+    {
+     "en": "Enable cross-zone load balancing so the client IP is preserved.",
+     "vi": "Bật cross-zone load balancing để giữ nguyên IP client."
+    },
+    {
+     "en": "Read the client IP from the `X-Amzn-Trace-Id` request header.",
+     "vi": "Đọc IP client từ request header `X-Amzn-Trace-Id`."
+    },
+    {
+     "en": "Enable sticky sessions with a duration-based cookie on the target group.",
+     "vi": "Bật sticky sessions với duration-based cookie trên target group."
+    },
+    {
+     "en": "Read the client IP from the `X-Forwarded-For` request header.",
+     "vi": "Đọc IP client từ request header `X-Forwarded-For`."
+    }
+   ],
+   "a": [
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong. Cross-zone only changes how traffic is spread across AZs.",
+     "vi": "Sai. Cross-zone chỉ thay đổi cách chia traffic giữa các AZ."
+    },
+    {
+     "en": "Wrong. `X-Amzn-Trace-Id` is a tracing identifier for following a request, not the client address.",
+     "vi": "Sai. `X-Amzn-Trace-Id` là ID để trace một request, không phải địa chỉ client."
+    },
+    {
+     "en": "Wrong. Stickiness pins clients to targets; it does not reveal the client IP.",
+     "vi": "Sai. Stickiness gắn client vào target; không cho biết IP client."
+    },
+    {
+     "en": "Correct. The ALB terminates the connection, so the backend sees the ALB's IP; the original client IP is passed in `X-Forwarded-For`.",
+     "vi": "Đúng. ALB terminate kết nối nên backend thấy IP của ALB; IP gốc của client được gửi trong `X-Forwarded-For`."
+    }
+   ],
+   "ex": {
+    "en": "ALB terminates connections → backends see the ALB's private IP; the client IP is in `X-Forwarded-For`.",
+    "vi": "ALB terminate kết nối → backend thấy IP private của ALB; IP client nằm trong `X-Forwarded-For`."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.2",
+   "ref": "s3-batch",
+   "type": "multi",
+   "pick": 3,
+   "q": {
+    "en": "A company has an S3 bucket with 400 million objects. Default encryption was enabled only recently, and the company must encrypt every existing unencrypted object with the LEAST operational overhead. Which combination of steps should a CloudOps engineer take?",
+    "vi": "Một công ty có S3 bucket chứa 400 triệu object. Default encryption mới được bật gần đây, và công ty phải mã hoá mọi object cũ chưa mã hoá với ít công vận hành NHẤT. CloudOps engineer nên kết hợp những bước nào?"
+   },
+   "o": [
+    {
+     "en": "Enable S3 Inventory on the bucket to produce a list of objects that includes their encryption status.",
+     "vi": "Bật S3 Inventory cho bucket để tạo danh sách object kèm trạng thái mã hoá."
+    },
+    {
+     "en": "Create an IAM role that S3 Batch Operations can assume, with permissions to read and write the objects.",
+     "vi": "Tạo IAM role mà S3 Batch Operations có thể assume, có quyền đọc và ghi object."
+    },
+    {
+     "en": "Configure an S3 Event Notification for `s3:ObjectCreated:*` events that invokes a Lambda function to re-encrypt each object.",
+     "vi": "Cấu hình S3 Event Notification cho sự kiện `s3:ObjectCreated:*` gọi một Lambda function để mã hoá lại từng object."
+    },
+    {
+     "en": "Add an S3 Lifecycle rule that transitions the objects to S3 Standard-IA to re-encrypt them.",
+     "vi": "Thêm S3 Lifecycle rule chuyển object sang S3 Standard-IA để mã hoá lại."
+    },
+    {
+     "en": "Create an S3 Batch Operations job that copies the listed objects in place with server-side encryption.",
+     "vi": "Tạo S3 Batch Operations job copy tại chỗ các object trong danh sách kèm server-side encryption."
+    },
+    {
+     "en": "Rely on the bucket's default encryption setting, which re-encrypts existing objects automatically in the background after it is enabled.",
+     "vi": "Dựa vào cài đặt default encryption của bucket, vốn tự động mã hoá lại object cũ ở chế độ nền sau khi được bật."
+    }
+   ],
+   "a": [
+    0,
+    1,
+    4
+   ],
+   "why": [
+    {
+     "en": "Correct: S3 Inventory reports encryption status for every object and feeds Batch Operations.",
+     "vi": "Đúng: S3 Inventory báo trạng thái mã hoá của mọi object và làm đầu vào cho Batch Operations."
+    },
+    {
+     "en": "Correct: a Batch Operations job needs an IAM role trusted by S3 Batch Operations.",
+     "vi": "Đúng: job Batch Operations cần một IAM role tin cậy S3 Batch Operations."
+    },
+    {
+     "en": "Wrong: event notifications fire for new events, not for objects that already exist.",
+     "vi": "Sai: event notification chỉ kích hoạt với sự kiện mới, không áp dụng cho object đã có."
+    },
+    {
+     "en": "Wrong: lifecycle transitions change storage class; they are not an encryption tool.",
+     "vi": "Sai: lifecycle transition đổi storage class, không phải công cụ mã hoá."
+    },
+    {
+     "en": "Correct: Batch Operations performs the bulk copy with managed retries, progress tracking and a completion report.",
+     "vi": "Đúng: Batch Operations thực hiện copy hàng loạt với retry, theo dõi tiến độ và completion report."
+    },
+    {
+     "en": "Wrong: default encryption applies only to objects written after it is enabled; it never touches existing objects.",
+     "vi": "Sai: default encryption chỉ áp dụng cho object được ghi sau khi bật; không bao giờ đụng tới object cũ."
+    }
+   ],
+   "ex": {
+    "en": "Encrypt all existing unencrypted objects → S3 Inventory (optionally Athena to filter) → S3 Batch Operations job with an IAM role trusted by Batch Operations.",
+    "vi": "Mã hoá mọi object cũ chưa mã hoá → S3 Inventory (có thể lọc bằng Athena) → S3 Batch Operations job với IAM role tin cậy Batch Operations."
+   }
+  },
+  {
+   "d": 4,
+   "task": "4.1",
+   "ref": "s3-security",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company hosts a static website in an S3 bucket. A CloudOps engineer adds a bucket policy that allows `s3:GetObject` for Principal \"*\" on `arn:aws:s3:::web-assets/*`. Anonymous users still receive `AccessDenied` errors when they request objects. What should the engineer do to resolve the issue?",
+    "vi": "Một công ty host static website trong một S3 bucket. CloudOps engineer thêm bucket policy cho phép `s3:GetObject` với Principal \"*\" trên `arn:aws:s3:::web-assets/*`. Người dùng ẩn danh vẫn nhận lỗi `AccessDenied` khi tải object. Engineer nên làm gì để khắc phục?"
+   },
+   "o": [
+    {
+     "en": "Turn off the S3 Block Public Access settings that apply to the bucket.",
+     "vi": "Tắt các thiết lập S3 Block Public Access đang áp lên bucket."
+    },
+    {
+     "en": "Enable default encryption with SSE-S3 on the bucket.",
+     "vi": "Bật default encryption SSE-S3 trên bucket."
+    },
+    {
+     "en": "Change the Resource in the policy to `arn:aws:s3:::web-assets` without the /* suffix.",
+     "vi": "Đổi Resource trong policy thành `arn:aws:s3:::web-assets` không có hậu tố /*."
+    },
+    {
+     "en": "Attach an IAM role with `s3:GetObject` permission to the bucket.",
+     "vi": "Gắn một IAM role có quyền `s3:GetObject` vào bucket."
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct: while Block Public Access is on (bucket or account level), the bucket can never be public even if the policy allows it.",
+     "vi": "Đúng: khi Block Public Access đang bật (cấp bucket hoặc account), bucket không bao giờ public dù policy cho phép."
+    },
+    {
+     "en": "Wrong: SSE-S3 is transparent to readers and does not cause or fix AccessDenied for public reads.",
+     "vi": "Sai: SSE-S3 trong suốt với người đọc, không gây ra cũng không sửa lỗi AccessDenied khi đọc public."
+    },
+    {
+     "en": "Wrong: `s3:GetObject` acts on objects, so the Resource must end with /*. The current policy is already correct.",
+     "vi": "Sai: `s3:GetObject` áp lên object nên Resource phải có /*. Policy hiện tại đã đúng."
+    },
+    {
+     "en": "Wrong: IAM roles are assumed by principals; they are not attached to buckets, and anonymous users have no IAM identity.",
+     "vi": "Sai: IAM role được principal assume, không gắn vào bucket; người dùng ẩn danh không có IAM identity."
+    }
+   ],
+   "ex": {
+    "en": "A correct public bucket policy still returns AccessDenied when S3 Block Public Access is enabled; it must be turned off before a bucket can be public.",
+    "vi": "Bucket policy public đúng vẫn bị AccessDenied nếu S3 Block Public Access đang bật; phải tắt nó trước thì bucket mới public được."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.3",
+   "ref": "placement",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A research team runs a tightly coupled HPC job across 20 EC2 instances. The job must finish as fast as possible and needs the lowest possible network latency and highest throughput between nodes. The team accepts that a failure of one Availability Zone could stop the whole job. Which placement strategy should be used?",
+    "vi": "Một nhóm nghiên cứu chạy HPC job liên kết chặt trên 20 EC2 instance. Job phải xong càng nhanh càng tốt, cần network latency thấp nhất và throughput cao nhất giữa các node. Nhóm chấp nhận rằng lỗi một Availability Zone có thể làm dừng cả job. Nên dùng placement strategy nào?"
+   },
+   "o": [
+    {
+     "en": "Cluster placement group",
+     "vi": "Cluster placement group"
+    },
+    {
+     "en": "Precision time placement group",
+     "vi": "Precision time placement group"
+    },
+    {
+     "en": "Partition placement group",
+     "vi": "Partition placement group"
+    },
+    {
+     "en": "Spread placement group",
+     "vi": "Spread placement group"
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct. Packs instances in one AZ on low-latency, high-throughput hardware — high performance, high risk.",
+     "vi": "Đúng. Gom instance trong 1 AZ trên phần cứng low-latency, throughput cao — hiệu năng cao, rủi ro cao."
+    },
+    {
+     "en": "It provides access to high-precision time sources for event ordering, not maximum inter-node bandwidth.",
+     "vi": "Nó cung cấp nguồn giờ chính xác cao cho việc sắp thứ tự sự kiện, không phải băng thông tối đa giữa node."
+    },
+    {
+     "en": "Partition isolates rack failures for partition-aware systems like HDFS or Kafka; not for lowest latency.",
+     "vi": "Partition cô lập lỗi rack cho hệ thống partition-aware như HDFS hay Kafka; không nhằm latency thấp nhất."
+    },
+    {
+     "en": "Spread puts each instance on distinct hardware for isolation, max 7 per AZ — it optimizes availability, not latency.",
+     "vi": "Spread đặt mỗi instance trên phần cứng riêng để cô lập lỗi, tối đa 7/AZ — tối ưu availability, không phải latency."
+    }
+   ],
+   "ex": {
+    "en": "Network performance → Cluster. Isolate each critical instance → Spread (7 per AZ). HDFS/Cassandra/Kafka → Partition.",
+    "vi": "Hiệu năng mạng → Cluster. Cô lập từng instance quan trọng → Spread (7/AZ). HDFS/Cassandra/Kafka → Partition."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.3",
+   "ref": "ebs-snapshots",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company must take daily snapshots of all EBS volumes tagged `Environment=Prod`, keep the last 14 snapshots, and keep a copy of each snapshot in a second AWS Region for disaster recovery. Which solution requires the LEAST operational overhead?",
+    "vi": "Một công ty phải tạo snapshot hằng ngày cho mọi EBS volume có tag `Environment=Prod`, giữ 14 snapshot gần nhất, và lưu một bản copy của mỗi snapshot ở một AWS Region thứ hai để phục vụ disaster recovery. Giải pháp nào có LEAST operational overhead?"
+   },
+   "o": [
+    {
+     "en": "Enable Fast Snapshot Restore in both Regions for the Prod volumes.",
+     "vi": "Bật Fast Snapshot Restore ở cả hai Region cho các volume Prod."
+    },
+    {
+     "en": "Create a Recycle Bin retention rule for snapshots tagged `Environment=Prod` in both Regions.",
+     "vi": "Tạo Recycle Bin retention rule cho snapshot có tag `Environment=Prod` ở cả hai Region."
+    },
+    {
+     "en": "Write a cron job on an EC2 instance that calls the AWS CLI every day to create snapshots, copy them to the second Region and delete those older than 14 days.",
+     "vi": "Viết cron job trên một EC2 instance gọi AWS CLI mỗi ngày để tạo snapshot, copy sang Region thứ hai và xoá các snapshot cũ hơn 14 ngày."
+    },
+    {
+     "en": "Create a Data Lifecycle Manager policy for the tag with a daily schedule, a retention count of 14 and a cross-Region copy rule.",
+     "vi": "Tạo Data Lifecycle Manager policy cho tag với lịch hằng ngày, retention count 14 và cross-Region copy rule."
+    }
+   ],
+   "a": [
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong: FSR speeds up restores; it does not create, retain or copy snapshots.",
+     "vi": "Sai: FSR tăng tốc restore, không tạo, giữ hay copy snapshot."
+    },
+    {
+     "en": "Wrong: Recycle Bin only protects deleted snapshots; it does not schedule backups.",
+     "vi": "Sai: Recycle Bin chỉ bảo vệ snapshot đã bị xoá, không lên lịch backup."
+    },
+    {
+     "en": "Wrong: works, but you must build, run and maintain the script and the instance.",
+     "vi": "Sai: chạy được nhưng phải tự viết, vận hành và bảo trì script lẫn instance."
+    },
+    {
+     "en": "Correct: DLM handles tag-based scheduling, retention and cross-Region copy natively.",
+     "vi": "Đúng: DLM tự xử lý lên lịch theo tag, retention và copy cross-Region."
+    }
+   ],
+   "ex": {
+    "en": "Automated, tag-based EBS snapshot schedules with retention and cross-Region copies (up to 3 Regions) → Data Lifecycle Manager.",
+    "vi": "Lịch snapshot EBS tự động theo tag, có retention và copy cross-Region (tối đa 3 Region) → Data Lifecycle Manager."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.1",
+   "ref": "cw-agent",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company runs several applications on each EC2 instance. Operations needs CloudWatch metrics for the CPU and memory usage of one specific Java process, selected by its process name, so that they can alarm when that process misbehaves. Which solution meets this requirement?",
+    "vi": "Một công ty chạy nhiều ứng dụng trên mỗi EC2 instance. Bộ phận vận hành cần CloudWatch metric về CPU và bộ nhớ của riêng một process Java, chọn theo tên process, để đặt alarm khi process đó hoạt động bất thường. Giải pháp nào đáp ứng yêu cầu?"
+   },
+   "o": [
+    {
+     "en": "Ship the application log to CloudWatch Logs and create a metric filter on the word `java`.",
+     "vi": "Đẩy log ứng dụng lên CloudWatch Logs và tạo metric filter trên chữ `java`."
+    },
+    {
+     "en": "Configure the `procstat` plugin of the unified CloudWatch agent to monitor the process by name.",
+     "vi": "Cấu hình plugin `procstat` của unified CloudWatch agent để theo dõi process theo tên."
+    },
+    {
+     "en": "Enable the StatsD listener in the agent and alarm on the instance-level CPU metrics it produces.",
+     "vi": "Bật StatsD listener trong agent và đặt alarm trên metric CPU cấp instance mà nó tạo ra."
+    },
+    {
+     "en": "Enable detailed monitoring so that `CPUUtilization` is reported for each process every minute.",
+     "vi": "Bật detailed monitoring để `CPUUtilization` được báo cho từng process mỗi phút."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "A metric filter counts log matches; it cannot measure CPU or memory consumption.",
+     "vi": "Metric filter chỉ đếm số lần khớp trong log; không đo được CPU hay bộ nhớ."
+    },
+    {
+     "en": "Correct. `procstat` collects per-process metrics (e.g. `procstat_cpu_usage`) selected by PID file, name or pattern.",
+     "vi": "Đúng. `procstat` thu metric theo từng process (vd `procstat_cpu_usage`), chọn theo PID file, tên hoặc pattern."
+    },
+    {
+     "en": "StatsD only receives metrics that the application itself emits; it does not measure a process's CPU and memory.",
+     "vi": "StatsD chỉ nhận metric do ứng dụng tự gửi; nó không đo CPU và bộ nhớ của một process."
+    },
+    {
+     "en": "Detailed monitoring is still instance-level; it has no per-process breakdown.",
+     "vi": "Detailed monitoring vẫn ở mức instance; không chia theo process."
+    }
+   ],
+   "ex": {
+    "en": "Per-process metrics on Linux or Windows → unified CloudWatch agent with the `procstat` plugin (metrics prefixed `procstat_`).",
+    "vi": "Metric theo từng process trên Linux hoặc Windows → unified CloudWatch agent với plugin `procstat` (metric có prefix `procstat_`)."
+   }
+  },
+  {
+   "d": 5,
+   "task": "5.1",
+   "ref": "nlb",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company exposes a TCP-based trading API to partners. The partners' firewalls only allow outbound traffic to a short list of fixed IP addresses that the company provides. The API runs on EC2 instances in two Availability Zones and must scale. Which solution meets these requirements?",
+    "vi": "Một công ty cung cấp API giao dịch chạy TCP cho đối tác. Firewall của đối tác chỉ cho traffic đi ra tới một danh sách ngắn các IP cố định do công ty cung cấp. API chạy trên EC2 ở 2 Availability Zone và phải scale được. Giải pháp nào đáp ứng yêu cầu?"
+   },
+   "o": [
+    {
+     "en": "Deploy an Application Load Balancer and give partners the IP addresses its DNS name resolves to.",
+     "vi": "Deploy Application Load Balancer và đưa cho đối tác các IP mà DNS name của nó resolve ra."
+    },
+    {
+     "en": "Deploy a Network Load Balancer and assign an Elastic IP address to it in each Availability Zone.",
+     "vi": "Deploy Network Load Balancer và gán một Elastic IP cho nó ở mỗi Availability Zone."
+    },
+    {
+     "en": "Assign an Elastic IP address to each EC2 instance and give all of them to the partners.",
+     "vi": "Gán Elastic IP cho từng EC2 instance và đưa tất cả cho đối tác."
+    },
+    {
+     "en": "Deploy a Gateway Load Balancer with Elastic IP addresses in front of the instances.",
+     "vi": "Deploy Gateway Load Balancer có Elastic IP đứng trước các instance."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "Wrong. An ALB only offers a fixed DNS name; its IP addresses can change over time.",
+     "vi": "Sai. ALB chỉ có DNS name cố định; IP của nó có thể thay đổi theo thời gian."
+    },
+    {
+     "en": "Correct. An NLB has one static IP per AZ and can use Elastic IPs, giving partners fixed addresses to allowlist.",
+     "vi": "Đúng. NLB có một static IP mỗi AZ và gán được Elastic IP, cho đối tác các địa chỉ cố định để allowlist."
+    },
+    {
+     "en": "Wrong. Instances added by scaling would get new addresses, and there is no load balancing or health checking.",
+     "vi": "Sai. Instance mới khi scale sẽ có địa chỉ mới, và không có load balancing hay health check."
+    },
+    {
+     "en": "Wrong. GWLB is for third-party virtual appliances (GENEVE), not for exposing an application.",
+     "vi": "Sai. GWLB dành cho virtual appliance bên thứ ba (GENEVE), không dùng để expose ứng dụng."
+    }
+   ],
+   "ex": {
+    "en": "\"Reachable through a few fixed IPs\", TCP/UDP or extreme performance → NLB with an Elastic IP per AZ.",
+    "vi": "\"Truy cập qua vài IP cố định\", TCP/UDP hoặc hiệu năng cực cao → NLB với Elastic IP mỗi AZ."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.1",
+   "ref": "elb-monitoring",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company runs a web tier behind a Classic Load Balancer. During traffic spikes, some client requests are rejected outright because the load balancer's queue is full. The operations team wants a CloudWatch alarm that fires as soon as any request is rejected for this reason. Which metric should the alarm use?",
+    "vi": "Một công ty chạy web tier sau Classic Load Balancer. Khi traffic tăng đột biến, một số request của client bị từ chối thẳng vì hàng đợi của load balancer đã đầy. Team vận hành muốn một CloudWatch alarm kích hoạt ngay khi có bất kỳ request nào bị từ chối vì lý do này. Alarm nên dùng metric nào?"
+   },
+   "o": [
+    {
+     "en": "`SpilloverCount` with a threshold of greater than 0",
+     "vi": "`SpilloverCount` với ngưỡng lớn hơn 0"
+    },
+    {
+     "en": "`UnHealthyHostCount` with a threshold of greater than 0",
+     "vi": "`UnHealthyHostCount` với ngưỡng lớn hơn 0"
+    },
+    {
+     "en": "`SurgeQueueLength` with a threshold of greater than 0",
+     "vi": "`SurgeQueueLength` với ngưỡng lớn hơn 0"
+    },
+    {
+     "en": "`RequestCount` with a threshold based on the normal peak",
+     "vi": "`RequestCount` với ngưỡng dựa trên mức đỉnh bình thường"
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct. SpilloverCount counts requests rejected because the surge queue is full; it should always be 0.",
+     "vi": "Đúng. SpilloverCount đếm request bị từ chối do surge queue đầy; giá trị luôn phải bằng 0."
+    },
+    {
+     "en": "It counts failing targets, not rejected requests.",
+     "vi": "Metric này đếm target lỗi, không phải request bị từ chối."
+    },
+    {
+     "en": "It counts requests waiting in the queue, not requests that were rejected; it rises before any loss occurs.",
+     "vi": "Metric này đếm request đang chờ trong hàng đợi, không phải request bị từ chối; nó tăng trước khi mất request."
+    },
+    {
+     "en": "It measures volume, not whether requests were dropped.",
+     "vi": "Metric này đo lượng request, không cho biết request có bị bỏ hay không."
+    }
+   ],
+   "ex": {
+    "en": "`SurgeQueueLength` = requests waiting (keep near 0); `SpilloverCount` = requests rejected because the queue is full (must be 0; > 0 means clients are losing requests → scale the backend).",
+    "vi": "`SurgeQueueLength` = request đang chờ (giữ gần 0); `SpilloverCount` = request bị từ chối vì hàng đợi đầy (phải bằng 0; > 0 là client đang mất request → scale backend)."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.3",
+   "ref": "storage-gateway-ops",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company uses an AWS Storage Gateway Volume Gateway in cached mode. Users complain that reading files is slow. CloudWatch shows `CacheHitPercent` at about 30% and `CachePercentUsed` near 100%. What should a CloudOps engineer do to improve read performance?",
+    "vi": "Một công ty dùng AWS Storage Gateway Volume Gateway ở cached mode. Người dùng phàn nàn đọc file chậm. CloudWatch cho thấy `CacheHitPercent` khoảng 30% và `CachePercentUsed` gần 100%. CloudOps engineer nên làm gì để cải thiện hiệu năng đọc?"
+   },
+   "o": [
+    {
+     "en": "Enable S3 Transfer Acceleration on the bucket that stores the gateway's volume data.",
+     "vi": "Bật S3 Transfer Acceleration trên bucket lưu dữ liệu volume của gateway."
+    },
+    {
+     "en": "Synchronize the gateway VM clock with an NTP server.",
+     "vi": "Đồng bộ đồng hồ gateway VM với NTP server."
+    },
+    {
+     "en": "Stop the Storage Gateway service, reboot the gateway VM, and start the service again.",
+     "vi": "Stop Storage Gateway service, reboot gateway VM rồi start lại service."
+    },
+    {
+     "en": "Add a new local disk to the gateway VM and allocate it as cache storage.",
+     "vi": "Thêm một local disk mới vào gateway VM và allocate nó làm cache storage."
+    }
+   ],
+   "a": [
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong: Transfer Acceleration is for clients uploading to S3 over long distances; the gateway manages its own S3 storage, and the problem is cache misses.",
+     "vi": "Sai: Transfer Acceleration dành cho client upload lên S3 qua khoảng cách xa; gateway tự quản lý storage S3 của nó, và vấn đề ở đây là cache miss."
+    },
+    {
+     "en": "NTP sync is a fix for activation failures, not for a low cache hit rate.",
+     "vi": "Đồng bộ NTP dùng để xử lý lỗi activation, không phải hit rate thấp."
+    },
+    {
+     "en": "This is the correct reboot procedure, but a reboot does not make the cache any bigger.",
+     "vi": "Đây là quy trình reboot đúng, nhưng reboot không làm cache lớn hơn."
+    },
+    {
+     "en": "Correct. A low hit rate with a full cache means too many reads miss and are fetched from S3. Add new disks as cache (existing cache disks must not be resized or removed).",
+     "vi": "Đúng. Hit rate thấp kèm cache đầy nghĩa là nhiều lần đọc bị miss và phải kéo từ S3. Thêm disk mới làm cache (không được resize hay gỡ cache disk đang dùng)."
+    }
+   ],
+   "ex": {
+    "en": "Cached Volume Gateway: keep `CacheHitPercent` high and `CachePercentUsed` not too high. Low hit rate → add cache capacity (new disk allocated as cache, e.g. Configure cache storage / `AddCache`).",
+    "vi": "Volume Gateway cached: giữ `CacheHitPercent` cao và `CachePercentUsed` không quá cao. Hit rate thấp → tăng dung lượng cache (thêm disk mới allocate làm cache, vd Configure cache storage / `AddCache`)."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.1",
+   "ref": "image-builder",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company needs a hardened golden AMI rebuilt every week from the latest Amazon Linux image. Each build must install the AWS CLI and a Java runtime, run automated tests, and make the AMI available in three AWS Regions. Which solution provides this with the LEAST operational overhead?",
+    "vi": "Một công ty cần build lại golden AMI đã hardening mỗi tuần từ image Amazon Linux mới nhất. Mỗi lần build phải cài AWS CLI và Java runtime, chạy test tự động và đưa AMI sang ba AWS Region. Giải pháp nào ít công vận hành NHẤT?"
+   },
+   "o": [
+    {
+     "en": "Create an SSM State Manager association that installs the software on all instances every week.",
+     "vi": "Tạo SSM State Manager association cài phần mềm lên mọi instance mỗi tuần."
+    },
+    {
+     "en": "Write a cron job on an EC2 instance that installs the software, calls `CreateImage`, and then runs `CopyImage` to each Region.",
+     "vi": "Viết cron job trên một EC2 instance để cài phần mềm, gọi `CreateImage` rồi chạy `CopyImage` sang từng Region."
+    },
+    {
+     "en": "Use AWS Backup with a weekly backup plan for a reference instance and a copy rule that copies each recovery point to the other two Regions.",
+     "vi": "Dùng AWS Backup với backup plan hằng tuần cho một instance mẫu và copy rule copy mỗi recovery point sang hai Region còn lại."
+    },
+    {
+     "en": "Create an EC2 Image Builder pipeline on a weekly schedule with build and test components and distribution to the three Regions.",
+     "vi": "Tạo EC2 Image Builder pipeline chạy hằng tuần với build và test component, phân phối tới ba Region."
+    }
+   ],
+   "a": [
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong: State Manager configures running instances; it does not produce, test or distribute AMIs.",
+     "vi": "Sai: State Manager cấu hình instance đang chạy; không tạo, test hay phân phối AMI."
+    },
+    {
+     "en": "Wrong: works but is fully custom, with no built-in testing and more to maintain.",
+     "vi": "Sai: chạy được nhưng tự viết toàn bộ, không có test sẵn và tốn công bảo trì."
+    },
+    {
+     "en": "Wrong: AWS Backup copies an existing instance; it does not install software or run tests from a fresh base image.",
+     "vi": "Sai: AWS Backup sao lưu instance có sẵn; không cài phần mềm hay chạy test từ base image mới."
+    },
+    {
+     "en": "Correct: Image Builder is the managed build → test → distribute pipeline, including multi-Region distribution.",
+     "vi": "Đúng: Image Builder là pipeline managed build → test → distribute, hỗ trợ phân phối nhiều Region."
+    }
+   ],
+   "ex": {
+    "en": "\"Automate building, testing and distributing AMIs\" on a schedule → EC2 Image Builder (recipe + components + distribution settings).",
+    "vi": "\"Tự động build, test và phân phối AMI\" theo lịch → EC2 Image Builder (recipe + component + distribution settings)."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.2",
+   "ref": "inventory-state",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "An auditor asks a company for a report of all software installed on its 3,000 managed EC2 instances and on-premises servers. The security team wants to run SQL queries against this data on a recurring basis. Which solution meets these requirements with the LEAST operational overhead?",
+    "vi": "Kiểm toán viên yêu cầu công ty báo cáo toàn bộ phần mềm đã cài trên 3.000 managed EC2 instance và server on-premises. Đội security muốn chạy truy vấn SQL trên dữ liệu này định kỳ. Giải pháp nào ít công vận hành NHẤT?"
+   },
+   "o": [
+    {
+     "en": "Enable SSM Inventory, configure a Resource Data Sync to an S3 bucket, and query the data with Amazon Athena.",
+     "vi": "Bật SSM Inventory, cấu hình Resource Data Sync về một S3 bucket và truy vấn bằng Amazon Athena."
+    },
+    {
+     "en": "Use SSM Run Command to run a package-listing script on every server and read the results in the console.",
+     "vi": "Dùng SSM Run Command chạy script liệt kê package trên mọi server và đọc kết quả trên console."
+    },
+    {
+     "en": "Enable S3 Inventory on the company's buckets and query the reports with Amazon Athena.",
+     "vi": "Bật S3 Inventory trên các bucket của công ty và truy vấn report bằng Amazon Athena."
+    },
+    {
+     "en": "Create a State Manager association that uninstalls unapproved software every day.",
+     "vi": "Tạo State Manager association gỡ phần mềm không được phép mỗi ngày."
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct: Inventory collects installed software; Resource Data Sync exports it to S3 for Athena SQL queries.",
+     "vi": "Đúng: Inventory thu thập phần mềm đã cài; Resource Data Sync xuất ra S3 để Athena truy vấn SQL."
+    },
+    {
+     "en": "Wrong: one-off, output is truncated in the console, and it is not queryable with SQL.",
+     "vi": "Sai: chỉ chạy một lần, output bị cắt trên console và không truy vấn SQL được."
+    },
+    {
+     "en": "Wrong: S3 Inventory lists S3 objects, not software installed on servers.",
+     "vi": "Sai: S3 Inventory liệt kê object S3, không phải phần mềm cài trên server."
+    },
+    {
+     "en": "Wrong: this enforces state but does not produce the requested report.",
+     "vi": "Sai: cách này áp trạng thái nhưng không tạo báo cáo được yêu cầu."
+    }
+   ],
+   "ex": {
+    "en": "\"List installed software across all instances and query with SQL\" → SSM Inventory + Resource Data Sync (S3, bucket policy for SSM) + Athena.",
+    "vi": "\"Liệt kê phần mềm đã cài trên mọi instance, truy vấn SQL\" → SSM Inventory + Resource Data Sync (S3, bucket policy cho SSM) + Athena."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.3",
+   "ref": "ebs",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A database runs on a 500 GiB gp2 EBS volume and is limited by its baseline of 1,500 IOPS. The workload needs a sustained 6,000 IOPS, but the data will not grow beyond 500 GiB. Which solution is the MOST cost-effective?",
+    "vi": "Một database chạy trên EBS volume gp2 500 GiB và đang bị giới hạn bởi baseline 1,500 IOPS. Workload cần ổn định 6,000 IOPS, nhưng dữ liệu sẽ không vượt quá 500 GiB. Giải pháp nào TIẾT KIỆM CHI PHÍ NHẤT?"
+   },
+   "o": [
+    {
+     "en": "Modify the volume to st1 to get higher throughput at a lower price.",
+     "vi": "Modify volume sang st1 để có throughput cao hơn với giá thấp hơn."
+    },
+    {
+     "en": "Modify the volume to gp3 and provision 6,000 IOPS without changing the size.",
+     "vi": "Modify volume sang gp3 và provision 6,000 IOPS mà không đổi dung lượng."
+    },
+    {
+     "en": "Modify the volume to io1 and provision 6,000 IOPS.",
+     "vi": "Modify volume sang io1 và provision 6,000 IOPS."
+    },
+    {
+     "en": "Increase the gp2 volume to 2,000 GiB to reach 6,000 IOPS at 3 IOPS per GB.",
+     "vi": "Tăng volume gp2 lên 2,000 GiB để đạt 6,000 IOPS theo tỉ lệ 3 IOPS/GB."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "st1 is HDD optimized for sequential throughput with only 500 IOPS — unsuitable for a database.",
+     "vi": "st1 là HDD tối ưu throughput tuần tự, chỉ 500 IOPS — không phù hợp cho database."
+    },
+    {
+     "en": "Correct. gp3 sets IOPS independently of size, so you don't pay for unused capacity.",
+     "vi": "Đúng. gp3 đặt IOPS độc lập với dung lượng, nên không phải trả tiền cho dung lượng thừa."
+    },
+    {
+     "en": "It meets the IOPS need but provisioned IOPS SSD costs more than gp3 at this level.",
+     "vi": "Đáp ứng IOPS nhưng Provisioned IOPS SSD đắt hơn gp3 ở mức này."
+    },
+    {
+     "en": "It works, but you pay for 1,500 GiB of unneeded storage.",
+     "vi": "Cách này được nhưng phải trả tiền cho 1,500 GiB không cần dùng."
+    }
+   ],
+   "ex": {
+    "en": "gp2 IOPS are tied to size (3 IOPS/GB); gp3 lets you raise IOPS and throughput independently of size — the usual answer for 'more IOPS without more storage'.",
+    "vi": "IOPS của gp2 gắn với dung lượng (3 IOPS/GB); gp3 cho tăng IOPS và throughput độc lập với dung lượng — đáp án thường gặp cho 'thêm IOPS mà không thêm dung lượng'."
+   }
+  },
+  {
+   "d": 4,
+   "task": "4.2",
+   "ref": "s3-encryption",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A financial company stores reports in S3. Compliance requires that the company controls which IAM principals can use the encryption key, can audit every use of the key, and can rotate the key. The company does not want to manage encryption code or key material outside AWS. Which encryption option should a CloudOps engineer choose?",
+    "vi": "Một công ty tài chính lưu báo cáo trên S3. Compliance yêu cầu công ty kiểm soát IAM principal nào được dùng encryption key, audit được mọi lần dùng key và xoay vòng được key. Công ty không muốn tự quản lý code mã hoá hay key material ngoài AWS. CloudOps engineer nên chọn phương án mã hoá nào?"
+   },
+   "o": [
+    {
+     "en": "SSE-C with keys supplied in each request.",
+     "vi": "SSE-C với key gửi kèm mỗi request."
+    },
+    {
+     "en": "SSE-S3 with the S3-owned key.",
+     "vi": "SSE-S3 với key do S3 sở hữu."
+    },
+    {
+     "en": "SSE-KMS with a customer managed KMS key.",
+     "vi": "SSE-KMS với customer managed KMS key."
+    },
+    {
+     "en": "Client-side encryption with the Amazon S3 Encryption Client.",
+     "vi": "Client-side encryption bằng Amazon S3 Encryption Client."
+    }
+   ],
+   "a": [
+    2
+   ],
+   "why": [
+    {
+     "en": "Wrong: SSE-C means the company manages keys outside AWS and must send them on every request.",
+     "vi": "Sai: SSE-C nghĩa là công ty tự quản lý key ngoài AWS và phải gửi key ở mỗi request."
+    },
+    {
+     "en": "Wrong: AWS fully manages the S3-owned key; the company cannot control or audit its usage.",
+     "vi": "Sai: key do S3 sở hữu hoàn toàn do AWS quản lý; công ty không kiểm soát hay audit được việc dùng key."
+    },
+    {
+     "en": "Correct: a customer managed key lets the company control key usage through policies, audit every use in CloudTrail and rotate the key.",
+     "vi": "Đúng: customer managed key cho phép kiểm soát quyền dùng key qua policy, audit mọi lần dùng qua CloudTrail và xoay vòng key."
+    },
+    {
+     "en": "Wrong: client-side encryption requires the company to run encryption code and manage keys itself.",
+     "vi": "Sai: client-side encryption buộc công ty tự chạy code mã hoá và tự quản lý key."
+    }
+   ],
+   "ex": {
+    "en": "\"Control who uses the key / audit key usage / rotate keys\" → SSE-KMS with a customer managed key. \"AWS manages everything\" → SSE-S3.",
+    "vi": "\"Kiểm soát ai dùng key / audit / xoay vòng key\" → SSE-KMS với customer managed key. \"AWS lo hết\" → SSE-S3."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.1",
+   "ref": "asg-scaling",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "An online retailer runs its web tier in an Auto Scaling group. Marketing has announced a flash sale that starts every Friday at 18:00 and lasts 4 hours. During the first minutes of past sales, the dynamic scaling policy reacted too slowly and customers saw errors. What should a CloudOps engineer do to handle this load with the LEAST operational overhead?",
+    "vi": "Một nhà bán lẻ online chạy web tier trong một Auto Scaling group. Bộ phận marketing thông báo một đợt flash sale bắt đầu lúc 18:00 mỗi thứ Sáu và kéo dài 4 giờ. Ở những phút đầu của các đợt sale trước, dynamic scaling policy phản ứng quá chậm và khách hàng gặp lỗi. CloudOps engineer nên làm gì để xử lý tải này với LEAST operational overhead?"
+   },
+   "o": [
+    {
+     "en": "Lower the target value of the existing target tracking policy from 40% CPU to 10% CPU permanently.",
+     "vi": "Giảm vĩnh viễn target value của target tracking policy hiện có từ 40% CPU xuống 10% CPU."
+    },
+    {
+     "en": "Create recurring scheduled actions that raise the minimum and desired capacity before 18:00 each Friday and restore them afterward.",
+     "vi": "Tạo các scheduled action lặp lại để tăng minimum và desired capacity trước 18:00 mỗi thứ Sáu và trả về như cũ sau đó."
+    },
+    {
+     "en": "Increase the scaling cooldown period to 900 seconds so the group keeps instances longer after each scale-out.",
+     "vi": "Tăng scaling cooldown lên 900 giây để group giữ instance lâu hơn sau mỗi lần scale out."
+    },
+    {
+     "en": "Create an Amazon EventBridge rule that invokes a Lambda function every Friday to launch EC2 instances outside the Auto Scaling group.",
+     "vi": "Tạo Amazon EventBridge rule gọi Lambda function mỗi thứ Sáu để launch EC2 instance bên ngoài Auto Scaling group."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "Wrong: this over-provisions all week and still reacts only after load arrives.",
+     "vi": "Sai: cách này over-provision cả tuần và vẫn chỉ phản ứng sau khi tải đã tới."
+    },
+    {
+     "en": "Correct: the load is a known, recurring event, so a scheduled action pre-provisions capacity before traffic arrives.",
+     "vi": "Đúng: tải là sự kiện biết trước và lặp lại, nên scheduled action chuẩn bị sẵn capacity trước khi traffic tới."
+    },
+    {
+     "en": "Wrong: a longer cooldown delays further scaling; it does not add capacity before the sale starts.",
+     "vi": "Sai: cooldown dài hơn chỉ làm chậm các lần scale tiếp theo, không thêm capacity trước khi sale bắt đầu."
+    },
+    {
+     "en": "Wrong: instances outside the ASG are not managed, health-checked or registered automatically; more custom work.",
+     "vi": "Sai: instance ngoài ASG không được quản lý, health check hay tự đăng ký vào LB; tốn công tự viết."
+    }
+   ],
+   "ex": {
+    "en": "Known, scheduled events → scheduled action (set min/desired/max ahead of time). Dynamic policies react only after metrics change.",
+    "vi": "Sự kiện biết trước theo lịch → scheduled action (đặt min/desired/max trước). Dynamic policy chỉ phản ứng sau khi metric thay đổi."
+   }
+  },
+  {
+   "d": 5,
+   "task": "5.1",
+   "ref": "cross-zone",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A Network Load Balancer with default settings distributes traffic to targets in two Availability Zones. AZ-a has 2 instances and AZ-b has 8 instances. Monitoring shows the 2 instances in AZ-a run at very high CPU while those in AZ-b are mostly idle. What should a CloudOps engineer do to distribute requests evenly across all instances?",
+    "vi": "Một Network Load Balancer với cấu hình mặc định phân phối traffic tới target ở 2 Availability Zone. AZ-a có 2 instance, AZ-b có 8 instance. Monitoring cho thấy 2 instance ở AZ-a có CPU rất cao trong khi các instance ở AZ-b gần như nhàn rỗi. CloudOps engineer cần làm gì để chia đều request cho tất cả instance?"
+   },
+   "o": [
+    {
+     "en": "Enable sticky sessions on the target group.",
+     "vi": "Bật sticky sessions trên target group."
+    },
+    {
+     "en": "Increase the deregistration delay on the target group.",
+     "vi": "Tăng deregistration delay của target group."
+    },
+    {
+     "en": "Enable cross-zone load balancing on the NLB, accepting inter-AZ data transfer charges.",
+     "vi": "Bật cross-zone load balancing trên NLB, chấp nhận phí truyền dữ liệu inter-AZ."
+    },
+    {
+     "en": "Change the target group routing algorithm to Least Outstanding Requests.",
+     "vi": "Đổi routing algorithm của target group sang Least Outstanding Requests."
+    }
+   ],
+   "a": [
+    2
+   ],
+   "why": [
+    {
+     "en": "Wrong. Stickiness keeps clients on the same target and can make imbalance worse.",
+     "vi": "Sai. Stickiness giữ client ở cùng target và có thể làm mất cân bằng nặng hơn."
+    },
+    {
+     "en": "Wrong. Deregistration delay only affects in-flight requests on targets being removed.",
+     "vi": "Sai. Deregistration delay chỉ ảnh hưởng request đang chạy trên target bị gỡ."
+    },
+    {
+     "en": "Correct. Cross-zone is off by default on NLB, so each AZ node splits only among its own targets; enabling it spreads traffic across all 10 instances (inter-AZ data is charged).",
+     "vi": "Đúng. Cross-zone mặc định tắt trên NLB nên mỗi node AZ chỉ chia cho target trong AZ của nó; bật lên thì traffic trải đều 10 instance (có tính phí data inter-AZ)."
+    },
+    {
+     "en": "Wrong. Least Outstanding Requests is an ALB/CLB algorithm; NLB uses flow hash and the imbalance is per AZ anyway.",
+     "vi": "Sai. Least Outstanding Requests là thuật toán của ALB/CLB; NLB dùng flow hash, và mất cân bằng ở đây là theo AZ."
+    }
+   ],
+   "ex": {
+    "en": "Uneven instance counts per AZ overload the smaller AZ → enable cross-zone load balancing. Default: ALB on (free); NLB/GWLB off (inter-AZ data charged when enabled).",
+    "vi": "Số instance mỗi AZ lệch nhau làm AZ ít instance quá tải → bật cross-zone load balancing. Mặc định: ALB bật (miễn phí); NLB/GWLB tắt (tính phí data inter-AZ khi bật)."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.1",
+   "ref": "storage-gateway",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "A company has on-premises Linux servers that must store files in Amazon S3 using NFS. Recently used files must be served with low latency from on premises. Files older than 180 days must be archived at the lowest cost. Which combination of actions meets these requirements?",
+    "vi": "Một công ty có server Linux on-premises cần lưu file vào Amazon S3 qua NFS. File dùng gần đây phải được phục vụ với độ trễ thấp tại on-premises. File cũ hơn 180 ngày phải được lưu trữ với chi phí thấp nhất. Kết hợp hành động nào đáp ứng yêu cầu?"
+   },
+   "o": [
+    {
+     "en": "Add an S3 Lifecycle rule that transitions objects to an S3 Glacier storage class after 180 days.",
+     "vi": "Thêm S3 Lifecycle rule chuyển object sang storage class S3 Glacier sau 180 ngày."
+    },
+    {
+     "en": "Deploy a Tape Gateway and configure the backup software to eject tapes after 180 days.",
+     "vi": "Triển khai Tape Gateway và cấu hình phần mềm backup eject tape sau 180 ngày."
+    },
+    {
+     "en": "Deploy a Volume Gateway in stored volume mode and present iSCSI volumes to the servers.",
+     "vi": "Triển khai Volume Gateway ở chế độ stored volume và cấp iSCSI volume cho server."
+    },
+    {
+     "en": "Deploy an S3 File Gateway on premises and mount its NFS file share on the servers.",
+     "vi": "Triển khai S3 File Gateway tại on-premises và mount NFS file share của nó trên các server."
+    },
+    {
+     "en": "Configure the file share to write new objects directly to the S3 Glacier Deep Archive storage class.",
+     "vi": "Cấu hình file share ghi object mới trực tiếp vào storage class S3 Glacier Deep Archive."
+    }
+   ],
+   "a": [
+    0,
+    3
+   ],
+   "why": [
+    {
+     "en": "Correct: File Gateway cannot write to Glacier directly; lifecycle rules archive the objects.",
+     "vi": "Đúng: File Gateway không ghi trực tiếp vào Glacier; dùng lifecycle rule để archive object."
+    },
+    {
+     "en": "Wrong: Tape Gateway replaces physical tapes for backup software; it is not an NFS file share.",
+     "vi": "Sai: Tape Gateway thay băng từ cho phần mềm backup; không phải NFS file share."
+    },
+    {
+     "en": "Wrong: Volume Gateway provides block storage over iSCSI, not NFS file access to S3 objects.",
+     "vi": "Sai: Volume Gateway cung cấp block storage qua iSCSI, không phải truy cập file NFS tới object S3."
+    },
+    {
+     "en": "Correct: S3 File Gateway exposes S3 over NFS/SMB and caches recently used data locally.",
+     "vi": "Đúng: S3 File Gateway cung cấp S3 qua NFS/SMB và cache dữ liệu dùng gần đây tại chỗ."
+    },
+    {
+     "en": "Wrong: S3 File Gateway supports Standard, Standard-IA, One Zone-IA and Intelligent-Tiering, not Glacier directly.",
+     "vi": "Sai: S3 File Gateway hỗ trợ Standard, Standard-IA, One Zone-IA và Intelligent-Tiering, không ghi Glacier trực tiếp."
+    }
+   ],
+   "ex": {
+    "en": "On-premises access to S3 over NFS/SMB with a local cache → S3 File Gateway. Archive to Glacier with an S3 Lifecycle rule, not directly from the gateway.",
+    "vi": "On-prem truy cập S3 qua NFS/SMB có cache tại chỗ → S3 File Gateway. Archive sang Glacier bằng S3 Lifecycle rule, không ghi trực tiếp từ gateway."
+   }
+  },
+  {
+   "d": 5,
+   "task": "5.1",
+   "ref": "s3-vpc-endpoints",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "EC2 instances in a private subnet with no internet gateway or NAT gateway must upload large daily reports to an Amazon S3 bucket in the same Region. Traffic must not traverse the internet. Which solution is the MOST cost-effective?",
+    "vi": "Các EC2 instance trong private subnet không có internet gateway hay NAT gateway phải upload báo cáo lớn hằng ngày lên một S3 bucket cùng region. Traffic không được đi qua internet. Giải pháp nào tiết kiệm chi phí NHẤT?"
+   },
+   "o": [
+    {
+     "en": "Add a NAT gateway in a public subnet and route S3 traffic through it.",
+     "vi": "Thêm NAT gateway ở public subnet và route traffic S3 qua đó."
+    },
+    {
+     "en": "Create an S3 interface endpoint in each Availability Zone used by the instances.",
+     "vi": "Tạo S3 interface endpoint ở mỗi Availability Zone mà instance đang dùng."
+    },
+    {
+     "en": "Create an S3 gateway endpoint and associate it with the private subnet's route table.",
+     "vi": "Tạo S3 gateway endpoint và gắn nó vào route table của private subnet."
+    },
+    {
+     "en": "Enable S3 Transfer Acceleration on the bucket.",
+     "vi": "Bật S3 Transfer Acceleration trên bucket."
+    }
+   ],
+   "a": [
+    2
+   ],
+   "why": [
+    {
+     "en": "Wrong. Traffic would go to the public S3 endpoint over the internet path, and NAT data processing costs money.",
+     "vi": "Sai. Traffic sẽ tới endpoint public của S3 qua đường internet, và NAT tính phí xử lý data."
+    },
+    {
+     "en": "Wrong. It works privately, but interface endpoints are billed per hour per AZ plus data processed.",
+     "vi": "Sai. Cách này riêng tư được, nhưng interface endpoint tính phí theo giờ mỗi AZ cộng phí data."
+    },
+    {
+     "en": "Correct. A gateway endpoint adds an S3 prefix-list route to the route table and has no hourly or data charge.",
+     "vi": "Đúng. Gateway endpoint thêm route prefix list S3 vào route table và không tính phí theo giờ hay theo data."
+    },
+    {
+     "en": "Wrong. Transfer Acceleration speeds uploads over the internet; it does not provide private connectivity.",
+     "vi": "Sai. Transfer Acceleration tăng tốc upload qua internet; không cung cấp kết nối riêng tư."
+    }
+   ],
+   "ex": {
+    "en": "Private subnet → S3 (or DynamoDB) at the lowest cost → gateway endpoint (route-table entry, free).",
+    "vi": "Private subnet → S3 (hoặc DynamoDB) với chi phí thấp nhất → gateway endpoint (một entry trong route table, miễn phí)."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.2",
+   "ref": "cross-zone",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "An Application Load Balancer is enabled in three Availability Zones, and each AZ has the same number of targets in every target group. For one latency-sensitive target group, the team wants each load balancer node to send requests only to targets in its own AZ, so that an impaired AZ cannot affect targets in the other AZs. The other target groups must keep their current behavior. What should a CloudOps engineer do?",
+    "vi": "Một Application Load Balancer được bật ở ba Availability Zone, và mỗi AZ có số target như nhau trong mọi target group. Với một target group nhạy cảm về latency, đội muốn mỗi node của load balancer chỉ gửi request tới target trong chính AZ của nó, để một AZ gặp sự cố không ảnh hưởng tới target ở các AZ khác. Các target group còn lại phải giữ nguyên hành vi hiện tại. CloudOps engineer nên làm gì?"
+   },
+   "o": [
+    {
+     "en": "Turn off cross-zone load balancing in the load balancer attributes, then turn it back on in the attributes of every other target group.",
+     "vi": "Tắt cross-zone load balancing trong attribute của load balancer, rồi bật lại trong attribute của mọi target group khác."
+    },
+    {
+     "en": "Turn off cross-zone load balancing in the attributes of that target group.",
+     "vi": "Tắt cross-zone load balancing trong attribute của target group đó."
+    },
+    {
+     "en": "Replace the ALB with a Network Load Balancer, because only NLB and GWLB allow cross-zone load balancing to be turned off.",
+     "vi": "Thay ALB bằng Network Load Balancer, vì chỉ NLB và GWLB cho phép tắt cross-zone load balancing."
+    },
+    {
+     "en": "Enable duration-based sticky sessions on that target group so that clients stay on targets in the AZ where their requests entered.",
+     "vi": "Bật duration-based sticky sessions trên target group đó để client luôn ở lại target trong AZ mà request đi vào."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "Wrong: on an ALB, cross-zone load balancing is always on at the load balancer level and cannot be turned off there.",
+     "vi": "Sai: với ALB, cross-zone load balancing luôn bật ở mức load balancer và không tắt được ở đó."
+    },
+    {
+     "en": "Correct: ALB target groups inherit the LB setting by default but can override it; setting `load_balancing.cross_zone.enabled` to false affects only that target group.",
+     "vi": "Đúng: target group của ALB mặc định kế thừa thiết lập của LB nhưng có thể override; đặt `load_balancing.cross_zone.enabled` = false chỉ ảnh hưởng target group đó."
+    },
+    {
+     "en": "Wrong: ALB target groups can also turn cross-zone off, and moving to layer 4 would lose the HTTP routing features.",
+     "vi": "Sai: target group của ALB cũng tắt được cross-zone, và chuyển sang layer 4 sẽ mất các tính năng routing HTTP."
+    },
+    {
+     "en": "Wrong: stickiness pins a client to one target, not to an AZ, and it is not supported when cross-zone load balancing is off.",
+     "vi": "Sai: stickiness gắn client vào một target chứ không phải một AZ, và không được hỗ trợ khi tắt cross-zone load balancing."
+    }
+   ],
+   "ex": {
+    "en": "ALB: cross-zone is always on at the LB level, but each target group can override it (inherit / on / off). Turning it off keeps traffic zonal; plan enough targets in every AZ, and note stickiness is not supported then.",
+    "vi": "ALB: cross-zone luôn bật ở mức LB, nhưng từng target group có thể override (inherit / on / off). Tắt đi thì traffic ở lại trong AZ; cần đủ target ở mọi AZ, và khi đó không dùng được stickiness."
+   }
+  },
+  {
+   "d": 5,
+   "task": "5.1",
+   "ref": "connect",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company runs EC2 instances in private subnets with no public IP addresses, no NAT gateway and no bastion host. Administrators occasionally need SSH access to these instances from the AWS console. Which solution provides this access with the LEAST operational overhead?",
+    "vi": "Một công ty chạy EC2 instance trong private subnet, không có public IP, không có NAT gateway và không có bastion host. Admin thỉnh thoảng cần SSH vào các instance này từ AWS console. Giải pháp nào cung cấp quyền truy cập này với ÍT công vận hành NHẤT?"
+   },
+   "o": [
+    {
+     "en": "Launch a bastion host in a public subnet, restrict its security group to the administrators' IP addresses, and distribute its key pair.",
+     "vi": "Launch một bastion host ở public subnet, giới hạn security group của nó theo IP của admin, và phân phát key pair cho admin."
+    },
+    {
+     "en": "Add a NAT gateway so the instances can be reached by EC2 Instance Connect from the internet.",
+     "vi": "Thêm NAT gateway để EC2 Instance Connect truy cập được instance từ internet."
+    },
+    {
+     "en": "Create an EC2 Instance Connect Endpoint and allow SSH on the instances from the endpoint's security group.",
+     "vi": "Tạo EC2 Instance Connect Endpoint và cho phép SSH vào instance từ security group của endpoint."
+    },
+    {
+     "en": "Create an S3 gateway endpoint and add its prefix list to the instance security group on port 22.",
+     "vi": "Tạo S3 gateway endpoint và thêm prefix list của nó vào security group của instance ở port 22."
+    }
+   ],
+   "a": [
+    2
+   ],
+   "why": [
+    {
+     "en": "Wrong. A bastion works but adds an instance and keys to patch and manage — more overhead.",
+     "vi": "Sai. Bastion chạy được nhưng thêm instance và key phải vá, quản lý — tốn công hơn."
+    },
+    {
+     "en": "Wrong. A NAT gateway only provides outbound internet access; it does not allow inbound connections.",
+     "vi": "Sai. NAT gateway chỉ cho traffic đi ra internet; không cho phép kết nối đi vào."
+    },
+    {
+     "en": "Correct. EICE lets you use EC2 Instance Connect to reach private-subnet instances without public IPs; the instance SG allows SSH from the endpoint SG.",
+     "vi": "Đúng. EICE cho phép dùng EC2 Instance Connect vào instance ở private subnet không có public IP; SG của instance cho phép SSH từ SG của endpoint."
+    },
+    {
+     "en": "Wrong. A gateway endpoint only routes traffic to S3/DynamoDB; it has nothing to do with SSH.",
+     "vi": "Sai. Gateway endpoint chỉ route traffic tới S3/DynamoDB; không liên quan tới SSH."
+    }
+   ],
+   "ex": {
+    "en": "Private-subnet instances, no public IP, SSH via EC2 Instance Connect → EC2 Instance Connect Endpoint (endpoint SG outbound 22, instance SG inbound 22 from the endpoint SG).",
+    "vi": "Instance ở private subnet, không public IP, SSH bằng EC2 Instance Connect → EC2 Instance Connect Endpoint (SG endpoint outbound 22, SG instance inbound 22 từ SG của endpoint)."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.3",
+   "ref": "s3-versioning",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "S3 Versioning is enabled on a bucket that stores application reports. A developer ran a delete command on `reports/q3.pdf` without specifying a version ID, and now GET requests for the object return 404. What is the FASTEST way to restore the object?",
+    "vi": "S3 Versioning đã bật trên một bucket lưu báo cáo ứng dụng. Một developer chạy lệnh delete `reports/q3.pdf` mà không chỉ định version ID, và giờ request GET object này trả về 404. Cách NHANH NHẤT để khôi phục object là gì?"
+   },
+   "o": [
+    {
+     "en": "Run a `RestoreObject` request for the object.",
+     "vi": "Chạy request `RestoreObject` cho object."
+    },
+    {
+     "en": "Nothing can be done; deleting an object in S3 is permanent.",
+     "vi": "Không làm gì được; xoá object trên S3 là vĩnh viễn."
+    },
+    {
+     "en": "Restore the object from the most recent EBS snapshot of the application server.",
+     "vi": "Khôi phục object từ EBS snapshot gần nhất của application server."
+    },
+    {
+     "en": "Delete the delete marker that is now the current version of the object.",
+     "vi": "Xoá delete marker hiện đang là current version của object."
+    }
+   ],
+   "a": [
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong: `RestoreObject` is for archived Glacier objects, not deleted ones.",
+     "vi": "Sai: `RestoreObject` dành cho object đã archive ở Glacier, không phải object bị xoá."
+    },
+    {
+     "en": "Wrong: only deleting a specific version ID is permanent.",
+     "vi": "Sai: chỉ khi xoá theo version ID cụ thể mới là vĩnh viễn."
+    },
+    {
+     "en": "Wrong: the object lives in S3; nothing guarantees it is on an EBS volume.",
+     "vi": "Sai: object nằm trên S3; không có gì đảm bảo nó có trên EBS volume."
+    },
+    {
+     "en": "Correct: a plain delete in a versioned bucket only adds a delete marker; removing it makes the previous version current again.",
+     "vi": "Đúng: delete thường trong bucket có versioning chỉ thêm delete marker; xoá marker thì version trước lại thành current."
+    }
+   ],
+   "ex": {
+    "en": "Versioned bucket: plain delete → delete marker (GET returns 404); delete the marker to restore. Deleting a specific version ID is permanent.",
+    "vi": "Bucket có versioning: delete thường → delete marker (GET trả 404); xoá marker để khôi phục. Xoá theo version ID cụ thể là vĩnh viễn."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.2",
+   "ref": "status-checks",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A standalone EC2 instance (not in an Auto Scaling group) runs a licensing server. Clients connect to it through its Elastic IP address, and the license is bound to its private IP address. The company wants the instance to recover automatically if the underlying host fails, while keeping the same instance ID and IP addresses. Which solution meets these requirements?",
+    "vi": "Một EC2 instance độc lập (không nằm trong Auto Scaling group) chạy license server. Client kết nối qua Elastic IP, và license gắn với private IP của instance. Công ty muốn instance tự phục hồi khi host bên dưới gặp lỗi, đồng thời giữ nguyên instance ID và địa chỉ IP. Giải pháp nào đáp ứng yêu cầu?"
+   },
+   "o": [
+    {
+     "en": "Create a CloudWatch alarm on `StatusCheckFailed_System` with the EC2 recover action.",
+     "vi": "Tạo CloudWatch alarm trên `StatusCheckFailed_System` với action recover EC2."
+    },
+    {
+     "en": "Create an Auto Scaling group with minimum, maximum and desired capacity set to 1 using EC2 status checks.",
+     "vi": "Tạo Auto Scaling group với minimum, maximum và desired capacity bằng 1, dùng EC2 status checks."
+    },
+    {
+     "en": "Create a CloudWatch alarm on `StatusCheckFailed_Instance` with the EC2 reboot action.",
+     "vi": "Tạo CloudWatch alarm trên `StatusCheckFailed_Instance` với action reboot EC2."
+    },
+    {
+     "en": "Create a CloudWatch alarm on `StatusCheckFailed` (any check) with the EC2 recover action.",
+     "vi": "Tạo CloudWatch alarm trên `StatusCheckFailed` (bất kỳ check nào) với action recover EC2."
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct: Recover moves the instance to a new host and keeps the instance ID, private IP, public IP/Elastic IP, metadata and placement group.",
+     "vi": "Đúng: Recover chuyển instance sang host mới và giữ nguyên instance ID, private IP, public IP/Elastic IP, metadata và placement group."
+    },
+    {
+     "en": "Wrong: the ASG would terminate and launch a new instance with a new ID and private IP, and without the old Elastic IP.",
+     "vi": "Sai: ASG sẽ terminate và launch instance mới với ID và private IP mới, không giữ Elastic IP cũ."
+    },
+    {
+     "en": "Wrong: a host failure shows up in the system status check, and a reboot does not move the instance to healthy hardware.",
+     "vi": "Sai: lỗi host thể hiện ở system status check, và reboot không chuyển instance sang phần cứng khoẻ."
+    },
+    {
+     "en": "Wrong: the recover action is supported only with the system status check metric.",
+     "vi": "Sai: action recover chỉ hỗ trợ với metric system status check."
+    }
+   ],
+   "ex": {
+    "en": "Host (system) failure on an instance you must keep → CloudWatch alarm on `StatusCheckFailed_System` + Recover. An ASG replaces the instance instead, losing its IPs.",
+    "vi": "Lỗi host (system) trên instance cần giữ nguyên → CloudWatch alarm trên `StatusCheckFailed_System` + Recover. ASG thì thay instance mới, mất IP cũ."
+   }
+  },
+  {
+   "d": 4,
+   "task": "4.1",
+   "ref": "s3-security",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "Account A owns an S3 bucket named `partner-data`. Developers in Account B must be able to download objects from the bucket by using their own IAM users. No other access should be granted, and the bucket must remain private. Which combination of steps meets these requirements?",
+    "vi": "Account A sở hữu S3 bucket `partner-data`. Developer ở Account B phải tải được object trong bucket bằng IAM user của chính họ. Không cấp thêm quyền nào khác và bucket phải giữ private. Tổ hợp bước nào đáp ứng yêu cầu?"
+   },
+   "o": [
+    {
+     "en": "In Account A, create an IAM user for each developer and share the access keys.",
+     "vi": "Ở Account A, tạo IAM user cho từng developer và chia sẻ access key."
+    },
+    {
+     "en": "In Account A, turn off Block Public Access and allow Principal \"*\" in the bucket policy.",
+     "vi": "Ở Account A, tắt Block Public Access và cho Principal \"*\" trong bucket policy."
+    },
+    {
+     "en": "In Account A, add a bucket policy that allows Account B's principal `s3:GetObject` on `arn:aws:s3:::partner-data/*`.",
+     "vi": "Ở Account A, thêm bucket policy cho principal của Account B quyền `s3:GetObject` trên `arn:aws:s3:::partner-data/*`."
+    },
+    {
+     "en": "In Account A, create an S3 gateway endpoint and allow requests from that endpoint with `aws:SourceVpce` in the bucket policy for Account B's developers.",
+     "vi": "Ở Account A, tạo S3 gateway endpoint và cho phép request từ endpoint đó bằng `aws:SourceVpce` trong bucket policy cho developer của Account B."
+    },
+    {
+     "en": "In Account B, attach an IAM policy that allows `s3:GetObject` on `arn:aws:s3:::partner-data/*` to the developers.",
+     "vi": "Ở Account B, gắn IAM policy cho developer cho phép `s3:GetObject` trên `arn:aws:s3:::partner-data/*`."
+    }
+   ],
+   "a": [
+    2,
+    4
+   ],
+   "why": [
+    {
+     "en": "Wrong: sharing long-term credentials is insecure; developers must use their own Account B identities.",
+     "vi": "Sai: chia sẻ credential dài hạn không an toàn; developer phải dùng identity của Account B."
+    },
+    {
+     "en": "Wrong: this makes the bucket public, violating the requirement.",
+     "vi": "Sai: bucket sẽ thành public, vi phạm yêu cầu."
+    },
+    {
+     "en": "Correct: cross-account access to a bucket is granted with a bucket policy (resource-based policy).",
+     "vi": "Đúng: truy cập cross-account vào bucket được cấp bằng bucket policy (resource-based policy)."
+    },
+    {
+     "en": "Wrong: a gateway endpoint only serves resources in that VPC; it does not grant another account's users access.",
+     "vi": "Sai: gateway endpoint chỉ phục vụ resource trong VPC đó; không cấp quyền cho user của account khác."
+    },
+    {
+     "en": "Correct: for cross-account access the caller's own account must also allow the action through an IAM policy.",
+     "vi": "Đúng: với truy cập cross-account, account của bên gọi cũng phải cho phép action qua IAM policy."
+    }
+   ],
+   "ex": {
+    "en": "Cross-account S3 access → bucket policy in the owning account plus an IAM policy in the caller's account. Public access is only for Principal \"*\" with Block Public Access off.",
+    "vi": "Truy cập S3 cross-account → bucket policy ở account sở hữu + IAM policy ở account bên gọi. Public chỉ khi Principal \"*\" và Block Public Access tắt."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.1",
+   "ref": "connect",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A CloudOps engineer provisions Amazon Linux 2023 instances with public IPv4 addresses for a short project. Administrators need shell access from the EC2 console, and nobody may store or distribute long-term SSH private keys. Inbound SSH is allowed only from AWS-owned address ranges. Which approach meets these requirements with the LEAST effort?",
+    "vi": "Một CloudOps engineer cấp phát các instance Amazon Linux 2023 có public IPv4 cho một dự án ngắn hạn. Admin cần truy cập shell từ EC2 console, và không ai được lưu hay phân phát SSH private key dài hạn. Inbound SSH chỉ được phép từ các dải địa chỉ do AWS sở hữu. Cách nào đáp ứng yêu cầu với ít công sức NHẤT?"
+   },
+   "o": [
+    {
+     "en": "Create one RSA key pair at launch, store the .pem file on a shared drive for the administrators, and have them run `chmod 400` before connecting.",
+     "vi": "Tạo một RSA key pair khi launch, lưu file .pem trên ổ dùng chung cho admin, và yêu cầu họ chạy `chmod 400` trước khi kết nối."
+    },
+    {
+     "en": "Use EC2 Instance Connect and allow inbound TCP 22 from the Region's EC2 Instance Connect IP range.",
+     "vi": "Dùng EC2 Instance Connect và cho phép inbound TCP 22 từ dải IP EC2 Instance Connect của Region."
+    },
+    {
+     "en": "Grant each administrator's IAM user access to the launch key pair so that the console can retrieve the private key when they connect.",
+     "vi": "Cấp cho IAM user của từng admin quyền dùng key pair lúc launch để console lấy private key khi họ kết nối."
+    },
+    {
+     "en": "Enable EC2 Serial Console access for the account and share a local Linux password for the instances with all administrators.",
+     "vi": "Bật EC2 Serial Console cho account và chia sẻ một mật khẩu Linux cục bộ của instance cho mọi admin."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "Wrong: a shared .pem file is exactly the long-term private key distribution that is forbidden.",
+     "vi": "Sai: file .pem dùng chung chính là việc phân phát private key dài hạn bị cấm."
+    },
+    {
+     "en": "Correct: EC2 Instance Connect pushes a one-time SSH public key (valid 60 seconds) for each session; the security group must allow port 22 from the Region's EC2_INSTANCE_CONNECT range.",
+     "vi": "Đúng: EC2 Instance Connect đẩy một SSH public key dùng 1 lần (hiệu lực 60 giây) cho mỗi phiên; security group phải mở port 22 cho dải EC2_INSTANCE_CONNECT của Region."
+    },
+    {
+     "en": "Wrong: AWS keeps only the public key of a key pair; the private key is downloaded once and cannot be retrieved later.",
+     "vi": "Sai: AWS chỉ giữ public key của key pair; private key chỉ tải về một lần và không lấy lại được."
+    },
+    {
+     "en": "Wrong: the serial console is a troubleshooting tool, and a shared password is still a long-term credential to distribute.",
+     "vi": "Sai: serial console là công cụ troubleshooting, và mật khẩu dùng chung vẫn là credential dài hạn phải phân phát."
+    }
+   ],
+   "ex": {
+    "en": "EC2 Instance Connect = console SSH without managing keys: a one-time public key valid 60 s is pushed per session. Public instance → SG allows 22 from the EC2_INSTANCE_CONNECT range; private instance → EC2 Instance Connect Endpoint.",
+    "vi": "EC2 Instance Connect = SSH từ console không cần quản lý key: mỗi phiên đẩy một public key dùng 1 lần, hiệu lực 60 giây. Instance public → SG mở 22 cho dải EC2_INSTANCE_CONNECT; instance private → EC2 Instance Connect Endpoint."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.1",
+   "ref": "asg-scaling",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "An Auto Scaling group uses a simple scaling policy that adds one instance when average CPU exceeds 70%. During sharp traffic increases, the group adds one instance and then waits about 5 minutes before it can add another, even though CPU remains above 90%. New instances need 4 minutes to install the application from user data. Which actions will help the group respond faster?",
+    "vi": "Một Auto Scaling group dùng simple scaling policy thêm một instance khi CPU trung bình vượt 70%. Khi traffic tăng mạnh, group thêm một instance rồi chờ khoảng 5 phút mới thêm được instance tiếp theo, dù CPU vẫn trên 90%. Instance mới cần 4 phút để cài ứng dụng từ user data. Những hành động nào giúp group phản ứng nhanh hơn?"
+   },
+   "o": [
+    {
+     "en": "Increase the scaling cooldown to 600 seconds so that CloudWatch metrics have more time to stabilise between scaling activities.",
+     "vi": "Tăng scaling cooldown lên 600 giây để CloudWatch metric có thêm thời gian ổn định giữa các lần scale."
+    },
+    {
+     "en": "Enable slow start on the load balancer target group.",
+     "vi": "Bật slow start trên target group của load balancer."
+    },
+    {
+     "en": "Enable group metrics collection for the Auto Scaling group.",
+     "vi": "Bật group metrics collection cho Auto Scaling group."
+    },
+    {
+     "en": "Build an AMI with the application pre-installed and then shorten the scaling cooldown.",
+     "vi": "Dựng AMI có cài sẵn ứng dụng rồi rút ngắn scaling cooldown."
+    },
+    {
+     "en": "Replace the simple scaling policy with a step scaling policy that adds more instances for larger CPU breaches.",
+     "vi": "Thay simple scaling policy bằng step scaling policy thêm nhiều instance hơn khi CPU vượt ngưỡng càng lớn."
+    }
+   ],
+   "a": [
+    3,
+    4
+   ],
+   "why": [
+    {
+     "en": "Wrong: a longer cooldown makes the group react even more slowly.",
+     "vi": "Sai: cooldown dài hơn khiến group phản ứng còn chậm hơn."
+    },
+    {
+     "en": "Wrong: slow start ramps traffic to new targets; it does not launch instances faster.",
+     "vi": "Sai: slow start tăng dần traffic cho target mới, không launch instance nhanh hơn."
+    },
+    {
+     "en": "Wrong: group metrics are for visibility; they do not change how the policy reacts.",
+     "vi": "Sai: group metrics chỉ để quan sát, không thay đổi cách policy phản ứng."
+    },
+    {
+     "en": "Correct: a ready-to-use AMI makes instances serve sooner, so a shorter cooldown is safe.",
+     "vi": "Đúng: AMI dựng sẵn giúp instance phục vụ sớm hơn, nên rút ngắn cooldown là an toàn."
+    },
+    {
+     "en": "Correct: step scaling sizes the adjustment to the breach (e.g. +2 above 70%, +5 above 90%) and is not blocked by the simple-scaling cooldown.",
+     "vi": "Đúng: step scaling điều chỉnh mức scale theo độ lớn vi phạm (vd +2 khi trên 70%, +5 khi trên 90%) và không bị cooldown của simple scaling chặn."
+    }
+   ],
+   "ex": {
+    "en": "Simple scaling waits for the cooldown (default 300 s) after each activity. To react faster: step or target tracking policies, and pre-baked AMIs so instances are ready sooner.",
+    "vi": "Simple scaling chờ hết cooldown (mặc định 300 giây) sau mỗi activity. Muốn phản ứng nhanh: dùng step hoặc target tracking policy, và AMI dựng sẵn để instance sẵn sàng sớm hơn."
+   }
+  },
+  {
+   "d": 5,
+   "task": "5.3",
+   "ref": "efs",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "An Amazon EFS file system (Regional) has mount targets in us-east-1a and us-east-1b. The mount target security group allows inbound TCP 2049 only from the CIDR blocks of the original application subnets. The company adds application instances in a new subnet in us-east-1c, and mounting the file system by its DNS name fails on these instances. Which actions should the CloudOps engineer take to fix the problem?",
+    "vi": "Một Amazon EFS file system (Regional) có mount target ở us-east-1a và us-east-1b. Security group của mount target chỉ cho phép inbound TCP 2049 từ CIDR của các subnet ứng dụng ban đầu. Công ty thêm instance ứng dụng ở subnet mới trong us-east-1c, và việc mount file system bằng DNS name thất bại trên các instance này. CloudOps engineer nên làm những gì để khắc phục?"
+   },
+   "o": [
+    {
+     "en": "Allow inbound TCP 2049 on the mount target security group from the new instances' security group.",
+     "vi": "Cho phép inbound TCP 2049 trên security group của mount target từ security group của các instance mới."
+    },
+    {
+     "en": "Create an S3 gateway endpoint in the VPC for the EFS traffic.",
+     "vi": "Tạo S3 gateway endpoint trong VPC cho traffic EFS."
+    },
+    {
+     "en": "Allow inbound TCP 22 on the mount target security group from the new subnet.",
+     "vi": "Cho phép inbound TCP 22 trên security group của mount target từ subnet mới."
+    },
+    {
+     "en": "Create an EFS mount target in the us-east-1c subnet.",
+     "vi": "Tạo EFS mount target ở subnet trong us-east-1c."
+    },
+    {
+     "en": "Change the file system performance mode to Max I/O.",
+     "vi": "Đổi performance mode của file system sang Max I/O."
+    }
+   ],
+   "a": [
+    0,
+    3
+   ],
+   "why": [
+    {
+     "en": "Correct. NFS traffic on port 2049 from the new instances is not allowed by the current CIDR-based rule.",
+     "vi": "Đúng. Traffic NFS port 2049 từ instance mới chưa được rule theo CIDR hiện tại cho phép."
+    },
+    {
+     "en": "Wrong. EFS is not reached through S3 gateway endpoints.",
+     "vi": "Sai. EFS không đi qua S3 gateway endpoint."
+    },
+    {
+     "en": "Wrong. Port 22 is SSH; EFS uses NFS on port 2049.",
+     "vi": "Sai. Port 22 là SSH; EFS dùng NFS ở port 2049."
+    },
+    {
+     "en": "Correct. EFS is accessed through a mount target in each AZ; the new AZ needs its own mount target.",
+     "vi": "Đúng. EFS được truy cập qua mount target ở từng AZ; AZ mới cần mount target riêng."
+    },
+    {
+     "en": "Wrong. Performance mode affects latency/parallelism, is set at creation, and does not affect reachability.",
+     "vi": "Sai. Performance mode ảnh hưởng latency/độ song song, đặt lúc tạo, không liên quan khả năng kết nối."
+    }
+   ],
+   "ex": {
+    "en": "EFS mount problems → check there is a mount target in the instance's AZ and that the mount target SG allows NFS TCP 2049 from the instances (best: source = instance SG).",
+    "vi": "Lỗi mount EFS → kiểm tra có mount target ở AZ của instance và SG của mount target cho phép NFS TCP 2049 từ instance (tốt nhất: source = SG của instance)."
+   }
+  },
+  {
+   "d": 4,
+   "task": "4.2",
+   "ref": "s3-encryption",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "An application uploads and downloads millions of small objects per hour to an S3 bucket whose default encryption is SSE-KMS with a customer managed key. During peak hours, some requests fail because KMS requests are throttled, and the KMS bill has grown significantly. Which action will reduce both the KMS request volume and the KMS cost?",
+    "vi": "Một ứng dụng upload và download hàng triệu object nhỏ mỗi giờ vào S3 bucket có default encryption là SSE-KMS với customer managed key. Giờ cao điểm, một số request lỗi vì request tới KMS bị throttle, và hoá đơn KMS tăng mạnh. Hành động nào giảm được cả lượng request KMS lẫn chi phí KMS?"
+   },
+   "o": [
+    {
+     "en": "Enable S3 Transfer Acceleration on the bucket.",
+     "vi": "Bật S3 Transfer Acceleration cho bucket."
+    },
+    {
+     "en": "Change the default encryption to DSSE-KMS.",
+     "vi": "Đổi default encryption sang DSSE-KMS."
+    },
+    {
+     "en": "Enable S3 Bucket Keys for SSE-KMS on the bucket.",
+     "vi": "Bật S3 Bucket Key cho SSE-KMS trên bucket."
+    },
+    {
+     "en": "Request a KMS requests-per-second quota increase through Service Quotas.",
+     "vi": "Xin tăng quota request/giây của KMS qua Service Quotas."
+    }
+   ],
+   "a": [
+    2
+   ],
+   "why": [
+    {
+     "en": "Wrong: Transfer Acceleration speeds up long-distance transfers; it has no effect on KMS calls.",
+     "vi": "Sai: Transfer Acceleration tăng tốc truyền xa, không ảnh hưởng tới lời gọi KMS."
+    },
+    {
+     "en": "Wrong: DSSE-KMS adds a second encryption layer, still calls KMS per object and does not support S3 Bucket Keys.",
+     "vi": "Sai: DSSE-KMS thêm lớp mã hoá thứ hai, vẫn gọi KMS cho mỗi object và không hỗ trợ S3 Bucket Key."
+    },
+    {
+     "en": "Correct: S3 Bucket Keys derive a short-lived bucket-level key, cutting KMS calls and KMS cost by up to 99%.",
+     "vi": "Đúng: S3 Bucket Key tạo key cấp bucket tạm thời, giảm lời gọi KMS và chi phí KMS tới 99%."
+    },
+    {
+     "en": "Wrong: a higher quota can stop throttling but every object still calls KMS, so the cost does not go down.",
+     "vi": "Sai: tăng quota có thể hết throttling nhưng mỗi object vẫn gọi KMS nên chi phí không giảm."
+    }
+   ],
+   "ex": {
+    "en": "SSE-KMS calls `GenerateDataKey`/`Decrypt` per object and counts toward the KMS quota. S3 Bucket Keys reduce calls and cost (new objects only); a quota increase only fixes throttling.",
+    "vi": "SSE-KMS gọi `GenerateDataKey`/`Decrypt` cho mỗi object và tính vào quota KMS. S3 Bucket Key giảm lời gọi và chi phí (chỉ object mới); tăng quota chỉ giải quyết throttling."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.2",
+   "ref": "asg-ops",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "An Auto Scaling group has stopped launching new instances. The activity history shows repeated launch failures stating that a security group does not exist. A team member recently cleaned up unused resources. What should a CloudOps engineer do to restore scaling?",
+    "vi": "Một Auto Scaling group đã ngừng launch instance mới. Activity history cho thấy launch thất bại liên tục với thông báo security group không tồn tại. Một thành viên vừa dọn dẹp các resource không dùng. CloudOps engineer nên làm gì để khôi phục khả năng scale?"
+   },
+   "o": [
+    {
+     "en": "Change the health check type of the Auto Scaling group to ELB.",
+     "vi": "Đổi health check type của Auto Scaling group sang ELB."
+    },
+    {
+     "en": "Create a new launch template version that references an existing security group and set the Auto Scaling group to use it.",
+     "vi": "Tạo launch template version mới tham chiếu một security group đang tồn tại và cấu hình Auto Scaling group dùng version đó."
+    },
+    {
+     "en": "Edit the existing launch configuration in place to reference a valid security group.",
+     "vi": "Sửa trực tiếp launch configuration hiện có để tham chiếu security group hợp lệ."
+    },
+    {
+     "en": "Increase the maximum capacity of the Auto Scaling group.",
+     "vi": "Tăng max capacity của Auto Scaling group."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "Health checks decide when to replace instances; they do not fix launch failures.",
+     "vi": "Health check quyết định khi nào thay instance; không sửa được lỗi launch."
+    },
+    {
+     "en": "Correct. Launches fail because the template references a deleted security group; a new version fixes it.",
+     "vi": "Đúng. Launch lỗi vì template tham chiếu security group đã bị xoá; version mới khắc phục điều này."
+    },
+    {
+     "en": "Launch configurations cannot be modified; they must be recreated (and are legacy).",
+     "vi": "Launch configuration không sửa được; phải tạo lại (và đã là legacy)."
+    },
+    {
+     "en": "Max capacity is not the problem; every launch attempt fails regardless of size.",
+     "vi": "Max capacity không phải vấn đề; mọi lần launch đều lỗi bất kể kích thước."
+    }
+   ],
+   "ex": {
+    "en": "ASG launch failures often come from a deleted security group or key pair in the template. Fix the template (new version). If launches fail for over 24 hours, the ASG suspends its processes (administrative suspension).",
+    "vi": "ASG launch lỗi thường do security group hoặc key pair trong template đã bị xoá. Sửa template (version mới). Nếu launch lỗi quá 24 giờ, ASG tự suspend các process (administrative suspension)."
+   }
+  },
+  {
+   "d": 5,
+   "task": "5.3",
+   "ref": "connect",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "An engineer can SSH into a public EC2 instance from a laptop, but connecting through EC2 Instance Connect in the console fails. The instance security group has a single inbound rule: TCP 22 from \"My IP\". What is the MOST secure fix?",
+    "vi": "Một engineer SSH được vào EC2 instance public từ laptop, nhưng kết nối bằng EC2 Instance Connect trên console thì lỗi. Security group của instance chỉ có một inbound rule: TCP 22 từ \"My IP\". Cách khắc phục an toàn NHẤT là gì?"
+   },
+   "o": [
+    {
+     "en": "Add an inbound TCP 22 rule from the Region's EC2 Instance Connect prefix list or IP range.",
+     "vi": "Thêm inbound rule TCP 22 từ prefix list hoặc dải IP EC2 Instance Connect của region."
+    },
+    {
+     "en": "Add an outbound rule allowing TCP 22 to 0.0.0.0/0 on the instance security group so that the return traffic can reach the console.",
+     "vi": "Thêm outbound rule cho phép TCP 22 tới 0.0.0.0/0 trên security group của instance để traffic trả về tới được console."
+    },
+    {
+     "en": "Change the inbound rule source to 0.0.0.0/0 on TCP 22.",
+     "vi": "Đổi source của inbound rule TCP 22 thành 0.0.0.0/0."
+    },
+    {
+     "en": "Upload the laptop's public key to the instance so EC2 Instance Connect can reuse it.",
+     "vi": "Upload public key của laptop lên instance để EC2 Instance Connect dùng lại."
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct. Console EC2 Instance Connect connects from the service's per-Region IP range (`com.amazonaws.<region>.ec2-instance-connect` prefix list), so port 22 must be open to that range.",
+     "vi": "Đúng. EC2 Instance Connect trên console kết nối từ dải IP của dịch vụ theo từng region (prefix list `com.amazonaws.<region>.ec2-instance-connect`), nên phải mở port 22 cho dải đó."
+    },
+    {
+     "en": "Wrong. Security groups are stateful; the missing piece is the inbound rule for the EIC source range.",
+     "vi": "Sai. Security group là stateful; cái thiếu là inbound rule cho dải IP nguồn của EIC."
+    },
+    {
+     "en": "Wrong. It would work but exposes SSH to the whole internet, so it is not the most secure option.",
+     "vi": "Sai. Cách này chạy được nhưng mở SSH cho toàn internet, không phải lựa chọn an toàn nhất."
+    },
+    {
+     "en": "Wrong. EC2 Instance Connect pushes its own one-time key valid for 60 seconds; the problem is the network path.",
+     "vi": "Sai. EC2 Instance Connect tự đẩy một key dùng 1 lần hiệu lực 60 giây; vấn đề nằm ở đường mạng."
+    }
+   ],
+   "ex": {
+    "en": "SSH works but EC2 Instance Connect fails → the SG allows only your IP; add port 22 from the Region's EC2_INSTANCE_CONNECT range (ip-ranges.json or managed prefix list).",
+    "vi": "SSH được nhưng EC2 Instance Connect lỗi → SG chỉ mở cho IP của bạn; thêm port 22 từ dải EC2_INSTANCE_CONNECT của region (ip-ranges.json hoặc managed prefix list)."
+   }
+  },
+  {
+   "d": 4,
+   "task": "4.1",
+   "ref": "session-manager",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company's security policy states that no EC2 instance may have inbound port 22 open, SSH keys must not be distributed, and every command that administrators run on Linux instances must be recorded for audit. Administrators still need interactive shell access. Which solution meets these requirements?",
+    "vi": "Chính sách security của công ty quy định không EC2 instance nào được mở inbound port 22, không được phân phát SSH key, và mọi lệnh admin chạy trên Linux instance phải được ghi lại để audit. Admin vẫn cần shell tương tác. Giải pháp nào đáp ứng yêu cầu?"
+   },
+   "o": [
+    {
+     "en": "Create an EC2 Instance Connect Endpoint in the private subnet and allow port 22 only from its security group.",
+     "vi": "Tạo EC2 Instance Connect Endpoint trong private subnet và chỉ cho phép port 22 từ security group của nó."
+    },
+    {
+     "en": "Use EC2 Instance Connect from the console and enable CloudTrail in all Regions.",
+     "vi": "Dùng EC2 Instance Connect trên console và bật CloudTrail ở mọi Region."
+    },
+    {
+     "en": "Deploy a bastion host in a public subnet and enable VPC Flow Logs.",
+     "vi": "Triển khai bastion host trong public subnet và bật VPC Flow Logs."
+    },
+    {
+     "en": "Use Systems Manager Session Manager and enable session logging to CloudWatch Logs or S3.",
+     "vi": "Dùng Systems Manager Session Manager và bật session logging ra CloudWatch Logs hoặc S3."
+    }
+   ],
+   "a": [
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong: the instance still needs inbound port 22 from the endpoint, and commands are not logged.",
+     "vi": "Sai: instance vẫn phải mở inbound port 22 từ endpoint, và lệnh không được log."
+    },
+    {
+     "en": "Wrong: EC2 Instance Connect uses SSH under the hood, so port 22 must be open, and it does not log commands.",
+     "vi": "Sai: EC2 Instance Connect dùng SSH bên dưới nên phải mở port 22, và không log lệnh."
+    },
+    {
+     "en": "Wrong: a bastion still needs SSH keys and port 22; Flow Logs record IP traffic, not commands.",
+     "vi": "Sai: bastion vẫn cần SSH key và port 22; Flow Logs ghi traffic IP, không ghi lệnh."
+    },
+    {
+     "en": "Correct: Session Manager needs no inbound ports, bastion or SSH keys, and can log every session and command to CloudWatch Logs or S3.",
+     "vi": "Đúng: Session Manager không cần inbound port, bastion hay SSH key, và log được mọi session và lệnh ra CloudWatch Logs hoặc S3."
+    }
+   ],
+   "ex": {
+    "en": "No port 22 + no keys + audit every command → Session Manager with session logging to S3 / CloudWatch Logs (CloudTrail also records `StartSession`).",
+    "vi": "Không port 22 + không key + audit mọi lệnh → Session Manager với session logging ra S3 / CloudWatch Logs (CloudTrail còn ghi event `StartSession`)."
+   }
+  },
+  {
+   "d": 5,
+   "task": "5.1",
+   "ref": "alb",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company is splitting a monolithic web application into two services on separate Auto Scaling groups. Requests to `www.example.com/api/*` must go to the API service and all other requests to the web front end. The company wants to use a single load balancer. What should a CloudOps engineer configure?",
+    "vi": "Một công ty tách ứng dụng web monolithic thành 2 service chạy trên 2 Auto Scaling group riêng. Request tới `www.example.com/api/*` phải tới service API, mọi request khác tới web front end. Công ty muốn dùng một load balancer duy nhất. CloudOps engineer cần cấu hình gì?"
+   },
+   "o": [
+    {
+     "en": "A Classic Load Balancer with both Auto Scaling groups registered.",
+     "vi": "Classic Load Balancer đăng ký cả 2 Auto Scaling group."
+    },
+    {
+     "en": "A Network Load Balancer with two TCP listeners, one per service.",
+     "vi": "Network Load Balancer với 2 TCP listener, mỗi service một listener."
+    },
+    {
+     "en": "An Application Load Balancer with a listener rule that forwards path `/api/*` to the API target group.",
+     "vi": "Application Load Balancer với listener rule forward path `/api/*` tới target group API."
+    },
+    {
+     "en": "An Application Load Balancer with two target groups and sticky sessions, so that API clients stay on the API instances after their first request.",
+     "vi": "Application Load Balancer với hai target group và sticky sessions, để client API ở lại instance API sau request đầu tiên."
+    }
+   ],
+   "a": [
+    2
+   ],
+   "why": [
+    {
+     "en": "Wrong. A CLB has no content-based routing and needs one load balancer per application; it is also deprecated.",
+     "vi": "Sai. CLB không routing theo nội dung và cần 1 LB cho mỗi app; CLB cũng đã deprecated."
+    },
+    {
+     "en": "Wrong. An NLB works at layer 4 and cannot inspect URL paths.",
+     "vi": "Sai. NLB hoạt động ở layer 4, không đọc được URL path."
+    },
+    {
+     "en": "Correct. ALB listener rules support path conditions, each forwarding to its own target group; the default rule sends everything else to the web target group.",
+     "vi": "Đúng. Listener rule của ALB hỗ trợ điều kiện path, mỗi rule forward tới target group riêng; default rule gửi phần còn lại tới target group web."
+    },
+    {
+     "en": "Wrong. Stickiness keeps a client on the same target; it does not route by URL path.",
+     "vi": "Sai. Stickiness giữ client ở cùng một target; không routing theo URL path."
+    }
+   ],
+   "ex": {
+    "en": "Routing by path, host header, query string or HTTP header to different target groups → ALB listener rules (priority 1 = highest; default rule evaluated last).",
+    "vi": "Routing theo path, host header, query string hay HTTP header tới các target group khác nhau → listener rule của ALB (priority 1 = cao nhất; default rule xét cuối)."
+   }
+  },
+  {
+   "d": 5,
+   "task": "5.3",
+   "ref": "elb-monitoring",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A legacy application still uses a Classic Load Balancer, and users intermittently receive HTTP 504 errors. The load balancer idle timeout is 60 seconds. The web servers on the EC2 targets have HTTP keep-alive enabled with a keep-alive timeout of 5 seconds. CPU and memory on the targets are low. What is the MOST likely fix?",
+    "vi": "Một ứng dụng cũ vẫn dùng Classic Load Balancer, và người dùng thỉnh thoảng nhận lỗi HTTP 504. Idle timeout của load balancer là 60 giây. Web server trên các EC2 target bật HTTP keep-alive với keep-alive timeout 5 giây. CPU và memory của target thấp. Cách khắc phục khả dĩ NHẤT là gì?"
+   },
+   "o": [
+    {
+     "en": "Increase the keep-alive timeout on the web servers to a value greater than the load balancer idle timeout.",
+     "vi": "Tăng keep-alive timeout trên web server lên giá trị lớn hơn idle timeout của load balancer."
+    },
+    {
+     "en": "Fix the client applications, because 5XX errors indicate malformed requests.",
+     "vi": "Sửa ứng dụng phía client vì lỗi 5XX nghĩa là request sai định dạng."
+    },
+    {
+     "en": "Add more instances to the Auto Scaling group because no healthy targets are available.",
+     "vi": "Thêm instance vào Auto Scaling group vì không còn target healthy."
+    },
+    {
+     "en": "Enable sticky sessions so each client keeps using the same connection.",
+     "vi": "Bật sticky sessions để mỗi client giữ nguyên một kết nối."
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct. If the instances close idle connections before the load balancer does, requests sent on those connections fail with 504; the keep-alive timeout must exceed the LB idle timeout.",
+     "vi": "Đúng. Nếu instance đóng kết nối idle trước load balancer, request gửi trên các kết nối đó sẽ lỗi 504; keep-alive timeout phải lớn hơn idle timeout của LB."
+    },
+    {
+     "en": "Wrong. 5XX errors are server-side; malformed requests produce 400.",
+     "vi": "Sai. 5XX là lỗi phía server; request sai định dạng cho lỗi 400."
+    },
+    {
+     "en": "Wrong. No healthy targets typically shows up as 503, and the targets here are lightly loaded.",
+     "vi": "Sai. Không còn target healthy thường biểu hiện là 503, và target ở đây đang tải thấp."
+    },
+    {
+     "en": "Wrong. Stickiness pins clients to targets but does not fix connections closed by the target.",
+     "vi": "Sai. Stickiness gắn client vào target nhưng không sửa được việc target đóng kết nối."
+    }
+   ],
+   "ex": {
+    "en": "ELB 504 Gateway Timeout → check keep-alive is enabled on targets and the keep-alive timeout is greater than the LB idle timeout. 503 → no healthy/registered targets.",
+    "vi": "ELB 504 Gateway Timeout → kiểm tra target bật keep-alive và keep-alive timeout lớn hơn idle timeout của LB. 503 → không có target healthy/đã đăng ký."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.1",
+   "ref": "asg-lifecycle",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A CloudOps engineer created a new launch template version that references a patched AMI and set it as the version used by an Auto Scaling group. A day later, all running instances still use the old AMI. The engineer must replace them gradually while keeping at least 80% of capacity in service. What should the engineer do?",
+    "vi": "Một CloudOps engineer tạo launch template version mới trỏ tới AMI đã patch và đặt làm version cho Auto Scaling group. Một ngày sau, mọi instance đang chạy vẫn dùng AMI cũ. Engineer phải thay chúng dần dần mà vẫn giữ ít nhất 80% capacity phục vụ. Engineer nên làm gì?"
+   },
+   "o": [
+    {
+     "en": "Add a lifecycle hook to the group so that instances are re-imaged when they enter the `Pending:Wait` state.",
+     "vi": "Thêm lifecycle hook vào group để instance được cài lại image khi vào trạng thái `Pending:Wait`."
+    },
+    {
+     "en": "Reboot all instances in the group so that they boot from the AMI in the new launch template version.",
+     "vi": "Reboot mọi instance trong group để chúng boot từ AMI của launch template version mới."
+    },
+    {
+     "en": "Start an instance refresh on the Auto Scaling group with a minimum healthy percentage of 80%.",
+     "vi": "Chạy instance refresh trên Auto Scaling group với minimum healthy percentage 80%."
+    },
+    {
+     "en": "Wait for the next scale-out event, because the Auto Scaling group updates existing instances automatically.",
+     "vi": "Chờ lần scale out tiếp theo vì Auto Scaling group sẽ tự cập nhật instance hiện có."
+    }
+   ],
+   "a": [
+    2
+   ],
+   "why": [
+    {
+     "en": "Wrong: lifecycle hooks pause launches/terminations for custom actions; they do not replace running instances.",
+     "vi": "Sai: lifecycle hook chỉ tạm dừng launch/terminate để chạy tác vụ tuỳ chỉnh; không thay instance đang chạy."
+    },
+    {
+     "en": "Wrong: a reboot keeps the same root volume and AMI.",
+     "vi": "Sai: reboot vẫn giữ root volume và AMI cũ."
+    },
+    {
+     "en": "Correct: `StartInstanceRefresh` replaces existing instances with the new template; minimum healthy percentage controls how many go at once.",
+     "vi": "Đúng: `StartInstanceRefresh` thay instance hiện có theo template mới; minimum healthy percentage quyết định thay bao nhiêu cùng lúc."
+    },
+    {
+     "en": "Wrong: a launch template change only affects newly launched instances.",
+     "vi": "Sai: đổi launch template chỉ ảnh hưởng instance mới được launch."
+    }
+   ],
+   "ex": {
+    "en": "Changing the launch template affects only new instances. Use Instance Refresh (`StartInstanceRefresh`) with a minimum healthy percentage to roll the change through running instances.",
+    "vi": "Đổi launch template chỉ áp dụng cho instance mới. Dùng Instance Refresh (`StartInstanceRefresh`) với minimum healthy percentage để thay dần instance đang chạy."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.2",
+   "ref": "scheduler",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company has development EC2 instances and Amazon RDS databases in several AWS accounts and Regions. They are used only during business hours on weekdays. The company wants to stop them automatically outside those hours to reduce cost, using a production-ready solution rather than custom code. What should a CloudOps engineer do?",
+    "vi": "Một công ty có EC2 instance và Amazon RDS database cho development ở nhiều AWS account và Region. Chúng chỉ được dùng trong giờ hành chính các ngày làm việc. Công ty muốn tự động tắt chúng ngoài giờ để giảm chi phí, dùng giải pháp production-ready thay vì tự viết code. CloudOps engineer nên làm gì?"
+   },
+   "o": [
+    {
+     "en": "Use AWS Backup to snapshot the resources each evening and restore them each morning.",
+     "vi": "Dùng AWS Backup snapshot tài nguyên mỗi tối và restore mỗi sáng."
+    },
+    {
+     "en": "Deploy Instance Scheduler on AWS and tag the resources with a `Schedule` tag for office hours.",
+     "vi": "Triển khai Instance Scheduler on AWS và gắn tag `Schedule` theo giờ hành chính cho tài nguyên."
+    },
+    {
+     "en": "Create Auto Scaling scheduled actions for each RDS database to set capacity to zero outside business hours.",
+     "vi": "Tạo Auto Scaling scheduled action cho từng RDS database để đặt capacity về 0 ngoài giờ."
+    },
+    {
+     "en": "Write Lambda functions in each account and Region, triggered by EventBridge schedules, to stop and start resources.",
+     "vi": "Viết Lambda function ở từng account và Region, kích hoạt bằng EventBridge schedule để stop/start tài nguyên."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "Wrong: complex, slow and not designed for start/stop scheduling.",
+     "vi": "Sai: phức tạp, chậm và không dành cho việc lên lịch start/stop."
+    },
+    {
+     "en": "Correct: Instance Scheduler on AWS starts/stops EC2 and RDS on schedules, cross-account and cross-Region.",
+     "vi": "Đúng: Instance Scheduler on AWS start/stop EC2 và RDS theo lịch, hỗ trợ cross-account và cross-Region."
+    },
+    {
+     "en": "Wrong: RDS instances are not managed by EC2 Auto Scaling scheduled actions.",
+     "vi": "Sai: RDS instance không được quản lý bởi EC2 Auto Scaling scheduled action."
+    },
+    {
+     "en": "Wrong: this is custom code to build and maintain, which the company wants to avoid.",
+     "vi": "Sai: đây là code tự viết phải bảo trì, điều công ty muốn tránh."
+    }
+   ],
+   "ex": {
+    "en": "Automatically stop/start EC2/RDS outside business hours → Instance Scheduler on AWS (an AWS Solution: Lambda + DynamoDB schedules, `Schedule` tag).",
+    "vi": "Tự động tắt/bật EC2/RDS ngoài giờ → Instance Scheduler on AWS (AWS Solution: Lambda + lịch trong DynamoDB, tag `Schedule`)."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.1",
+   "ref": "cw-agent",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "A CloudOps engineer must roll out the unified CloudWatch agent to 300 EC2 instances so that every instance sends the same memory and disk metrics and the same log files. The configuration must be identical everywhere and easy to change later, with the LEAST operational overhead. Which actions should the engineer take?",
+    "vi": "Một CloudOps engineer cần triển khai unified CloudWatch agent cho 300 EC2 instance để mọi instance gửi cùng bộ metric bộ nhớ, disk và cùng các file log. Cấu hình phải giống hệt nhau và dễ thay đổi sau này, với operational overhead THẤP NHẤT. Engineer nên làm những gì?"
+   },
+   "o": [
+    {
+     "en": "Enable detailed monitoring on every instance so that memory and disk metrics are published.",
+     "vi": "Bật detailed monitoring trên mọi instance để metric bộ nhớ và disk được gửi lên."
+    },
+    {
+     "en": "Attach the `CloudWatchAgentAdminPolicy` managed policy to every instance so that each agent can read and write its configuration in Parameter Store.",
+     "vi": "Gắn managed policy `CloudWatchAgentAdminPolicy` cho mọi instance để từng agent đọc và ghi được cấu hình trong Parameter Store."
+    },
+    {
+     "en": "Store the agent configuration in SSM Parameter Store and start each agent with `fetch-config` pointing to that parameter.",
+     "vi": "Lưu cấu hình agent trong SSM Parameter Store và khởi động mỗi agent bằng `fetch-config` trỏ tới parameter đó."
+    },
+    {
+     "en": "Copy a local JSON configuration file to each instance with a script and start the agent with `-c file:` pointing to that file.",
+     "vi": "Dùng script copy file cấu hình JSON cục bộ lên từng instance và khởi động agent với `-c file:` trỏ tới file đó."
+    },
+    {
+     "en": "Attach an instance profile with the `CloudWatchAgentServerPolicy` managed policy to every instance.",
+     "vi": "Gắn instance profile có managed policy `CloudWatchAgentServerPolicy` cho mọi instance."
+    }
+   ],
+   "a": [
+    2,
+    4
+   ],
+   "why": [
+    {
+     "en": "Detailed monitoring does not add memory or disk-space metrics.",
+     "vi": "Detailed monitoring không thêm metric bộ nhớ hay dung lượng disk."
+    },
+    {
+     "en": "The admin policy (with `ssm:PutParameter`) is only needed on the one machine that writes the config; giving it to all instances breaks least privilege.",
+     "vi": "Admin policy (có `ssm:PutParameter`) chỉ cần trên máy ghi cấu hình; cấp cho toàn bộ instance vi phạm least privilege."
+    },
+    {
+     "en": "Correct. A central config in Parameter Store is shared by all instances and changed in one place.",
+     "vi": "Đúng. Cấu hình tập trung trong Parameter Store được mọi instance dùng chung và sửa ở một chỗ."
+    },
+    {
+     "en": "It works, but every change means redistributing files to 300 instances — high overhead.",
+     "vi": "Cách này chạy được nhưng mỗi lần đổi phải phát lại file cho 300 instance — overhead cao."
+    },
+    {
+     "en": "Correct. It allows `PutMetricData`, sending logs and `ssm:GetParameter` to read the config.",
+     "vi": "Đúng. Policy này cho phép `PutMetricData`, gửi log và `ssm:GetParameter` để đọc cấu hình."
+    }
+   ],
+   "ex": {
+    "en": "Fleet-wide agent config → store it once in SSM Parameter Store (`-c ssm:<name>`). Instances need `CloudWatchAgentServerPolicy`; only the setup machine needs `CloudWatchAgentAdminPolicy`.",
+    "vi": "Cấu hình agent cho cả fleet → lưu một lần trong SSM Parameter Store (`-c ssm:<name>`). Instance cần `CloudWatchAgentServerPolicy`; chỉ máy setup mới cần `CloudWatchAgentAdminPolicy`."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.1",
+   "ref": "asg-ops",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company processes image-conversion jobs with EC2 worker instances in an Auto Scaling group. The workers poll an Amazon SQS queue. During peak hours, jobs wait in the queue for a long time, although the average CPU of the workers stays around 35%. Which change will make the worker fleet scale with demand?",
+    "vi": "Một công ty xử lý job chuyển đổi ảnh bằng EC2 worker trong một Auto Scaling group. Các worker poll một Amazon SQS queue. Vào giờ cao điểm, job phải chờ trong queue rất lâu dù CPU trung bình của worker chỉ khoảng 35%. Thay đổi nào giúp đội worker scale theo nhu cầu?"
+   },
+   "o": [
+    {
+     "en": "Put an Application Load Balancer in front of the workers and scale on `RequestCountPerTarget`.",
+     "vi": "Đặt Application Load Balancer trước các worker và scale theo `RequestCountPerTarget`."
+    },
+    {
+     "en": "Create a step scaling policy that adds instances when the average `CPUUtilization` of the group exceeds 70%.",
+     "vi": "Tạo step scaling policy thêm instance khi `CPUUtilization` trung bình của group vượt 70%."
+    },
+    {
+     "en": "Enable group metrics collection and scale on `GroupInServiceInstances`.",
+     "vi": "Bật group metrics collection và scale theo `GroupInServiceInstances`."
+    },
+    {
+     "en": "Add a scaling policy driven by a CloudWatch alarm on the queue's `ApproximateNumberOfMessages` metric.",
+     "vi": "Thêm scaling policy được kích hoạt bởi CloudWatch alarm trên metric `ApproximateNumberOfMessages` của queue."
+    }
+   ],
+   "a": [
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong: workers pull from SQS; they receive no HTTP requests through a load balancer.",
+     "vi": "Sai: worker tự lấy message từ SQS, không nhận HTTP request qua load balancer."
+    },
+    {
+     "en": "Wrong: CPU stays low while the backlog grows, so this alarm would never fire.",
+     "vi": "Sai: CPU vẫn thấp trong khi backlog tăng, nên alarm này sẽ không bao giờ kích hoạt."
+    },
+    {
+     "en": "Wrong: that metric only counts instances; it says nothing about the backlog.",
+     "vi": "Sai: metric này chỉ đếm số instance, không phản ánh backlog."
+    },
+    {
+     "en": "Correct: queue depth is the true measure of pending work for SQS consumers.",
+     "vi": "Đúng: độ dài queue mới là thước đo thực sự của lượng việc đang chờ với SQS consumer."
+    }
+   ],
+   "ex": {
+    "en": "SQS worker fleets scale on queue depth (`ApproximateNumberOfMessages`), not on CPU or request counts.",
+    "vi": "Đội worker SQS scale theo độ dài queue (`ApproximateNumberOfMessages`), không theo CPU hay request count."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.2",
+   "ref": "fsx",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company is migrating Windows-based applications to AWS. The applications need a shared file system over SMB with Microsoft Active Directory integration and NTFS ACLs. The file system must stay available if an Availability Zone fails, with the LEAST operational overhead. Which solution meets these requirements?",
+    "vi": "Một công ty đang chuyển các ứng dụng Windows lên AWS. Ứng dụng cần file system dùng chung qua SMB, tích hợp Microsoft Active Directory và NTFS ACL. File system phải tiếp tục hoạt động khi một Availability Zone gặp sự cố, với LEAST operational overhead. Giải pháp nào đáp ứng yêu cầu?"
+   },
+   "o": [
+    {
+     "en": "Deploy an Amazon FSx for Windows File Server Multi-AZ file system.",
+     "vi": "Triển khai Amazon FSx for Windows File Server loại Multi-AZ."
+    },
+    {
+     "en": "Deploy an Amazon FSx for Lustre persistent file system linked to an S3 bucket.",
+     "vi": "Triển khai Amazon FSx for Lustre loại persistent liên kết với một S3 bucket."
+    },
+    {
+     "en": "Deploy two FSx for Windows File Server Single-AZ file systems in different AZs and replicate data between them with a scheduled script.",
+     "vi": "Triển khai hai FSx for Windows File Server Single-AZ ở hai AZ khác nhau và replicate dữ liệu giữa chúng bằng script chạy theo lịch."
+    },
+    {
+     "en": "Create an Amazon EFS file system with the Regional storage class and mount targets in two AZs.",
+     "vi": "Tạo Amazon EFS file system với Regional storage class và mount target ở hai AZ."
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct: Multi-AZ keeps a standby in another AZ with synchronous replication and automatic failover.",
+     "vi": "Đúng: Multi-AZ giữ một standby ở AZ khác với replication đồng bộ và failover tự động."
+    },
+    {
+     "en": "Wrong: Lustre targets Linux HPC/ML workloads and lives in a single AZ.",
+     "vi": "Sai: Lustre dành cho workload HPC/ML trên Linux và chỉ nằm trong một AZ."
+    },
+    {
+     "en": "Wrong: self-managed replication adds overhead and gives no automatic failover.",
+     "vi": "Sai: tự replicate tốn công vận hành và không có failover tự động."
+    },
+    {
+     "en": "Wrong: EFS is NFS for Linux (POSIX); it does not provide SMB or Active Directory ACLs.",
+     "vi": "Sai: EFS là NFS cho Linux (POSIX), không cung cấp SMB hay ACL của Active Directory."
+    }
+   ],
+   "ex": {
+    "en": "Windows / SMB / Active Directory → FSx for Windows File Server. Need AZ failover → choose Multi-AZ instead of replicating between Single-AZ file systems yourself.",
+    "vi": "Windows / SMB / Active Directory → FSx for Windows File Server. Cần failover giữa AZ → chọn Multi-AZ thay vì tự replicate giữa các file system Single-AZ."
+   }
+  },
+  {
+   "d": 5,
+   "task": "5.1",
+   "ref": "tg-settings",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "A Java web application runs on EC2 instances behind an Application Load Balancer in an Auto Scaling group. Newly launched instances become healthy quickly but respond very slowly for the first few minutes and sometimes fail under their full share of traffic. Users also report that long file uploads are cut off when the group scales in. Which configuration changes should a CloudOps engineer make?",
+    "vi": "Một ứng dụng web Java chạy trên EC2 sau Application Load Balancer trong Auto Scaling group. Instance mới launch nhanh chóng healthy nhưng phản hồi rất chậm trong vài phút đầu và đôi khi lỗi khi nhận đủ phần traffic. Người dùng cũng báo upload file dài bị cắt khi group scale in. CloudOps engineer nên thay đổi những cấu hình nào?"
+   },
+   "o": [
+    {
+     "en": "Set the deregistration delay to 0 seconds.",
+     "vi": "Đặt deregistration delay về 0 giây."
+    },
+    {
+     "en": "Enable slow start on the target group with a suitable duration.",
+     "vi": "Bật slow start trên target group với khoảng thời gian phù hợp."
+    },
+    {
+     "en": "Enable duration-based stickiness with the `AWSALB` cookie.",
+     "vi": "Bật duration-based stickiness với cookie `AWSALB`."
+    },
+    {
+     "en": "Increase the deregistration delay on the target group.",
+     "vi": "Tăng deregistration delay của target group."
+    },
+    {
+     "en": "Reduce the health check interval to 5 seconds.",
+     "vi": "Giảm health check interval xuống 5 giây."
+    }
+   ],
+   "a": [
+    1,
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong. 0 disables draining, so in-flight requests would be cut immediately.",
+     "vi": "Sai. 0 tắt draining, request đang chạy sẽ bị cắt ngay."
+    },
+    {
+     "en": "Correct. Slow start ramps traffic to a newly healthy target linearly instead of sending its full share at once.",
+     "vi": "Đúng. Slow start tăng dần traffic tới target vừa healthy thay vì gửi ngay đủ phần."
+    },
+    {
+     "en": "Wrong. Stickiness does not protect new instances or keep in-flight uploads alive during scale-in.",
+     "vi": "Sai. Stickiness không bảo vệ instance mới và không giữ được upload đang chạy khi scale in."
+    },
+    {
+     "en": "Correct. A longer deregistration delay gives in-flight long uploads time to finish before the instance is removed.",
+     "vi": "Đúng. Deregistration delay dài hơn cho các upload dài đang chạy thời gian hoàn tất trước khi instance bị gỡ."
+    },
+    {
+     "en": "Wrong. Faster checks do not warm up instances and can add load to the app.",
+     "vi": "Sai. Check nhanh hơn không làm instance warm up, còn có thể thêm tải cho app."
+    }
+   ],
+   "ex": {
+    "en": "New targets overwhelmed on entry → slow start (30–900 s). In-flight requests cut on scale-in/deploy → raise deregistration delay (1–3,600 s, default 300 s).",
+    "vi": "Target mới bị quá tải khi vào service → slow start (30–900 s). Request đang chạy bị cắt khi scale-in/deploy → tăng deregistration delay (1–3,600 s, mặc định 300 s)."
+   }
+  },
+  {
+   "d": 4,
+   "task": "4.2",
+   "ref": "parameter-store",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "An application on EC2 reads a database password from the Parameter Store parameter `/shop/prod/db-password`, which is a SecureString encrypted with a customer managed KMS key. The application receives an unreadable encrypted value instead of the password. What should a CloudOps engineer do so that the application receives the plaintext password securely?",
+    "vi": "Một ứng dụng trên EC2 đọc mật khẩu database từ parameter `/shop/prod/db-password` trong Parameter Store, kiểu SecureString mã hoá bằng customer managed KMS key. Ứng dụng nhận được giá trị đã mã hoá thay vì mật khẩu. CloudOps engineer nên làm gì để ứng dụng nhận mật khẩu dạng plaintext một cách an toàn?"
+   },
+   "o": [
+    {
+     "en": "Change the parameter type from SecureString to String.",
+     "vi": "Đổi kiểu parameter từ SecureString sang String."
+    },
+    {
+     "en": "Call `get-parameters-by-path` for `/shop/prod` with the `--recursive` flag so that nested values are returned in plaintext.",
+     "vi": "Gọi `get-parameters-by-path` cho `/shop/prod` với flag `--recursive` để các giá trị lồng nhau được trả về dạng plaintext."
+    },
+    {
+     "en": "Request the parameter with decryption enabled and allow `kms:Decrypt` on the key for the instance role.",
+     "vi": "Gọi lấy parameter có bật giải mã (`--with-decryption`) và cấp `kms:Decrypt` trên key cho instance role."
+    },
+    {
+     "en": "Upgrade the parameter to the Advanced tier.",
+     "vi": "Nâng parameter lên Advanced tier."
+    }
+   ],
+   "a": [
+    2
+   ],
+   "why": [
+    {
+     "en": "Wrong: this stores the password unencrypted and violates the security requirement.",
+     "vi": "Sai: mật khẩu sẽ lưu không mã hoá, vi phạm yêu cầu bảo mật."
+    },
+    {
+     "en": "Wrong: `--recursive` only includes sub-paths; values stay encrypted without decryption.",
+     "vi": "Sai: `--recursive` chỉ lấy thêm cây con; giá trị vẫn mã hoá nếu không yêu cầu giải mã."
+    },
+    {
+     "en": "Correct: SecureString values are returned encrypted unless decryption is requested, and the caller needs `kms:Decrypt` on the KMS key.",
+     "vi": "Đúng: SecureString trả về dạng mã hoá trừ khi yêu cầu giải mã, và bên gọi cần `kms:Decrypt` trên KMS key."
+    },
+    {
+     "en": "Wrong: the tier changes size limits and policies, not how values are decrypted.",
+     "vi": "Sai: tier chỉ đổi giới hạn kích thước và policy, không đổi cách giải mã."
+    }
+   ],
+   "ex": {
+    "en": "SecureString = KMS-encrypted. Reading the plaintext needs the decryption flag (`--with-decryption` / `WithDecryption`) plus `kms:Decrypt` on the key.",
+    "vi": "SecureString = mã hoá bằng KMS. Muốn đọc plaintext cần flag giải mã (`--with-decryption` / `WithDecryption`) và quyền `kms:Decrypt` trên key."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.2",
+   "ref": "status-checks",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A CloudWatch alarm reports that `StatusCheckFailed_Instance` is 1 for a standalone EC2 instance, while `StatusCheckFailed_System` remains 0. The console shows the instance check failing because of exhausted memory after an application leak. The team wants this condition to be remediated automatically the next time it happens. What should a CloudOps engineer configure?",
+    "vi": "Một CloudWatch alarm báo `StatusCheckFailed_Instance` bằng 1 cho một EC2 instance độc lập, trong khi `StatusCheckFailed_System` vẫn bằng 0. Console cho thấy instance check fail do hết bộ nhớ sau khi ứng dụng bị leak. Đội muốn tình trạng này được tự động khắc phục ở lần xảy ra tiếp theo. CloudOps engineer nên cấu hình gì?"
+   },
+   "o": [
+    {
+     "en": "A CloudWatch alarm on `StatusCheckFailed_Instance` with the EC2 Recover action, so that the instance is moved to new hardware.",
+     "vi": "CloudWatch alarm trên `StatusCheckFailed_Instance` với action EC2 Recover để instance được chuyển sang phần cứng mới."
+    },
+    {
+     "en": "A CloudWatch alarm on `StatusCheckFailed_Instance` with the EC2 Reboot action.",
+     "vi": "CloudWatch alarm trên `StatusCheckFailed_Instance` với action EC2 Reboot."
+    },
+    {
+     "en": "An AWS Health notification rule, because instance status check failures are fixed by AWS as scheduled maintenance events.",
+     "vi": "Rule thông báo AWS Health, vì lỗi instance status check được AWS tự sửa dưới dạng sự kiện bảo trì theo lịch."
+    },
+    {
+     "en": "A CloudWatch alarm on `StatusCheckFailed_AttachedEBS` with the EC2 Recover action.",
+     "vi": "CloudWatch alarm trên `StatusCheckFailed_AttachedEBS` với action EC2 Recover."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "Wrong: Recover works only with the system status check, and the hardware is not the problem here.",
+     "vi": "Sai: Recover chỉ dùng được với system status check, và phần cứng không phải vấn đề ở đây."
+    },
+    {
+     "en": "Correct: an instance status check failure (exhausted memory, bad network config, corrupted file system) is fixed by rebooting or reconfiguring the instance; a Reboot alarm action automates it.",
+     "vi": "Đúng: lỗi instance status check (hết bộ nhớ, cấu hình mạng sai, file system hỏng) được xử lý bằng reboot hoặc sửa cấu hình instance; alarm action Reboot tự động hoá việc đó."
+    },
+    {
+     "en": "Wrong: instance status checks reflect problems you must fix yourself; only system (host) problems are AWS's to repair.",
+     "vi": "Sai: instance status check phản ánh lỗi bạn phải tự xử lý; chỉ lỗi system (host) mới do AWS sửa."
+    },
+    {
+     "en": "Wrong: the attached EBS check is not failing, and Recover is supported only with `StatusCheckFailed_System`.",
+     "vi": "Sai: attached EBS check không fail, và Recover chỉ hỗ trợ với `StatusCheckFailed_System`."
+    }
+   ],
+   "ex": {
+    "en": "Instance status check fails (memory, network config, file system) → reboot / fix the OS (alarm action Reboot). System status check fails (AWS host) → stop/start or alarm action Recover.",
+    "vi": "Instance status check fail (bộ nhớ, cấu hình mạng, file system) → reboot / sửa OS (alarm action Reboot). System status check fail (host của AWS) → stop/start hoặc alarm action Recover."
+   }
+  },
+  {
+   "d": 4,
+   "task": "4.2",
+   "ref": "ami-sharing",
+   "type": "multi",
+   "pick": 3,
+   "q": {
+    "en": "A CloudOps engineer must share a custom AMI with a partner AWS account so the partner can launch instances from it. The AMI's EBS snapshots are currently encrypted with the AWS managed key `aws/ebs`. The AMI must stay encrypted and must not be visible to any other account. Which combination of steps should the engineer take?",
+    "vi": "CloudOps engineer phải share một custom AMI với AWS account của đối tác để họ launch instance. EBS snapshot của AMI hiện được mã hoá bằng AWS managed key `aws/ebs`. AMI phải luôn được mã hoá và không account nào khác nhìn thấy. Engineer nên thực hiện tổ hợp bước nào?"
+   },
+   "o": [
+    {
+     "en": "Set the AMI permissions to Public so the partner can find it.",
+     "vi": "Đặt AMI permissions là Public để đối tác tìm thấy."
+    },
+    {
+     "en": "Enable EBS encryption by default in the partner account.",
+     "vi": "Bật EBS encryption by default ở account đối tác."
+    },
+    {
+     "en": "Update the customer managed key policy to allow the partner account to use the key, including `kms:Decrypt`, `kms:DescribeKey`, `kms:ReEncrypt*` and `kms:CreateGrant`.",
+     "vi": "Cập nhật key policy của customer managed key cho phép account đối tác dùng key, gồm `kms:Decrypt`, `kms:DescribeKey`, `kms:ReEncrypt*` và `kms:CreateGrant`."
+    },
+    {
+     "en": "Add the partner account to the key policy of the AWS managed key `aws/ebs`.",
+     "vi": "Thêm account đối tác vào key policy của AWS managed key `aws/ebs`."
+    },
+    {
+     "en": "Modify the AMI launch permissions to add the partner's AWS account ID.",
+     "vi": "Sửa launch permission của AMI để thêm AWS account ID của đối tác."
+    },
+    {
+     "en": "Copy the AMI and re-encrypt its snapshots with a customer managed KMS key.",
+     "vi": "Copy AMI và re-encrypt snapshot bằng customer managed KMS key."
+    }
+   ],
+   "a": [
+    2,
+    4,
+    5
+   ],
+   "why": [
+    {
+     "en": "Wrong: encrypted AMIs cannot be made public, and the AMI must not be visible to other accounts.",
+     "vi": "Sai: AMI mã hoá không thể public, và AMI không được để account khác thấy."
+    },
+    {
+     "en": "Wrong: this setting does not give the partner access to the source key or the AMI.",
+     "vi": "Sai: thiết lập này không cho đối tác quyền dùng key nguồn hay AMI."
+    },
+    {
+     "en": "Correct: the partner must be able to use the KMS key to launch instances from the encrypted snapshots.",
+     "vi": "Đúng: đối tác phải dùng được KMS key để launch instance từ snapshot mã hoá."
+    },
+    {
+     "en": "Wrong: AWS managed keys cannot be shared with other accounts.",
+     "vi": "Sai: AWS managed key không share được cho account khác."
+    },
+    {
+     "en": "Correct: adding the account to the AMI launch permissions shares it privately with that account only (the referenced snapshots do not need to be shared separately).",
+     "vi": "Đúng: thêm account vào launch permission của AMI là share riêng cho đúng account đó (không cần share riêng các snapshot mà AMI tham chiếu)."
+    },
+    {
+     "en": "Correct: AMIs encrypted with `aws/ebs` cannot be shared, so the AMI must use a customer managed key.",
+     "vi": "Đúng: AMI mã hoá bằng `aws/ebs` không share được, nên AMI phải dùng customer managed key."
+    }
+   ],
+   "ex": {
+    "en": "Sharing an encrypted AMI: it must use a customer managed key, the KMS key must be shared with the target account, and the AMI launch permission must include that account. `aws/ebs` cannot be shared.",
+    "vi": "Share AMI mã hoá: phải dùng customer managed key, phải share KMS key cho account đích, và launch permission của AMI phải có account đó. `aws/ebs` không share được."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.2",
+   "ref": "patch-manager",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company uses Patch Manager for its EC2 fleet. Development instances must receive all available updates, while production instances must receive only patches approved 7 days after release. What is the MOST operationally efficient way to apply different rules to each environment?",
+    "vi": "Một công ty dùng Patch Manager cho fleet EC2. Instance development phải nhận mọi bản cập nhật, còn instance production chỉ nhận patch được duyệt sau 7 ngày kể từ khi phát hành. Cách hiệu quả vận hành NHẤT để áp quy tắc khác nhau cho từng môi trường là gì?"
+   },
+   "o": [
+    {
+     "en": "Create two custom patch baselines, tag instances with the `Patch Group` key, and register each patch group with its baseline.",
+     "vi": "Tạo hai custom patch baseline, gắn tag key `Patch Group` cho instance và đăng ký mỗi patch group với baseline tương ứng."
+    },
+    {
+     "en": "Edit the AWS predefined patch baseline so that it applies different approval rules based on instance tags.",
+     "vi": "Sửa AWS predefined patch baseline để áp approval rule khác nhau theo tag instance."
+    },
+    {
+     "en": "Tag each instance with both `Patch Group` values so that it can use the correct baseline at run time.",
+     "vi": "Gắn cả hai giá trị `Patch Group` cho mỗi instance để chọn baseline phù hợp khi chạy."
+    },
+    {
+     "en": "Create separate AWS accounts for development and production so that each account can use its own default patch baseline with different rules.",
+     "vi": "Tạo AWS account riêng cho development và production để mỗi account dùng default patch baseline riêng với rule khác nhau."
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct: patch groups (via the `Patch Group` tag) map sets of instances to different baselines.",
+     "vi": "Đúng: patch group (qua tag `Patch Group`) gắn từng nhóm instance với baseline khác nhau."
+    },
+    {
+     "en": "Wrong: predefined baselines are managed by AWS and cannot be modified.",
+     "vi": "Sai: predefined baseline do AWS quản lý, không sửa được."
+    },
+    {
+     "en": "Wrong: an instance can belong to only one patch group.",
+     "vi": "Sai: một instance chỉ thuộc một patch group."
+    },
+    {
+     "en": "Wrong: far more overhead than using patch groups in the same account.",
+     "vi": "Sai: tốn công hơn nhiều so với dùng patch group trong cùng account."
+    }
+   ],
+   "ex": {
+    "en": "Different baselines per environment → tag key `Patch Group`. One instance = one patch group; one patch group = one baseline. Predefined baselines can't be edited.",
+    "vi": "Baseline khác nhau cho từng môi trường → tag key `Patch Group`. Một instance = một patch group; một patch group = một baseline. Predefined baseline không sửa được."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.1",
+   "ref": "asg-ops",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A CloudOps engineer wants a CloudWatch dashboard that shows, over time, how many instances in an Auto Scaling group are InService, Pending and Terminating, compared with the desired capacity. The metrics such as `GroupInServiceInstances` do not appear in CloudWatch. What should the engineer do?",
+    "vi": "Một CloudOps engineer muốn có CloudWatch dashboard hiển thị theo thời gian số instance InService, Pending và Terminating của một Auto Scaling group so với desired capacity. Các metric như `GroupInServiceInstances` không xuất hiện trong CloudWatch. Engineer nên làm gì?"
+   },
+   "o": [
+    {
+     "en": "Install the unified CloudWatch agent on every instance in the group.",
+     "vi": "Cài unified CloudWatch agent trên mọi instance trong group."
+    },
+    {
+     "en": "Enable group metrics collection on the Auto Scaling group.",
+     "vi": "Bật group metrics collection trên Auto Scaling group."
+    },
+    {
+     "en": "Enable detailed monitoring in the launch template of the Auto Scaling group.",
+     "vi": "Bật detailed monitoring trong launch template của Auto Scaling group."
+    },
+    {
+     "en": "Change the health check type of the Auto Scaling group to ELB.",
+     "vi": "Đổi health check type của Auto Scaling group sang ELB."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "The agent collects OS-level metrics per instance; it cannot report the group's instance states.",
+     "vi": "Agent thu metric cấp OS của từng instance; không báo được trạng thái instance của group."
+    },
+    {
+     "en": "Correct. ASG group metrics are opt-in and are published every minute once enabled.",
+     "vi": "Đúng. Group metric của ASG là opt-in và được gửi mỗi phút khi đã bật."
+    },
+    {
+     "en": "Detailed monitoring affects EC2 instance metrics, not the ASG-level group metrics.",
+     "vi": "Detailed monitoring ảnh hưởng metric của EC2 instance, không phải group metric cấp ASG."
+    },
+    {
+     "en": "Health check type does not publish any group metrics.",
+     "vi": "Health check type không gửi group metric nào."
+    }
+   ],
+   "ex": {
+    "en": "ASG-level metrics (`GroupDesiredCapacity`, `GroupInServiceInstances`, `GroupPendingInstances`…) are opt-in: enable group metrics collection. EC2-level metrics are on by default.",
+    "vi": "Metric cấp ASG (`GroupDesiredCapacity`, `GroupInServiceInstances`, `GroupPendingInstances`…) là opt-in: phải bật group metrics collection. Metric cấp EC2 thì mặc định có."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.1",
+   "ref": "cw-metrics",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A CloudOps engineer must create a CloudWatch alarm that fires when memory utilization on a fleet of Amazon Linux EC2 instances exceeds 80%. In the EC2 metrics in CloudWatch, the engineer cannot find any memory metric. What should the engineer do?",
+    "vi": "Một CloudOps engineer cần tạo CloudWatch alarm kích hoạt khi mức sử dụng bộ nhớ trên một nhóm EC2 instance Amazon Linux vượt 80%. Trong các EC2 metric trên CloudWatch, engineer không tìm thấy metric bộ nhớ nào. Engineer nên làm gì?"
+   },
+   "o": [
+    {
+     "en": "Enable detailed monitoring on the instances, wait for the 1-minute metrics to appear, then alarm on the `MemoryUtilization` metric in the `AWS/EC2` namespace.",
+     "vi": "Bật detailed monitoring cho các instance, chờ metric chu kỳ 1 phút xuất hiện, rồi tạo alarm trên metric `MemoryUtilization` trong namespace `AWS/EC2`."
+    },
+    {
+     "en": "Enable the `StatusCheckFailed_Instance` metric, which reports exhausted memory as a value of 1.",
+     "vi": "Dùng metric `StatusCheckFailed_Instance`, vốn báo hết bộ nhớ bằng giá trị 1."
+    },
+    {
+     "en": "Install the unified CloudWatch agent with permission to publish metrics, then alarm on `mem_used_percent` in the `CWAgent` namespace.",
+     "vi": "Cài unified CloudWatch agent kèm quyền gửi metric, rồi tạo alarm trên `mem_used_percent` trong namespace `CWAgent`."
+    },
+    {
+     "en": "Create an alarm on `CPUCreditBalance`, because a low credit balance indicates memory pressure.",
+     "vi": "Tạo alarm trên `CPUCreditBalance`, vì credit balance thấp cho thấy thiếu bộ nhớ."
+    }
+   ],
+   "a": [
+    2
+   ],
+   "why": [
+    {
+     "en": "Detailed monitoring only changes the period to 1 minute; it never adds a memory metric.",
+     "vi": "Detailed monitoring chỉ đổi chu kỳ sang 1 phút; không hề thêm metric bộ nhớ."
+    },
+    {
+     "en": "The instance status check is a 0/1 health signal, not a utilization percentage you can threshold at 80%.",
+     "vi": "Instance status check chỉ là tín hiệu 0/1, không phải phần trăm sử dụng để đặt ngưỡng 80%."
+    },
+    {
+     "en": "Correct. RAM is not a default EC2 metric; the agent pushes it as a custom metric.",
+     "vi": "Đúng. RAM không phải metric mặc định của EC2; agent đẩy nó lên dưới dạng custom metric."
+    },
+    {
+     "en": "CPU credits relate to CPU usage on burstable instances, not memory.",
+     "vi": "CPU credit liên quan đến CPU của instance burstable, không phải bộ nhớ."
+    }
+   ],
+   "ex": {
+    "en": "EC2 default metrics cover CPU, network, disk (instance store) and status checks — never RAM. Memory and other OS-level metrics require the CloudWatch agent (custom metrics, namespace `CWAgent`).",
+    "vi": "Metric mặc định của EC2 gồm CPU, network, disk (instance store) và status check — không có RAM. Bộ nhớ và metric cấp OS cần CloudWatch agent (custom metric, namespace `CWAgent`)."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.1",
+   "ref": "asg-lifecycle",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "An application's EC2 instances need about 8 minutes after launch to run configuration scripts and load a large in-memory cache before they can serve traffic. Scale-out events therefore take too long to relieve load. The company does not want to keep extra in-service instances running all the time. Which solution meets these requirements?",
+    "vi": "EC2 instance của một ứng dụng cần khoảng 8 phút sau khi launch để chạy script cấu hình và nạp một cache lớn vào bộ nhớ trước khi phục vụ traffic. Vì vậy mỗi lần scale out mất quá lâu mới giảm được tải. Công ty không muốn lúc nào cũng chạy thêm instance in-service dư thừa. Giải pháp nào đáp ứng yêu cầu?"
+   },
+   "o": [
+    {
+     "en": "Configure a warm pool for the Auto Scaling group with instances kept in the Stopped state.",
+     "vi": "Cấu hình warm pool cho Auto Scaling group với instance được giữ ở trạng thái Stopped."
+    },
+    {
+     "en": "Increase the minimum capacity of the Auto Scaling group so that spare instances are always in service.",
+     "vi": "Tăng minimum capacity của Auto Scaling group để luôn có instance dự phòng in-service."
+    },
+    {
+     "en": "Add a lifecycle hook on instance launch with a heartbeat timeout of 8 minutes.",
+     "vi": "Thêm lifecycle hook khi launch instance với heartbeat timeout 8 phút."
+    },
+    {
+     "en": "Switch the scaling policy from target tracking to simple scaling with a shorter cooldown.",
+     "vi": "Đổi scaling policy từ target tracking sang simple scaling với cooldown ngắn hơn."
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct: pre-initialised instances wait in the pool and move into service quickly, without paying for extra running instances.",
+     "vi": "Đúng: instance đã khởi tạo sẵn chờ trong pool và vào service nhanh, không phải trả tiền cho instance đang chạy dư."
+    },
+    {
+     "en": "Wrong: this is the over-provisioning the company wants to avoid.",
+     "vi": "Sai: đây chính là over-provision mà công ty muốn tránh."
+    },
+    {
+     "en": "Wrong: a hook only pauses the instance in the wait state; it does not make it ready any sooner.",
+     "vi": "Sai: hook chỉ giữ instance ở trạng thái wait, không làm instance sẵn sàng sớm hơn."
+    },
+    {
+     "en": "Wrong: new instances would still need 8 minutes to bootstrap.",
+     "vi": "Sai: instance mới vẫn cần 8 phút để bootstrap."
+    }
+   ],
+   "ex": {
+    "en": "Slow scale-out caused by long bootstrap → warm pool (Running, Stopped or Hibernated pre-initialised instances). Instances in the pool do not count toward ASG metrics.",
+    "vi": "Scale out chậm do bootstrap lâu → warm pool (instance khởi tạo sẵn ở trạng thái Running, Stopped hoặc Hibernated). Instance trong pool không tính vào metric của ASG."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.1",
+   "ref": "asg-lifecycle",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "An Auto Scaling group has a termination lifecycle hook that runs a script to upload application logs to Amazon S3 before an instance is terminated. The hook uses the default heartbeat timeout. On busy days the upload takes up to 3 hours, and logs are lost because instances terminate before the script finishes. What should a CloudOps engineer do to fix this?",
+    "vi": "Một Auto Scaling group có termination lifecycle hook chạy script upload log ứng dụng lên Amazon S3 trước khi instance bị terminate. Hook dùng heartbeat timeout mặc định. Ngày cao điểm, việc upload mất tới 3 giờ và log bị mất vì instance bị terminate trước khi script chạy xong. CloudOps engineer nên làm gì?"
+   },
+   "o": [
+    {
+     "en": "Configure a warm pool so that terminated instances are moved to the pool in the Stopped state.",
+     "vi": "Cấu hình warm pool để instance bị terminate được đưa vào pool ở trạng thái Stopped."
+    },
+    {
+     "en": "Replace the termination hook with a launch lifecycle hook so that logs are uploaded when instances start.",
+     "vi": "Thay termination hook bằng launch lifecycle hook để upload log khi instance khởi động."
+    },
+    {
+     "en": "Increase the health check grace period of the Auto Scaling group to 3 hours so that the instance is not terminated during the upload.",
+     "vi": "Tăng health check grace period của Auto Scaling group lên 3 giờ để instance không bị terminate trong lúc upload."
+    },
+    {
+     "en": "Have the script call `record-lifecycle-action-heartbeat` periodically, then `complete-lifecycle-action` when the upload finishes.",
+     "vi": "Cho script gọi `record-lifecycle-action-heartbeat` định kỳ, rồi gọi `complete-lifecycle-action` khi upload xong."
+    }
+   ],
+   "a": [
+    3
+   ],
+   "why": [
+    {
+     "en": "Wrong: warm pools reduce scale-out latency; they are not a way to finish work before termination.",
+     "vi": "Sai: warm pool giảm độ trễ scale out; không dùng để hoàn tất công việc trước khi terminate."
+    },
+    {
+     "en": "Wrong: logs produced during the instance's life would still be lost at termination.",
+     "vi": "Sai: log sinh ra trong vòng đời instance vẫn bị mất khi terminate."
+    },
+    {
+     "en": "Wrong: the grace period delays health checks of new instances; it does not delay termination.",
+     "vi": "Sai: grace period trì hoãn health check của instance mới; không trì hoãn việc terminate."
+    },
+    {
+     "en": "Correct: the heartbeat timeout (default 1 hour) can be set to at most 2 hours, so a 3-hour task must send heartbeats to reset it; the total wait can last up to 48 hours or 100 × the heartbeat timeout, whichever is smaller.",
+     "vi": "Đúng: heartbeat timeout (mặc định 1 giờ) chỉ đặt được tối đa 2 giờ, nên tác vụ 3 giờ phải gửi heartbeat để reset; tổng thời gian chờ tối đa 48 giờ hoặc 100 × heartbeat timeout, tuỳ giá trị nào nhỏ hơn."
+    }
+   ],
+   "ex": {
+    "en": "A lifecycle hook keeps the instance in `:Wait` until `complete-lifecycle-action` or the heartbeat timeout (default 3,600 s, range 30–7,200 s). Longer tasks → `record-lifecycle-action-heartbeat` (overall max 48 h or 100 × heartbeat).",
+    "vi": "Lifecycle hook giữ instance ở `:Wait` tới khi gọi `complete-lifecycle-action` hoặc hết heartbeat timeout (mặc định 3.600 giây, khoảng 30–7.200 giây). Tác vụ dài hơn → `record-lifecycle-action-heartbeat` (tổng tối đa 48 giờ hoặc 100 × heartbeat)."
+   }
+  },
+  {
+   "d": 4,
+   "task": "4.2",
+   "ref": "s3-encryption",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "A company must ensure that every object uploaded to an S3 bucket is encrypted with SSE-KMS and that any upload request not specifying SSE-KMS is rejected. All requests to the bucket must also use encrypted connections. Which bucket policy statements should a CloudOps engineer add?",
+    "vi": "Công ty phải đảm bảo mọi object upload vào S3 bucket được mã hoá SSE-KMS và mọi request upload không chỉ định SSE-KMS đều bị từ chối. Mọi request tới bucket cũng phải dùng kết nối mã hoá. CloudOps engineer nên thêm những statement nào vào bucket policy?"
+   },
+   "o": [
+    {
+     "en": "Deny `s3:PutObject` when `s3:x-amz-server-side-encryption` is StringNotEquals `aws:kms`.",
+     "vi": "Deny `s3:PutObject` khi `s3:x-amz-server-side-encryption` StringNotEquals `aws:kms`."
+    },
+    {
+     "en": "Deny `s3:PutObject` when `aws:SourceVpce` does not match the VPC endpoint ID.",
+     "vi": "Deny `s3:PutObject` khi `aws:SourceVpce` không khớp VPC endpoint ID."
+    },
+    {
+     "en": "Allow `s3:PutObject` only when `aws:MultiFactorAuthPresent` is `true`.",
+     "vi": "Chỉ Allow `s3:PutObject` khi `aws:MultiFactorAuthPresent` là `true`."
+    },
+    {
+     "en": "Set the bucket default encryption to SSE-KMS instead of adding a Deny statement.",
+     "vi": "Đặt default encryption của bucket là SSE-KMS thay vì thêm statement Deny."
+    },
+    {
+     "en": "Deny `s3:*` when `aws:SecureTransport` is `false`.",
+     "vi": "Deny `s3:*` khi `aws:SecureTransport` là `false`."
+    }
+   ],
+   "a": [
+    0,
+    4
+   ],
+   "why": [
+    {
+     "en": "Correct: bucket policies are evaluated before default encryption, so this Deny rejects any upload that does not request SSE-KMS.",
+     "vi": "Đúng: bucket policy được đánh giá trước default encryption, nên Deny này từ chối mọi upload không yêu cầu SSE-KMS."
+    },
+    {
+     "en": "Wrong: this restricts the network path, not the encryption type or transport encryption.",
+     "vi": "Sai: giới hạn đường mạng, không ép kiểu mã hoá hay mã hoá đường truyền."
+    },
+    {
+     "en": "Wrong: this requires MFA; it neither enforces SSE-KMS nor HTTPS.",
+     "vi": "Sai: chỉ bắt buộc MFA; không ép SSE-KMS hay HTTPS."
+    },
+    {
+     "en": "Wrong: default encryption only applies when no header is sent; it does not reject requests that ask for another encryption type, and it is not a bucket policy statement.",
+     "vi": "Sai: default encryption chỉ áp khi không có header; không từ chối request yêu cầu kiểu mã hoá khác, và không phải statement trong bucket policy."
+    },
+    {
+     "en": "Correct: this rejects any request sent over plain HTTP, enforcing HTTPS.",
+     "vi": "Đúng: từ chối mọi request đi qua HTTP thường, ép dùng HTTPS."
+    }
+   ],
+   "ex": {
+    "en": "Enforce one encryption type → bucket policy Deny `PutObject` when the `x-amz-server-side-encryption` header isn't the required value. Enforce HTTPS → Deny when `aws:SecureTransport` = false.",
+    "vi": "Ép đúng một kiểu mã hoá → bucket policy Deny `PutObject` khi header `x-amz-server-side-encryption` khác giá trị yêu cầu. Ép HTTPS → Deny khi `aws:SecureTransport` = false."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.2",
+   "ref": "ssm-overview",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A CloudOps engineer launches an EC2 instance from the latest Amazon Linux 2 AMI in a public subnet. The security group has no inbound rules and no IAM role is attached. After 30 minutes, the instance still does not appear under Fleet Manager managed nodes. What is the MOST likely cause and fix?",
+    "vi": "Một CloudOps engineer launch EC2 instance từ AMI Amazon Linux 2 mới nhất trong public subnet. Security group không có inbound rule nào và không gắn IAM role. Sau 30 phút instance vẫn không xuất hiện trong Fleet Manager managed nodes. Nguyên nhân KHẢ NĂNG NHẤT và cách khắc phục là gì?"
+   },
+   "o": [
+    {
+     "en": "The SSM Agent is missing; connect over SSH and install it manually.",
+     "vi": "Thiếu SSM Agent; SSH vào để cài thủ công."
+    },
+    {
+     "en": "No IAM permissions for Systems Manager; attach an instance profile with `AmazonSSMManagedInstanceCore`.",
+     "vi": "Instance không có quyền IAM cho Systems Manager; gắn instance profile có `AmazonSSMManagedInstanceCore`."
+    },
+    {
+     "en": "The instance must be added to a Resource Group before Systems Manager can discover it.",
+     "vi": "Instance phải được thêm vào Resource Group thì Systems Manager mới phát hiện được."
+    },
+    {
+     "en": "The security group blocks Systems Manager; add an inbound rule that allows HTTPS on port 443 from the Systems Manager service endpoints.",
+     "vi": "Security group chặn Systems Manager; thêm inbound rule cho phép HTTPS port 443 từ các endpoint của dịch vụ Systems Manager."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "Wrong: Amazon Linux 2 AMIs include the SSM Agent, and SSH is not even reachable here.",
+     "vi": "Sai: AMI Amazon Linux 2 có sẵn SSM Agent, và ở đây cũng không SSH vào được."
+    },
+    {
+     "en": "Correct: the SSM Agent is preinstalled on Amazon Linux 2, so the missing IAM role is the cause.",
+     "vi": "Đúng: SSM Agent đã cài sẵn trên Amazon Linux 2, nên nguyên nhân là thiếu IAM role."
+    },
+    {
+     "en": "Wrong: Resource Groups are only for targeting; they are not required for registration.",
+     "vi": "Sai: Resource Groups chỉ dùng để chọn target, không bắt buộc để đăng ký."
+    },
+    {
+     "en": "Wrong: the agent connects outbound to SSM, so no inbound rules are required.",
+     "vi": "Sai: agent kết nối outbound tới SSM nên không cần inbound rule."
+    }
+   ],
+   "ex": {
+    "en": "An instance not showing in SSM is almost always (1) SSM Agent not installed/running or (2) missing IAM role `AmazonSSMManagedInstanceCore`. No inbound ports are needed.",
+    "vi": "Instance không hiện trong SSM gần như luôn do (1) SSM Agent chưa cài/không chạy hoặc (2) thiếu IAM role `AmazonSSMManagedInstanceCore`. Không cần mở inbound port."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.1",
+   "ref": "asg-ops",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "During a traffic spike, a CloudOps engineer sees that the CPU alarm of an Auto Scaling group's step scaling policy is in the ALARM state, but no new instances are being launched. Group metrics show that `GroupDesiredCapacity` equals `GroupMaxSize`, and the Activity history shows no failed launches. What should the engineer do?",
+    "vi": "Trong một đợt tăng traffic, CloudOps engineer thấy CPU alarm của step scaling policy trong một Auto Scaling group đang ở trạng thái ALARM nhưng không có instance mới nào được launch. Group metrics cho thấy `GroupDesiredCapacity` bằng `GroupMaxSize`, và Activity history không có lần launch thất bại nào. Engineer nên làm gì?"
+   },
+   "o": [
+    {
+     "en": "Increase the maximum capacity of the Auto Scaling group.",
+     "vi": "Tăng maximum capacity của Auto Scaling group."
+    },
+    {
+     "en": "Reduce the scaling cooldown so the policy can run more often.",
+     "vi": "Giảm scaling cooldown để policy chạy thường xuyên hơn."
+    },
+    {
+     "en": "Create a new launch template version that references an existing security group.",
+     "vi": "Tạo launch template version mới tham chiếu tới một security group đang tồn tại."
+    },
+    {
+     "en": "Resume the processes that were suspended by an administrative suspension.",
+     "vi": "Resume các process đã bị tạm dừng do administrative suspension."
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct: the group has reached its max size, so the policy cannot add instances until the max is raised.",
+     "vi": "Đúng: group đã chạm max size nên policy không thể thêm instance cho tới khi tăng max."
+    },
+    {
+     "en": "Wrong: cooldown does not matter when the desired capacity is already at the maximum.",
+     "vi": "Sai: cooldown không có ý nghĩa khi desired capacity đã bằng maximum."
+    },
+    {
+     "en": "Wrong: a deleted security group would cause failed launches in the Activity history.",
+     "vi": "Sai: security group bị xoá sẽ gây launch lỗi trong Activity history."
+    },
+    {
+     "en": "Wrong: administrative suspension follows repeated launch failures (over 24 hours); there are no failed launches here.",
+     "vi": "Sai: administrative suspension xảy ra khi launch lỗi liên tục (hơn 24 giờ); ở đây không có launch lỗi."
+    }
+   ],
+   "ex": {
+    "en": "Scaling alarm firing but nothing launches and desired = max → the ASG hit its max capacity; raise the max (or check AZ capacity).",
+    "vi": "Alarm scaling đã kích hoạt nhưng không launch gì và desired = max → ASG đã chạm max capacity; tăng max (hoặc kiểm tra capacity của AZ)."
+   }
+  },
+  {
+   "d": 5,
+   "task": "5.3",
+   "ref": "ssh-troubleshoot",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A CloudOps engineer launched an Amazon Linux EC2 instance with a public IPv4 address in a newly created subnet. The security group allows inbound TCP 22 from the engineer's office IP, and the network ACL allows all traffic. SSH attempts fail with \"Connection timed out\". What should the engineer do to resolve the issue?",
+    "vi": "Một CloudOps engineer launch một EC2 instance Amazon Linux có public IPv4 trong một subnet mới tạo. Security group cho phép inbound TCP 22 từ IP văn phòng, network ACL cho phép mọi traffic. Khi SSH thì nhận lỗi \"Connection timed out\". Engineer cần làm gì để khắc phục?"
+   },
+   "o": [
+    {
+     "en": "Add a route for 0.0.0.0/0 to the internet gateway in the subnet's route table.",
+     "vi": "Thêm route 0.0.0.0/0 tới internet gateway vào route table của subnet."
+    },
+    {
+     "en": "Connect with the `ubuntu` username instead of `ec2-user`.",
+     "vi": "Kết nối bằng username `ubuntu` thay vì `ec2-user`."
+    },
+    {
+     "en": "Create a new key pair and attach it to the running instance.",
+     "vi": "Tạo key pair mới và gắn vào instance đang chạy."
+    },
+    {
+     "en": "Run `chmod 400` on the .pem key file before connecting again.",
+     "vi": "Chạy `chmod 400` cho file .pem rồi kết nối lại."
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct. A timeout is a network problem; with SG and NACL already open, a new subnet without an internet gateway route cannot be reached from the internet.",
+     "vi": "Đúng. Timeout là lỗi mạng; SG và NACL đã mở thì subnet mới thiếu route tới internet gateway sẽ không truy cập được từ internet."
+    },
+    {
+     "en": "Wrong. A wrong username gives Permission denied after port 22 is reached; also Amazon Linux uses `ec2-user`.",
+     "vi": "Sai. Sai username cho lỗi Permission denied sau khi đã tới được port 22; hơn nữa Amazon Linux dùng `ec2-user`."
+    },
+    {
+     "en": "Wrong. Key problems are credential errors, not timeouts; the packets never reach the instance here.",
+     "vi": "Sai. Vấn đề key là lỗi credential, không phải timeout; ở đây gói tin còn chưa tới được instance."
+    },
+    {
+     "en": "Wrong. Loose key permissions cause an UNPROTECTED PRIVATE KEY FILE error, not a timeout.",
+     "vi": "Sai. Key có permission quá rộng gây lỗi UNPROTECTED PRIVATE KEY FILE, không phải timeout."
+    }
+   ],
+   "ex": {
+    "en": "SSH \"Connection timed out\" = networking (security group, NACL, route table, public IP). \"Permission denied\" = credentials (key or username).",
+    "vi": "SSH \"Connection timed out\" = lỗi mạng (security group, NACL, route table, public IP). \"Permission denied\" = lỗi credential (key hoặc username)."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.3",
+   "ref": "s3-replication",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A company enabled S3 Cross-Region Replication from a bucket in us-east-1 to a bucket in eu-west-1 for disaster recovery. A week later, an audit finds that new objects exist in the destination bucket, but the millions of objects that were in the source bucket before replication was configured are missing. How should a CloudOps engineer copy the missing objects?",
+    "vi": "Một công ty đã bật S3 Cross-Region Replication từ bucket ở us-east-1 sang bucket ở eu-west-1 để phục vụ disaster recovery. Một tuần sau, đợt kiểm tra phát hiện object mới đã có ở bucket đích, nhưng hàng triệu object có sẵn trong bucket nguồn trước khi cấu hình replication thì không có. CloudOps engineer nên copy các object bị thiếu như thế nào?"
+   },
+   "o": [
+    {
+     "en": "Run an S3 Batch Replication job for the existing objects.",
+     "vi": "Chạy S3 Batch Replication job cho các object có sẵn."
+    },
+    {
+     "en": "Add the `s3:ReplicateObject` permission to the destination bucket policy.",
+     "vi": "Thêm quyền `s3:ReplicateObject` vào bucket policy của bucket đích."
+    },
+    {
+     "en": "Enable S3 Replication Time Control on the replication rule.",
+     "vi": "Bật S3 Replication Time Control trên replication rule."
+    },
+    {
+     "en": "Suspend and then re-enable versioning on the source bucket to trigger replication.",
+     "vi": "Suspend rồi bật lại versioning trên bucket nguồn để kích hoạt replication."
+    }
+   ],
+   "a": [
+    0
+   ],
+   "why": [
+    {
+     "en": "Correct: replication rules only copy new objects; Batch Replication copies existing and previously failed objects.",
+     "vi": "Đúng: replication rule chỉ copy object mới; Batch Replication copy object có sẵn và object replicate lỗi trước đó."
+    },
+    {
+     "en": "Wrong: permissions are already working, since new objects are replicating.",
+     "vi": "Sai: quyền đã hoạt động, vì object mới vẫn đang được replicate."
+    },
+    {
+     "en": "Wrong: RTC adds a 15-minute SLA for new objects; it does not backfill old ones.",
+     "vi": "Sai: RTC thêm SLA 15 phút cho object mới, không bổ sung object cũ."
+    },
+    {
+     "en": "Wrong: toggling versioning does not replicate existing objects.",
+     "vi": "Sai: bật/tắt versioning không làm replicate các object có sẵn."
+    }
+   ],
+   "ex": {
+    "en": "S3 Replication copies only objects written after the rule is enabled. Existing or failed objects → S3 Batch Replication.",
+    "vi": "S3 Replication chỉ copy object được ghi sau khi bật rule. Object có sẵn hoặc replicate lỗi → S3 Batch Replication."
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.2",
+   "ref": "elb-monitoring",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "Users receive HTTP 504 errors from an Application Load Balancer, but only when they export large reports. Access logs show that these requests ran for about 60 seconds before failing, and the application logs show that report generation takes 70–90 seconds. The targets are healthy and CPU usage is low. The load balancer uses default settings. What should a CloudOps engineer do?",
+    "vi": "Người dùng nhận lỗi HTTP 504 từ một Application Load Balancer, nhưng chỉ khi export báo cáo lớn. Access log cho thấy các request này chạy khoảng 60 giây rồi lỗi, và log ứng dụng cho thấy việc tạo báo cáo mất 70–90 giây. Các target đều healthy và CPU thấp. Load balancer dùng cấu hình mặc định. CloudOps engineer nên làm gì?"
+   },
+   "o": [
+    {
+     "en": "Increase the deregistration delay of the target group to 120 seconds so that in-flight report requests can complete.",
+     "vi": "Tăng deregistration delay của target group lên 120 giây để các request báo cáo đang chạy kịp hoàn tất."
+    },
+    {
+     "en": "Increase the idle timeout of the load balancer to 120 seconds.",
+     "vi": "Tăng idle timeout của load balancer lên 120 giây."
+    },
+    {
+     "en": "Add more targets to the target group, because a 504 error means that the load balancer has no healthy targets to route to.",
+     "vi": "Thêm target vào target group, vì lỗi 504 nghĩa là load balancer không còn target healthy để route tới."
+    },
+    {
+     "en": "Enable slow start on the target group so that targets receive report requests gradually and respond within the timeout.",
+     "vi": "Bật slow start trên target group để target nhận request báo cáo từ từ và phản hồi kịp trong timeout."
+    }
+   ],
+   "a": [
+    1
+   ],
+   "why": [
+    {
+     "en": "Wrong: deregistration delay only applies to targets that are being deregistered; these targets stay registered.",
+     "vi": "Sai: deregistration delay chỉ áp dụng cho target đang bị deregister; các target này vẫn đang được đăng ký."
+    },
+    {
+     "en": "Correct: the ALB returns 504 when the target does not respond before the idle timeout (default 60 seconds) elapses; raise it above the longest expected response time.",
+     "vi": "Đúng: ALB trả 504 khi target không phản hồi trước khi hết idle timeout (mặc định 60 giây); hãy tăng nó cao hơn thời gian phản hồi dài nhất."
+    },
+    {
+     "en": "Wrong: no healthy targets produces 503, not 504, and these targets are healthy.",
+     "vi": "Sai: không còn target healthy cho lỗi 503, không phải 504, và các target ở đây đều healthy."
+    },
+    {
+     "en": "Wrong: slow start ramps traffic to newly healthy targets; it does not make a 90-second request faster.",
+     "vi": "Sai: slow start tăng dần traffic cho target vừa healthy; không làm request 90 giây nhanh hơn."
+    }
+   ],
+   "ex": {
+    "en": "ALB 504 → target did not respond within the idle timeout (default 60 s) or no connection within 10 s. Long requests → raise the idle timeout. 503 → no healthy/registered targets. (ALB: target keep-alive shorter than idle timeout → 502.)",
+    "vi": "ALB 504 → target không phản hồi trong idle timeout (mặc định 60 giây) hoặc không kết nối được trong 10 giây. Request dài → tăng idle timeout. 503 → không có target healthy/đăng ký. (ALB: keep-alive của target ngắn hơn idle timeout → 502.)"
+   }
+  },
+  {
+   "d": 1,
+   "task": "1.2",
+   "ref": "s3-audit",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "A security team suspects that an application is repeatedly receiving Access Denied errors on an S3 bucket. They need a record of every request made to the bucket, including denied requests, and want to count failed requests by HTTP status using SQL. Which combination of steps meets these requirements?",
+    "vi": "Team bảo mật nghi ngờ một ứng dụng liên tục nhận lỗi Access Denied trên một S3 bucket. Họ cần bản ghi mọi request gửi tới bucket, kể cả request bị từ chối, và muốn đếm request lỗi theo HTTP status bằng SQL. Kết hợp bước nào đáp ứng yêu cầu?"
+   },
+   "o": [
+    {
+     "en": "Enable S3 server access logging on the bucket, delivering logs to a separate bucket in the same Region.",
+     "vi": "Bật S3 server access logging trên bucket, gửi log tới một bucket khác trong cùng Region."
+    },
+    {
+     "en": "Create an Amazon Athena table over the log bucket and query the HTTP status column for 403 errors.",
+     "vi": "Tạo bảng Amazon Athena trên bucket log và query cột HTTP status để tìm lỗi 403."
+    },
+    {
+     "en": "Send the server access logs to a log bucket in another Region so that the audit records survive a Regional outage.",
+     "vi": "Gửi server access logs tới bucket log ở Region khác để bản ghi audit vẫn còn khi một Region gặp sự cố."
+    },
+    {
+     "en": "Use IAM Access Analyzer for S3 to list each denied request.",
+     "vi": "Dùng IAM Access Analyzer for S3 để liệt kê từng request bị từ chối."
+    },
+    {
+     "en": "Enable server access logging with the source bucket itself as the target bucket.",
+     "vi": "Bật server access logging với chính bucket nguồn làm bucket đích."
+    }
+   ],
+   "a": [
+    0,
+    1
+   ],
+   "why": [
+    {
+     "en": "Correct. Server access logs record every request, allowed or denied, into a different same-Region bucket.",
+     "vi": "Đúng. Server access logs ghi mọi request, được phép hay bị từ chối, vào một bucket khác cùng Region."
+    },
+    {
+     "en": "Correct. Athena runs serverless SQL directly on the log files in S3.",
+     "vi": "Đúng. Athena chạy SQL serverless trực tiếp trên file log trong S3."
+    },
+    {
+     "en": "The logging bucket must be in the same Region as the source bucket.",
+     "vi": "Bucket log phải nằm cùng Region với bucket nguồn."
+    },
+    {
+     "en": "Access Analyzer finds buckets shared publicly or cross-account; it does not log individual requests.",
+     "vi": "Access Analyzer tìm bucket bị public hoặc share cross-account; không ghi log từng request."
+    },
+    {
+     "en": "The target must be a different bucket; logging into itself creates an endless loop of log objects.",
+     "vi": "Bucket đích phải khác bucket nguồn; ghi log vào chính nó tạo vòng lặp log vô tận."
+    }
+   ],
+   "ex": {
+    "en": "Audit every request to a bucket → S3 server access logs (different bucket, same Region, delivered within hours) + Athena for SQL analysis.",
+    "vi": "Audit mọi request vào bucket → S3 server access logs (bucket khác, cùng Region, log tới sau vài giờ) + Athena để phân tích bằng SQL."
+   }
+  },
+  {
+   "d": 2,
+   "task": "2.2",
+   "ref": "asg-ops",
+   "type": "multi",
+   "pick": 2,
+   "q": {
+    "en": "A web application runs on EC2 instances in an Auto Scaling group behind an Application Load Balancer. Sometimes the application process hangs: the instance keeps passing EC2 status checks, but it returns HTTP 500 errors. These instances stay in service until an operator replaces them manually. Which actions will make the Auto Scaling group replace such instances automatically?",
+    "vi": "Một web application chạy trên EC2 instance trong Auto Scaling group đứng sau Application Load Balancer. Đôi khi process ứng dụng bị treo: instance vẫn pass EC2 status checks nhưng trả về lỗi HTTP 500. Các instance này vẫn ở trạng thái in service cho tới khi operator thay thủ công. Những hành động nào giúp Auto Scaling group tự động thay các instance như vậy?"
+   },
+   "o": [
+    {
+     "en": "Run a monitoring script that calls `set-instance-health` to mark the instance Unhealthy when the application fails.",
+     "vi": "Chạy script giám sát gọi `set-instance-health` để đánh dấu instance Unhealthy khi ứng dụng lỗi."
+    },
+    {
+     "en": "Create a CloudWatch alarm on `StatusCheckFailed_System` with the EC2 recover action for each instance.",
+     "vi": "Tạo CloudWatch alarm trên `StatusCheckFailed_System` với action recover EC2 cho từng instance."
+    },
+    {
+     "en": "Configure the Auto Scaling group to reboot instances that fail health checks instead of terminating them, so that local data is preserved.",
+     "vi": "Cấu hình Auto Scaling group reboot các instance fail health check thay vì terminate, để giữ lại dữ liệu cục bộ."
+    },
+    {
+     "en": "Enable the Least Outstanding Requests routing algorithm on the target group.",
+     "vi": "Bật routing algorithm Least Outstanding Requests trên target group."
+    },
+    {
+     "en": "Turn on Elastic Load Balancing health checks for the Auto Scaling group.",
+     "vi": "Bật Elastic Load Balancing health checks cho Auto Scaling group."
+    }
+   ],
+   "a": [
+    0,
+    4
+   ],
+   "why": [
+    {
+     "en": "Correct: a custom health check reported through the API makes the ASG terminate and replace the instance.",
+     "vi": "Đúng: custom health check báo qua API khiến ASG terminate và thay instance mới."
+    },
+    {
+     "en": "Wrong: the system check is passing, and ASG instances do not need Recover alarms.",
+     "vi": "Sai: system check vẫn pass, và instance trong ASG không cần alarm Recover."
+    },
+    {
+     "en": "Wrong: an ASG never reboots unhealthy instances; it terminates and replaces them.",
+     "vi": "Sai: ASG không bao giờ reboot instance unhealthy; nó terminate và thay mới."
+    },
+    {
+     "en": "Wrong: this only changes how requests are distributed; failing instances are not replaced.",
+     "vi": "Sai: chỉ thay đổi cách phân phối request; instance lỗi không được thay."
+    },
+    {
+     "en": "Correct: with ELB health checks on, a target that fails the target group's application health check (e.g. `/health`) is marked unhealthy and replaced by the ASG.",
+     "vi": "Đúng: khi bật ELB health checks, target fail health check ứng dụng của target group (vd `/health`) bị đánh dấu unhealthy và được ASG thay mới."
+    }
+   ],
+   "ex": {
+    "en": "EC2 status checks don't see application failures. Add ELB health checks to the ASG or report custom health with `set-instance-health`; the ASG then terminates and replaces (never reboots).",
+    "vi": "EC2 status checks không phát hiện lỗi ứng dụng. Bật ELB health checks cho ASG hoặc báo custom health bằng `set-instance-health`; khi đó ASG terminate và thay mới (không reboot)."
+   }
+  },
+  {
+   "d": 3,
+   "task": "3.1",
+   "ref": "ami-basics",
+   "type": "single",
+   "pick": 1,
+   "q": {
+    "en": "A CloudOps engineer must move a configured EC2 instance from Availability Zone us-east-1a to us-east-1b in the same Region. The instance has custom software and configuration on its root EBS volume. What is the MOST straightforward way to do this?",
+    "vi": "Một CloudOps engineer phải chuyển một EC2 instance đã cấu hình từ Availability Zone us-east-1a sang us-east-1b trong cùng Region. Instance có phần mềm và cấu hình riêng trên root EBS volume. Cách đơn giản NHẤT là gì?"
+   },
+   "o": [
+    {
+     "en": "Detach the root EBS volume and attach it directly to a new instance in us-east-1b.",
+     "vi": "Detach root EBS volume rồi attach trực tiếp vào instance mới ở us-east-1b."
+    },
+    {
+     "en": "Stop the instance and change its subnet to one in us-east-1b in the instance settings.",
+     "vi": "Stop instance rồi đổi subnet sang subnet thuộc us-east-1b trong phần cài đặt instance."
+    },
+    {
+     "en": "Create an AMI from the instance and launch a new instance from that AMI in a subnet in us-east-1b.",
+     "vi": "Tạo AMI từ instance rồi launch instance mới từ AMI đó vào một subnet thuộc us-east-1b."
+    },
+    {
+     "en": "Copy the AMI to another Region and launch it in us-east-1b.",
+     "vi": "Copy AMI sang Region khác rồi launch ở us-east-1b."
+    }
+   ],
+   "a": [
+    2
+   ],
+   "why": [
+    {
+     "en": "Wrong: EBS volumes are locked to their AZ and can only attach to instances in the same AZ.",
+     "vi": "Sai: EBS volume bị gắn với AZ và chỉ attach được vào instance cùng AZ."
+    },
+    {
+     "en": "Wrong: an instance's subnet (and AZ) cannot be changed after launch.",
+     "vi": "Sai: không thể đổi subnet (và AZ) của instance sau khi launch."
+    },
+    {
+     "en": "Correct: creating an AMI and launching it into a subnet of the target AZ is the standard way to move an instance between AZs.",
+     "vi": "Đúng: tạo AMI rồi launch vào subnet của AZ đích là cách chuẩn để chuyển instance giữa các AZ."
+    },
+    {
+     "en": "Wrong: no cross-Region copy is needed; the target AZ is in the same Region.",
+     "vi": "Sai: không cần copy sang Region khác; AZ đích cùng Region."
+    }
+   ],
+   "ex": {
+    "en": "AMIs are Region-scoped and usable in any AZ of that Region. To move an instance to another AZ: create an AMI → launch it in a subnet of the target AZ.",
+    "vi": "AMI thuộc phạm vi Region và dùng được ở mọi AZ trong Region đó. Chuyển instance sang AZ khác: tạo AMI → launch vào subnet của AZ đích."
+   }
+  }
+ ]
+}

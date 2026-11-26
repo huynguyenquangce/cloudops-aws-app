@@ -1,12 +1,14 @@
 /* Service worker: offline support for the CloudOps notes PWA.
    - Page (navigation / index.html): network-first, so edits show up as soon as you're online;
      falls back to the cached copy when offline.
+   - exams.js (practice-exam data): network-first as well, so new questions arrive after a deploy.
    - Static assets (icons, manifest): cache-first.
    Bump CACHE only when the list of PRECACHE files changes. */
-const CACHE = 'cloudops-v2';
+const CACHE = 'cloudops-v3';
 const PRECACHE = [
   './',
   './index.html',
+  './exams.js',
   './manifest.webmanifest',
   './icons/icon.svg',
   './icons/apple-touch-icon.png',
@@ -52,6 +54,19 @@ self.addEventListener('fetch', (e) => {
         .catch(() => (isAppPage
           ? caches.match('./index.html').then((r) => r || caches.match('./'))
           : caches.match(req).then((r) => r || caches.match('./index.html'))))
+    );
+    return;
+  }
+
+  // Exam data: network-first (fresh after deploy), cached copy offline.
+  if (url.pathname === scopePath + 'exams.js') {
+    e.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put('./exams.js', copy)); }
+          return res;
+        })
+        .catch(() => caches.match('./exams.js'))
     );
     return;
   }

@@ -54,3 +54,10 @@ Repository để học AWS CloudOps. User sẽ paste transcript bài giảng và
 - `tools/build_icons.py` chỉ nhúng icon **đang được dùng** → thêm diagram dùng icon mới thì phải chạy lại script.
 - Host trên GitHub Pages (HTTPS bắt buộc cho service worker). Mở file trực tiếp (file://) vẫn chạy nhưng không có offline cache.
 
+
+## Luyện đề thi thử (practice exams)
+
+- Nguồn câu hỏi: `exams/exam-N.json` (song ngữ, schema ghi ở đầu `tools/build_exams.py`). **Không sửa tay `exams.js`** — chạy `python3 tools/build_exams.py` để validate (đủ VI/EN, số đáp án, `ref` phải là id section có thật) và đóng gói thành `exams.js`.
+- `exams.js` được `index.html` tải lazy khi mở màn hình Luyện đề (chạy được cả file://); `sw.js` cache nó network-first.
+- Format theo exam guide SOA-C03: 65 câu, 130 phút, thang 100–1000, đạt 720; multiple choice (4 lựa chọn) và multiple response (5–6 lựa chọn, "Choose TWO/THREE", chấm đúng hết mới tính). Phân bổ domain 22/22/22/16/18 % → 14/14/14/11/12 câu mỗi đề.
+- Câu hỏi phải **tự soạn** (không chép từ trang luyện thi/dump), chỉ dùng kiến thức có trong ghi chú; mỗi câu có giải thích cho từng lựa chọn + `ref` về mục để ôn. Khi học thêm Phần mới (VPC, Route 53, CloudFormation…), bổ sung câu hỏi cho domain tương ứng.
